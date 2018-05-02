@@ -303,7 +303,7 @@ public class SellerMainFrame extends JFrame
 			{
 				int selectedRow = productsTable.getSelectionModel().getMinSelectionIndex();
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
-				ProductsTableModel.getProductInfo(selectedRow);
+				ptm.getProductInfo(selectedRow);
 			}
 		});
 		
@@ -321,6 +321,13 @@ public class SellerMainFrame extends JFrame
 		});
 		
 		productsTab.add(addProductButton, "2, 4");
+		removeProductButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int selectedRow = productsTable.getSelectionModel().getMinSelectionIndex();
+				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
+				ptm.removeSelectedProduct(selectedRow);
+			}
+		});
 		productsTab.add(removeProductButton, "2, 6");
 		
 		productsTab.add(new JScrollPane(productsTable), "4, 4, 7, 5, fill, fill");
@@ -425,10 +432,11 @@ public class SellerMainFrame extends JFrame
 				String ObjButtons[] = {"Ναι", "Όχι"};			
 				int PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 					
-				if(PromptResult == JOptionPane.YES_OPTION)
+				if(PromptResult == JOptionPane.YES_OPTION) {
 					//if this is not set, if a stray window stays open, the application won't stop
 					setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					dispose();
+				}
 			}
 		});
 	}
