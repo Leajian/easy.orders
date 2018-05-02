@@ -78,16 +78,16 @@ public class Product
 		return "";
 	}
 	
-	public String getProducer()
+	public String getSupplier()
 	{
 		try
 		{
-			String query = "SELECT producer FROM product WHERE id = " + id;
+			String query = "SELECT supplier FROM product WHERE id = " + id;
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
 			
-			return rs.getString("producer");
+			return rs.getString("supplier");
 		}
 		catch (Exception ex)
 		{
