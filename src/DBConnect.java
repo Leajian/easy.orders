@@ -27,7 +27,8 @@ public class DBConnect
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://" + localIPAddress + ":3306/easyorders_db?useSSL=false", "root", "poytiolas1997");
+			//conn = DriverManager.getConnection("jdbc:mysql://" + localIPAddress + ":3306/easyorders_db?useSSL=false", "root", "poytiolas1997");
+			conn = DriverManager.getConnection("jdbc:mysql://" + localIPAddress + ":3306/easyorders_db?useSSL=false", "daddy", "issues");
 			//conn = DriverManager.getConnection("jdbc:mysql://192.168.1.14:3306/easyorders_db?useSSL=false", "root", "poytiolas1997");
 			//?useSSL=false
 			stmt = conn.createStatement();
