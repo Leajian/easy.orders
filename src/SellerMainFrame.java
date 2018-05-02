@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListSelectionModel;
@@ -214,8 +215,8 @@ public class SellerMainFrame extends JFrame
 		//Products.
 		tabbedPane.addTab("Προϊόντα", null, productsTab, null);
 		
-		String[] productColumnNames = {"Προιόν", "Προέλευση", "Προμυθευτής", "Ποιότητα", "Συσκευασία", "Τιμή", "Απόθεμα"};
-		String[][] productData = {{"", ""}};
+		//String[] productColumnNames = {"Προιόν", "Προέλευση", "Προμυθευτής", "Ποιότητα", "Συσκευασία", "Τιμή", "Απόθεμα"};
+		//String[][] productData = {{"", ""}};
 		
 		productsTab.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -254,13 +255,26 @@ public class SellerMainFrame extends JFrame
 		productsGroup.add(supplierNameRadioButton);
 		
 		//this makes all cells not editable
-		productsTable = new JTable(productData, productColumnNames);
-		productsTable.setModel(new DefaultTableModel(productData, productColumnNames) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-		});
+//		productsTable = new JTable(productData, productColumnNames);
+//		productsTable.setModel(new DefaultTableModel(productData, productColumnNames) {
+//			@Override
+//			public boolean isCellEditable(int row, int column) {
+//				return false;
+//			}
+//		});
+		
+		//testing without refresh
+		ArrayList<Product> testProductsArray = new ArrayList<>();
+		
+		testProductsArray.add(new Product("1", "2", "3"));
+		testProductsArray.add(new Product("2", "2", "3"));
+		testProductsArray.add(new Product("3", "2", "3"));
+		testProductsArray.add(new Product("4", "2", "3"));
+		testProductsArray.add(new Product("5", "2", "3"));
+		testProductsArray.add(new Product("6", "2", "3"));
+		//testProductsArray.add(new Product("7", "2", "3"));
+		
+		productsTable = new JTable(new ProductsTableModel(testProductsArray));
 		
 		//this disallows reordering of columns
 		productsTable.getTableHeader().setReorderingAllowed(false);
@@ -278,8 +292,9 @@ public class SellerMainFrame extends JFrame
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				ListSelectionModel rowSM = productsTable.getSelectionModel();
-				System.out.println("Row " + rowSM.getMinSelectionIndex() + " is now selected.");
+				int selectedRow = productsTable.getSelectionModel().getMinSelectionIndex();
+				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
+				ProductsTableModel.getProductInfo(selectedRow);
 			}
 		});
 		
@@ -289,6 +304,12 @@ public class SellerMainFrame extends JFrame
 		productsTable.getColumnModel().getColumn(3).setPreferredWidth(145);
 		productsTable.getColumnModel().getColumn(5).setPreferredWidth(115);
 		productsTable.getColumnModel().getColumn(6).setPreferredWidth(115);
+		
+		addProductButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new NewProductFrame();
+			}
+		});
 		
 		productsTab.add(addProductButton, "2, 4");
 		productsTab.add(removeProductButton, "2, 6");
@@ -385,7 +406,7 @@ public class SellerMainFrame extends JFrame
 		this.setLocation(100, 100);
 		this.setVisible(true);
 		this.setTitle("Easy Orders 1.0");
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		addWindowListener(new WindowAdapter()
 		{
@@ -396,6 +417,8 @@ public class SellerMainFrame extends JFrame
 				int PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 					
 				if(PromptResult == JOptionPane.YES_OPTION)
+					//if this is not set, if a stray window stays open, the application won't stop
+					setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					dispose();
 			}
 		});
