@@ -5,12 +5,12 @@ import javax.swing.table.AbstractTableModel;
 public class ProductsTableModel extends AbstractTableModel {
 	
 		public ProductsTableModel(ArrayList<Product> products) {
-			ProductsTableModel.products = products;
+			this.products = products;
 		}
 
 		String[] productColumnNames = {"Προιόν", "Προέλευση", "Προμυθευτής", "Ποιότητα", "Συσκευασία", "Τιμή", "Απόθεμα"};
         
-		private static ArrayList<Product> products = new ArrayList<>();
+		private ArrayList<Product> products = new ArrayList<>();
 
         public int getColumnCount() {
             return 7;
@@ -45,7 +45,7 @@ public class ProductsTableModel extends AbstractTableModel {
 			}
         }
         
-        public static void getProductInfo(int row) {
+        public void getProductInfo(int row) {
         	new ProductInfoFrame(products.get(row).getId());
         }
 
@@ -70,14 +70,25 @@ public class ProductsTableModel extends AbstractTableModel {
         }
         
         public void removeProductByID(String id) {
-			for (Product product : products) {
-				if (product.getId().equals(id))
-					products.remove(product);
-			}
-			
+        	if (!products.isEmpty()) {
+				for (Product product : products) {
+					if (product.getId().equals(id))
+						products.remove(product);
+				}
+        	}
+        	
 			//INSERT DELETION FROM DATABASE CODE HERE
 					
 			//not sure if array list adds the item last
+			fireTableDataChanged(); //to be changed, not efficient
+		}
+        
+        public void removeSelectedProduct(int row) {
+        	if (!products.isEmpty())
+        		products.remove(products.get(row));
+			
+			//INSERT DELETION FROM DATABASE CODE HERE
+        	
 			fireTableDataChanged(); //to be changed, not efficient
 		}
         
@@ -91,7 +102,7 @@ public class ProductsTableModel extends AbstractTableModel {
         
         //this updates the table model, using a data structure and informs the table that it must refresh it's contents
 		public void update(ArrayList<Product> products) {
-			ProductsTableModel.products = products;
+			this.products = products;
 			fireTableDataChanged();
 		}
 }
