@@ -7,23 +7,27 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -32,6 +36,11 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
+
+import ca.odell.glazedlists.GlazedLists;
+import ca.odell.glazedlists.swing.AutoCompleteSupport;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
 
 public class SellerMainFrame extends JFrame
 {
@@ -45,7 +54,6 @@ public class SellerMainFrame extends JFrame
 	private JTable historyTable;
 	
 	private JTextField searchClientTextField = new JTextField();
-	private JTextField searchProductTextField = new JTextField();
 	
 	private JButton addClientButton = new JButton("+");
 	private JButton removeClientButton = new JButton("-");
@@ -66,6 +74,7 @@ public class SellerMainFrame extends JFrame
 	private JPanel clientsTab = new JPanel();
 	private JPanel productsTab = new JPanel();
 	private JPanel historyTab = new JPanel();
+	private final JComboBox searchProductComboBox = new JComboBox();
 	
 	public SellerMainFrame()
 	{
@@ -241,8 +250,12 @@ public class SellerMainFrame extends JFrame
 		
 		productsTab.add(productsearchLabel, "2, 2, right, center");
 		
-		productsTab.add(searchProductTextField, "4, 2, fill, default");
-		searchProductTextField.setColumns(10);
+		
+//		Object[] elements = new Object[] {"Cat", "Dog", "Lion", "Mouse"};
+//		AutoCompleteSupport.install(searchProductComboBox, GlazedLists.eventListOf(elements));
+
+		//searchProductComboBox.setEditable(true);
+		productsTab.add(searchProductComboBox, "4, 2, fill, default");
 		
 		productNameRadioButton.setSelected(true);
 		productsTab.add(productNameRadioButton, "6, 2, left, top");
@@ -321,11 +334,14 @@ public class SellerMainFrame extends JFrame
 		});
 		
 		productsTab.add(addProductButton, "2, 4");
+		
+		//BUG: after you delete the last item, pressing it again causes error. it remembers the last selection for some reason
 		removeProductButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int selectedRow = productsTable.getSelectionModel().getMinSelectionIndex();
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
-				ptm.removeSelectedProduct(selectedRow);
+				if (selectedRow != -1)
+					ptm.removeSelectedProduct(selectedRow);
 			}
 		});
 		productsTab.add(removeProductButton, "2, 6");
