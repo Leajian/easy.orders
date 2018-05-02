@@ -1,3 +1,4 @@
+/ClientsTableModel.class
 /CustomerInfoFrame$1.class
 /CustomerInfoFrame$2.class
 /CustomerInfoFrame$3.class
@@ -19,10 +20,12 @@
 /ProductInfoFrame$2.class
 /ProductInfoFrame$3.class
 /ProductInfoFrame.class
+/ProductsTableModel.class
 /SellerMainFrame$1.class
 /SellerMainFrame$10.class
 /SellerMainFrame$11.class
 /SellerMainFrame$12.class
+/SellerMainFrame$13.class
 /SellerMainFrame$2.class
 /SellerMainFrame$3.class
 /SellerMainFrame$4.class
@@ -33,7 +36,4 @@
 /SellerMainFrame$9.class
 /SellerMainFrame$ForcedListSelectionModel.class
 /SellerMainFrame.class
-/favicon-32x32.png
-/images/
-/ProductTableModel.class
-/ProductsTableModel.class
+/SellerMainFrame$14.class
