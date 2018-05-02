@@ -78,7 +78,7 @@ public class Product
 		return "";
 	}
 	
-	public String getProducer()
+	public String getSupplier()
 	{
 		try
 		{
@@ -87,7 +87,7 @@ public class Product
 			
 			rs.next();
 			
-			return rs.getString("producer");
+			return rs.getString("supplier");
 		}
 		catch (Exception ex)
 		{

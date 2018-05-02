@@ -7,9 +7,6 @@ public class ProductsTableModel extends AbstractTableModel {
 		public ProductsTableModel(ArrayList<Product> products) {
 			ProductsTableModel.products = products;
 		}
-		
-		
-		private boolean DEBUG = true;
 
 		String[] productColumnNames = {"Προιόν", "Προέλευση", "Προμυθευτής", "Ποιότητα", "Συσκευασία", "Τιμή", "Απόθεμα"};
         
@@ -34,7 +31,7 @@ public class ProductsTableModel extends AbstractTableModel {
 			case 1:
 				return products.get(row).getLocation();
 			case 2:
-				return products.get(row).getProducer();
+				return products.get(row).getSupplier();
 			case 3:
 				return products.get(row).getQuality();
 			case 4:
@@ -71,49 +68,30 @@ public class ProductsTableModel extends AbstractTableModel {
             //no matter where the cell appears onscreen.
                 return false;
         }
-
-        /*
-         * Don't need to implement this method unless your table's
-         * products can change.
-         */
-        public void setValueAt(Product value, int row, int col) {
-            if (DEBUG) {
-                System.out.println("Setting value at " + row + "," + col
-                                   + " to " + value
-                                   + " (an instance of "
-                                   + value.getClass() + ")");
-            }
-
-            //fireTableCellUpdated(row, col);
-            fireTableRowsUpdated(row, row);
-
-            if (DEBUG) {
-                System.out.println("New value of products:");
-                printDebugData();
-            }
-        }
         
         public void removeProductByID(String id) {
 			for (Product product : products) {
 				if (product.getId().equals(id))
 					products.remove(product);
 			}
+			
+			//INSERT DELETION FROM DATABASE CODE HERE
 					
 			//not sure if array list adds the item last
 			fireTableDataChanged(); //to be changed, not efficient
 		}
         
-        private void printDebugData() {
-            int numRows = getRowCount();
-            int numCols = getColumnCount();
-
-            for (int i=0; i < numRows; i++) {
-                System.out.print("    row " + i + ":");
-                for (int j=0; j < numCols; j++) {
-                    System.out.print("  " + getValueAt(i, j));
-                }
-                System.out.println();
-            }
-            System.out.println("--------------------------");
+        //alternative way to add a row
+        public void addRow(Product product) {
+        	int lastRowBeforeUpdate = this.getRowCount() - 1;
+        	products.add(product);
+        	int lastRowAfterUpdate = this.getRowCount() - 1;
+        	fireTableRowsInserted(lastRowBeforeUpdate, lastRowAfterUpdate);
         }
+        
+        //this updates the table model, using a data structure and informs the table that it must refresh it's contents
+		public void update(ArrayList<Product> products) {
+			ProductsTableModel.products = products;
+			fireTableDataChanged();
+		}
 }
