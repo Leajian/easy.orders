@@ -82,7 +82,7 @@ public class Product
 	{
 		try
 		{
-			String query = "SELECT producer FROM product WHERE id = " + id;
+			String query = "SELECT supplier FROM product WHERE id = " + id;
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
