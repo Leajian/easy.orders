@@ -66,7 +66,7 @@ public class ProductInfoFrame extends JDialog
 			nameField.setText(rs.getString("name"));
 			qualityField.setText(rs.getString("quality"));
 			locationField.setText(rs.getString("location"));
-			supplierField.setText(rs.getString("producer"));
+			supplierField.setText(rs.getString("supplier"));
 			packagingField.setText(rs.getString("packaging"));
 			priceField.setText(rs.getString("price"));
 			stockSpinner.setValue(rs.getObject("stock"));

@@ -138,7 +138,7 @@ public class NewProductFrame extends JDialog
 				{
 					try
 					{
-						String query = "INSERT INTO product (id, name, quality, location, producer, packaging, price, stock) VALUES ('" + id + "', " + "'" + name + "', " + "'" + quality + "', " + "'" + location + "', " + "'" + supplier + "', " + "'" + packaging + "', " + "'" + price + "', " + "'" + stock + "')";
+						String query = "INSERT INTO product (id, name, quality, location, supplier, packaging, price, stock) VALUES ('" + id + "', " + "'" + name + "', " + "'" + quality + "', " + "'" + location + "', " + "'" + supplier + "', " + "'" + packaging + "', " + "'" + price + "', " + "'" + stock + "')";
 						int rs = db.getStatement().executeUpdate(query);
 						
 						JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.");
