@@ -272,9 +272,18 @@ public class SellerMainFrame extends JFrame
 		testProductsArray.add(new Product("4", "2", "3"));
 		testProductsArray.add(new Product("5", "2", "3"));
 		testProductsArray.add(new Product("6", "2", "3"));
+		
+		//we create a table model so that we can manipulate it's data
+		ProductsTableModel ptm = new ProductsTableModel(testProductsArray);
+		
+		productsTable = new JTable(ptm);
+		
 		//testProductsArray.add(new Product("7", "2", "3"));
 		
-		productsTable = new JTable(new ProductsTableModel(testProductsArray));
+		//now we call the model to populate the data to the table from the list
+		ptm.update(testProductsArray);
+		
+		ptm.addRow(new Product("2", "65", "42"));
 		
 		//this disallows reordering of columns
 		productsTable.getTableHeader().setReorderingAllowed(false);
