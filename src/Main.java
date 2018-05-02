@@ -15,7 +15,7 @@ public class Main
 		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 		ArrayList<Order> orders = new ArrayList<Order>();
 
-		//db.connect();
+		db.connect();
 		
 		//new NewCustomerFrame();
 		new SellerMainFrame();
