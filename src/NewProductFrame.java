@@ -163,15 +163,8 @@ public class NewProductFrame extends JDialog
 		});
 
 		this.setContentPane(panel);
-
-		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
-		this.setLocation(500, 200);
-		this.setSize(458, 219);
-		this.setVisible(true);
-		this.setResizable(false);
-		this.setTitle("Νέο Προιόν");
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
+		//window listener must be set before setVisible, otherwise it won't work
 		addWindowListener(new WindowAdapter()
 		{
 			@Override
@@ -185,5 +178,13 @@ public class NewProductFrame extends JDialog
 					dispose();
 			}
 		});
+		
+		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
+		this.setLocation(500, 200);
+		this.setSize(458, 219);
+		this.setVisible(true);
+		this.setResizable(false);
+		this.setTitle("Νέο Προιόν");
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	}
 }

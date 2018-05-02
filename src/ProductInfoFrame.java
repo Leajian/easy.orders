@@ -212,14 +212,6 @@ public class ProductInfoFrame extends JDialog
 		});
 
 		this.setContentPane(panel);
-
-		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
-		this.setLocation(500, 200);
-		this.setSize(458, 242);
-		this.setVisible(true);
-		this.setResizable(false);
-		this.setTitle("Στοιχεία Προιόντος");
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		addWindowListener(new WindowAdapter()
 		{
@@ -235,9 +227,19 @@ public class ProductInfoFrame extends JDialog
 					String ObjButtons[] = {"Ναι", "Όχι"};			
 					PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 				}
+				
 				if(PromptResult == JOptionPane.YES_OPTION)
-					dispose();
+					dispose();				
 			}
 		});
+
+		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
+		this.setLocation(500, 200);
+		this.setSize(458, 242);
+		this.setVisible(true);
+		this.setResizable(false);
+		this.setTitle("Στοιχεία Προιόντος");
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
 	}
 }
