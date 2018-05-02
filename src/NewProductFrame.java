@@ -1,3 +1,5 @@
+import java.awt.Dialog;
+import java.awt.Dialog.ModalExclusionType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -6,6 +8,7 @@ import java.sql.ResultSet;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -16,7 +19,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 
-public class NewProductFrame extends JFrame
+public class NewProductFrame extends JDialog
 {
 	private JTextField idField = new JTextField();
 	private JTextField nameField = new JTextField();
@@ -45,6 +48,11 @@ public class NewProductFrame extends JFrame
 	
 	public NewProductFrame()
 	{
+		//this blocks other windows unless this is closed.
+		//this is important because we don't want to add a new product with the same id
+		//also it must be here and not the bottom for some reason
+		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+		
 		db.connect();
 		
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -130,7 +138,7 @@ public class NewProductFrame extends JFrame
 				{
 					try
 					{
-						String query = "INSERT INTO product (id, name, quality, location, supplier, packaging, price, stock) VALUES ('" + id + "', " + "'" + name + "', " + "'" + quality + "', " + "'" + location + "', " + "'" + supplier + "', " + "'" + packaging + "', " + "'" + price + "', " + "'" + stock + "')";
+						String query = "INSERT INTO product (id, name, quality, location, producer, packaging, price, stock) VALUES ('" + id + "', " + "'" + name + "', " + "'" + quality + "', " + "'" + location + "', " + "'" + supplier + "', " + "'" + packaging + "', " + "'" + price + "', " + "'" + stock + "')";
 						int rs = db.getStatement().executeUpdate(query);
 						
 						JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.");
@@ -171,6 +179,7 @@ public class NewProductFrame extends JFrame
 			{
 				String ObjButtons[] = {"Ναι", "Όχι"};			
 				int PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+				
 					
 				if(PromptResult == JOptionPane.YES_OPTION)
 					dispose();

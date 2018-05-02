@@ -1,3 +1,4 @@
+import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -14,9 +15,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.border.EtchedBorder;
 
-public class ProductInfoFrame extends JFrame
+public class ProductInfoFrame extends JDialog
 {
 	private JTextField idField = new JTextField();
 	private JTextField nameField = new JTextField();
@@ -47,6 +49,10 @@ public class ProductInfoFrame extends JFrame
 	
 	public ProductInfoFrame(String id)
 	{
+		//this blocks other windows unless this is closed.
+		//also it must be here and not the bottom for some reason
+		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+		
 		db.connect();
 		
 		try
@@ -60,7 +66,7 @@ public class ProductInfoFrame extends JFrame
 			nameField.setText(rs.getString("name"));
 			qualityField.setText(rs.getString("quality"));
 			locationField.setText(rs.getString("location"));
-			supplierField.setText(rs.getString("supplier"));
+			supplierField.setText(rs.getString("producer"));
 			packagingField.setText(rs.getString("packaging"));
 			priceField.setText(rs.getString("price"));
 			stockSpinner.setValue(rs.getObject("stock"));
@@ -220,9 +226,15 @@ public class ProductInfoFrame extends JFrame
 			@Override
 			public void windowClosing(WindowEvent we)
 			{
-				String ObjButtons[] = {"Ναι", "Όχι"};			
-				int PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
-					
+				//initialize prompt default option
+				int PromptResult = JOptionPane.YES_OPTION;
+				
+				//we care to ask only if there is an edit
+				if(editCheckBox.isSelected())
+				{
+					String ObjButtons[] = {"Ναι", "Όχι"};			
+					PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+				}
 				if(PromptResult == JOptionPane.YES_OPTION)
 					dispose();
 			}
