@@ -4,17 +4,17 @@ import java.util.ArrayList;
 public class Order
 {
 	private ArrayList<Product> products = new ArrayList<Product>();
-	private String last_edit, customer_id, employee_username, closed;
+	private String lastEdit, clientId, employeeUsername, closed;
 	
 	private DBConnect db = new DBConnect();
 	
-	public Order(String last_edit, String customer_id, String employee_username, String closed)
+	public Order(String lastEdit, String clientId, String employeeUsername, String closed)
 	{
 		db.connect();
 		
-		this.last_edit = last_edit;
-		this.customer_id = customer_id;
-		this.employee_username = employee_username;
+		this.lastEdit = lastEdit;
+		this.clientId = clientId;
+		this.employeeUsername = employeeUsername;
 		this.closed = closed;
 	}
 
@@ -28,21 +28,21 @@ public class Order
 		return products;
 	}
 
-	public String getLast_edit()
+	public String getLastEdit()
 	{
-		return last_edit;
+		return lastEdit;
 	}
 
-	public String getCustomer_id()
+	public String getClientId()
 	{
-		return customer_id;
+		return clientId;
 	}
 	
-	public String getCustomer_name()
+	public String getClientName()
 	{
 		try
 		{
-			String query = "SELECT name FROM customer WHERE id = " + customer_id;
+			String query = "SELECT name FROM client WHERE id = " + clientId;
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
@@ -57,9 +57,9 @@ public class Order
 		return "";
 	}
 
-	public String getEmployee_username()
+	public String getEmployeeUsername()
 	{
-		return employee_username;
+		return employeeUsername;
 	}
 
 	public String isClosed()
