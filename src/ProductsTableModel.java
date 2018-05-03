@@ -36,7 +36,7 @@ public class ProductsTableModel extends AbstractTableModel
     	case 1:
 			return products.get(row).getLocation();
 		case 2:
-			return products.get(row).getProducer();
+			return products.get(row).getSupplier();
 		case 3:
 			return products.get(row).getQuality();
 		case 4:
