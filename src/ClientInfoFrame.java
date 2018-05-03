@@ -1,14 +1,15 @@
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import java.sql.ResultSet;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -17,7 +18,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
-public class ClientInfoFrame extends JFrame
+public class ClientInfoFrame extends JDialog
 {
 	private JTextField nameField = new JTextField();
 	private JTextField idField = new JTextField();
@@ -50,6 +51,10 @@ public class ClientInfoFrame extends JFrame
 	
 	public ClientInfoFrame(String id)
 	{
+		//this blocks other windows unless this is closed.
+		//also it must be here and not the bottom for some reason
+		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+		
 		db.connect();
 		
 		try
