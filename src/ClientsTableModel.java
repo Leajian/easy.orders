@@ -4,13 +4,12 @@ import javax.swing.table.AbstractTableModel;
 
 public class ClientsTableModel extends AbstractTableModel
 {
-	private boolean DEBUG = true;
 	String[] clientColumnNames = {"Ονοματεπώνυμο", "ΑΦΜ", "Περιοχή", "Διεύθυνση", "Τ.Κ.", "Τηλέφωνο", "ΦΑΞ", "E-mail", "Σημειώσεις"};
-	private static ArrayList<Client> clients = new ArrayList<>();
+	private ArrayList<Client> clients = new ArrayList<>();
 	
 	public ClientsTableModel(ArrayList<Client> clients)
 	{
-		ClientsTableModel.clients = clients;
+		this.clients = clients;
 	}
 	
 	public int getColumnCount()
@@ -55,7 +54,7 @@ public class ClientsTableModel extends AbstractTableModel
     	}
     }
 	
-	public static void getClientInfo(int row)
+	public void getClientInfo(int row)
     {
     	new ClientInfoFrame(clients.get(row).getId());
     }
