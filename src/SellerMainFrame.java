@@ -7,7 +7,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -21,13 +20,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -36,11 +33,6 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
-
-import ca.odell.glazedlists.GlazedLists;
-import ca.odell.glazedlists.swing.AutoCompleteSupport;
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
 
 public class SellerMainFrame extends JFrame
 {
@@ -64,7 +56,7 @@ public class SellerMainFrame extends JFrame
 	private JRadioButton clientIdRadioButton = new JRadioButton("ΑΦΜ");
 	private JRadioButton productNameRadioButton = new JRadioButton("Προιόν");
 	private JRadioButton locationNameRadioButton = new JRadioButton("Προέλευση");
-	private JRadioButton supplierNameRadioButton = new JRadioButton("Προμυθευτής");
+	private JRadioButton producerNameRadioButton = new JRadioButton("Προμυθευτής");
 	
 	private JLabel clientsearchLabel = new JLabel("Αναζήτηση");
 	private JLabel productsearchLabel = new JLabel("Αναζήτηση");
@@ -164,9 +156,11 @@ public class SellerMainFrame extends JFrame
 		
 		//this makes all cells not editable
 		clientsTable = new JTable(clientData, clientColumnNames);
-		clientsTable.setModel(new DefaultTableModel(clientData, clientColumnNames) {
+		clientsTable.setModel(new DefaultTableModel(clientData, clientColumnNames)
+		{
 			@Override
-			public boolean isCellEditable(int row, int column) {
+			public boolean isCellEditable(int row, int column)
+			{
 				return false;
 			}
 		});
@@ -224,9 +218,6 @@ public class SellerMainFrame extends JFrame
 		//Products.
 		tabbedPane.addTab("Προϊόντα", null, productsTab, null);
 		
-		//String[] productColumnNames = {"Προιόν", "Προέλευση", "Προμυθευτής", "Ποιότητα", "Συσκευασία", "Τιμή", "Απόθεμα"};
-		//String[][] productData = {{"", ""}};
-		
 		productsTab.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("114px:grow"),
@@ -249,10 +240,6 @@ public class SellerMainFrame extends JFrame
 				RowSpec.decode("fill:415px:grow"),}));
 		
 		productsTab.add(productsearchLabel, "2, 2, right, center");
-		
-		
-//		Object[] elements = new Object[] {"Cat", "Dog", "Lion", "Mouse"};
-//		AutoCompleteSupport.install(searchProductComboBox, GlazedLists.eventListOf(elements));
 
 		//searchProductComboBox.setEditable(true);
 		productsTab.add(searchProductComboBox, "4, 2, fill, default");
@@ -260,43 +247,31 @@ public class SellerMainFrame extends JFrame
 		productNameRadioButton.setSelected(true);
 		productsTab.add(productNameRadioButton, "6, 2, left, top");
 		productsTab.add(locationNameRadioButton, "8, 2, left, top");
-		productsTab.add(supplierNameRadioButton, "10, 2");
+		productsTab.add(producerNameRadioButton, "10, 2");
 		
-		ButtonGroup productsGroup = new ButtonGroup();	
+		ButtonGroup productsGroup = new ButtonGroup();
 		productsGroup.add(productNameRadioButton);
 		productsGroup.add(locationNameRadioButton);
-		productsGroup.add(supplierNameRadioButton);
-		
-		//this makes all cells not editable
-//		productsTable = new JTable(productData, productColumnNames);
-//		productsTable.setModel(new DefaultTableModel(productData, productColumnNames) {
-//			@Override
-//			public boolean isCellEditable(int row, int column) {
-//				return false;
-//			}
-//		});
+		productsGroup.add(producerNameRadioButton);
 		
 		//testing without refresh
 		ArrayList<Product> testProductsArray = new ArrayList<>();
+		testProductsArray = OrderingManagment.fetchProducts();
 		
-		testProductsArray.add(new Product("1", "2", "3"));
-		testProductsArray.add(new Product("2", "2", "3"));
-		testProductsArray.add(new Product("3", "2", "3"));
-		testProductsArray.add(new Product("4", "2", "3"));
-		testProductsArray.add(new Product("5", "2", "3"));
-		testProductsArray.add(new Product("6", "2", "3"));
+		/*testProductsArray.add(new Product("1"));
+		testProductsArray.add(new Product("2"));
+		testProductsArray.add(new Product("3"));
+		testProductsArray.add(new Product("4"));
+		testProductsArray.add(new Product("5"));
+		testProductsArray.add(new Product("6"));*/
 		
 		//we create a table model so that we can manipulate it's data
 		ProductsTableModel ptm = new ProductsTableModel(testProductsArray);
 		
 		productsTable = new JTable(ptm);
 		
-		//testProductsArray.add(new Product("7", "2", "3"));
-		
 		//now we call the model to populate the data to the table from the list
 		ptm.update(testProductsArray);
-		
-		ptm.addRow(new Product("2", "65", "42"));
 		
 		//this disallows reordering of columns
 		productsTable.getTableHeader().setReorderingAllowed(false);
@@ -327,8 +302,10 @@ public class SellerMainFrame extends JFrame
 		productsTable.getColumnModel().getColumn(5).setPreferredWidth(115);
 		productsTable.getColumnModel().getColumn(6).setPreferredWidth(115);
 		
-		addProductButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		addProductButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
 				new NewProductFrame();
 			}
 		});
@@ -336,8 +313,10 @@ public class SellerMainFrame extends JFrame
 		productsTab.add(addProductButton, "2, 4");
 		
 		//BUG: after you delete the last item, pressing it again causes error. it remembers the last selection for some reason
-		removeProductButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		removeProductButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
 				int selectedRow = productsTable.getSelectionModel().getMinSelectionIndex();
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
 				if (selectedRow != -1)
@@ -387,9 +366,11 @@ public class SellerMainFrame extends JFrame
 		
 		//this makes all cells not editable
 		historyTable = new JTable(historytData, historyColumnNames);
-		historyTable.setModel(new DefaultTableModel(historytData, historyColumnNames) {
+		historyTable.setModel(new DefaultTableModel(historytData, historyColumnNames) 
+		{
 			@Override
-			public boolean isCellEditable(int row, int column) {
+			public boolean isCellEditable(int row, int column)
+			{
 				return false;
 			}
 		});
@@ -448,7 +429,8 @@ public class SellerMainFrame extends JFrame
 				String ObjButtons[] = {"Ναι", "Όχι"};			
 				int PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 					
-				if(PromptResult == JOptionPane.YES_OPTION) {
+				if(PromptResult == JOptionPane.YES_OPTION)
+				{
 					//if this is not set, if a stray window stays open, the application won't stop
 					setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					dispose();
@@ -458,18 +440,24 @@ public class SellerMainFrame extends JFrame
 	}
 	
 	//model for allowing only single line selection
-	public class ForcedListSelectionModel extends DefaultListSelectionModel {
+	public class ForcedListSelectionModel extends DefaultListSelectionModel
+	{
 
-	    public ForcedListSelectionModel () {
+	    public ForcedListSelectionModel () 
+	    {
 	        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	    }
 
 	    @Override
-	    public void clearSelection() {
+	    public void clearSelection()
+	    {
+	    	
 	    }
 
 	    @Override
-	    public void removeSelectionInterval(int index0, int index1) {
+	    public void removeSelectionInterval(int index0, int index1)
+	    {
+	    	
 	    }
 
 	}
@@ -570,9 +558,11 @@ public class SellerMainFrame extends JFrame
 		//this makes all cells not editable
 		ordersTable = new JTable(ordersData, ordersColumnNames);
 		ordersTable.setBounds(117, 39, 568, 161);
-		ordersTable.setModel(new DefaultTableModel(ordersData, ordersColumnNames) {
+		ordersTable.setModel(new DefaultTableModel(ordersData, ordersColumnNames)
+		{
 			@Override
-			public boolean isCellEditable(int row, int column) {
+			public boolean isCellEditable(int row, int column)
+			{
 				return false;
 			}
 		});
