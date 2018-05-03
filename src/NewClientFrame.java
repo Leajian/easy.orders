@@ -137,7 +137,7 @@ public class NewClientFrame extends JFrame
 				{
 					try
 					{
-						String query = "INSERT INTO client (id, name, city, phone_number, email, address, fax, zip_code, notes) VALUES ('" + id + "', " + "'" + name + "', " + "'" + city + "', " + "'" + phoneNumber + "', " + "'" + email + "', " + "'" + address + "', " + "'" + fax + "', " + "'" + zipCode + "', " + "'" + notes + "')";
+						String query = "INSERT INTO client (id, name, city, phoneNumber, email, address, fax, zipCode, notes) VALUES ('" + id + "', " + "'" + name + "', " + "'" + city + "', " + "'" + phoneNumber + "', " + "'" + email + "', " + "'" + address + "', " + "'" + fax + "', " + "'" + zipCode + "', " + "'" + notes + "')";
 						int rs = db.getStatement().executeUpdate(query);
 						
 						JOptionPane.showMessageDialog(null, "Ο νέος χρήστης καταχωρήθηκε.");
