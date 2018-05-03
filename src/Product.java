@@ -142,7 +142,7 @@ public class Product
 		return 0;
 	}
 
-	public String getQuantity_weight()
+	public String getQuantitWeight()
 	{
 		return quantityWeight;
 	}
