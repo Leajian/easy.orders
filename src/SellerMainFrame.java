@@ -43,7 +43,7 @@ public class SellerMainFrame extends JFrame
 	private JTable ordersTable;
 	private JTable clientsTable;
 	private JTable productsTable;
-	private JTable historyTable;
+	private JTable recordTable;
 	
 	private JTextField searchClientTextField = new JTextField();
 	
@@ -58,6 +58,8 @@ public class SellerMainFrame extends JFrame
 	private JRadioButton locationNameRadioButton = new JRadioButton("Προέλευση");
 	private JRadioButton producerNameRadioButton = new JRadioButton("Προμυθευτής");
 	
+	private JComboBox searchProductComboBox = new JComboBox();
+	
 	private JLabel clientsearchLabel = new JLabel("Αναζήτηση");
 	private JLabel productsearchLabel = new JLabel("Αναζήτηση");
 	private JLabel DateLabel = new JLabel("Ημερομηνία");
@@ -65,8 +67,9 @@ public class SellerMainFrame extends JFrame
 	private JPanel ordersTab = new JPanel();
 	private JPanel clientsTab = new JPanel();
 	private JPanel productsTab = new JPanel();
-	private JPanel historyTab = new JPanel();
-	private final JComboBox searchProductComboBox = new JComboBox();
+	private JPanel recordTab = new JPanel();
+	
+	
 	
 	public SellerMainFrame()
 	{
@@ -119,9 +122,6 @@ public class SellerMainFrame extends JFrame
 		//Clients.
 		tabbedPane.addTab("Πελάτες", null, clientsTab, null);
 		
-		String[] clientColumnNames = {"Ονοματεπώνυμο", "ΑΦΜ", "Περιοχή", "Διεύθυνση", "Τ.Κ.", "Τηλέφωνο", "ΦΑΞ", "E-mail", "Σημειώσεις"};
-		String[][] clientData = {{"", ""}};
-		
 		clientsTab.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("114px:grow"),
@@ -154,7 +154,7 @@ public class SellerMainFrame extends JFrame
 		clientsGroup.add(clientNameRadioButton);
 		clientsGroup.add(clientIdRadioButton);
 		
-		//this makes all cells not editable
+		/*//this makes all cells not editable
 		clientsTable = new JTable(clientData, clientColumnNames);
 		clientsTable.setModel(new DefaultTableModel(clientData, clientColumnNames)
 		{
@@ -163,8 +163,16 @@ public class SellerMainFrame extends JFrame
 			{
 				return false;
 			}
-		});
+		});*/
 		
+		ArrayList<Client> testClientsArray = new ArrayList<>();
+		testClientsArray = OrderingManagment.fetchClients();
+		
+		ClientsTableModel ctm = new ClientsTableModel(testClientsArray);
+		clientsTable = new JTable(ctm);
+		
+		ctm.update(testClientsArray);
+
 		//this disallows reordering of columns
 		clientsTable.getTableHeader().setReorderingAllowed(false);
 		
@@ -181,12 +189,13 @@ public class SellerMainFrame extends JFrame
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				ListSelectionModel rowSM = clientsTable.getSelectionModel();
-				System.out.println("Row " + rowSM.getMinSelectionIndex() + " is now selected.");
+				int selectedRow = clientsTable.getSelectionModel().getMinSelectionIndex();
+				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
+				ctm.getClientInfo(selectedRow);
 			}
 		});
 		
-		clientsTable.getColumnModel().getColumn(0).setPreferredWidth(165);
+		clientsTable.getColumnModel().getColumn(0).setPreferredWidth(270);
 		clientsTable.getColumnModel().getColumn(1).setPreferredWidth(104);
 		clientsTable.getColumnModel().getColumn(2).setPreferredWidth(143);
 		clientsTable.getColumnModel().getColumn(3).setPreferredWidth(145);
@@ -255,15 +264,7 @@ public class SellerMainFrame extends JFrame
 		productsGroup.add(producerNameRadioButton);
 		
 		//testing without refresh
-		ArrayList<Product> testProductsArray = new ArrayList<>();
-		testProductsArray = OrderingManagment.fetchProducts();
-		
-		/*testProductsArray.add(new Product("1"));
-		testProductsArray.add(new Product("2"));
-		testProductsArray.add(new Product("3"));
-		testProductsArray.add(new Product("4"));
-		testProductsArray.add(new Product("5"));
-		testProductsArray.add(new Product("6"));*/
+		ArrayList<Product> testProductsArray = OrderingManagment.fetchProducts();
 		
 		//we create a table model so that we can manipulate it's data
 		ProductsTableModel ptm = new ProductsTableModel(testProductsArray);
@@ -302,6 +303,7 @@ public class SellerMainFrame extends JFrame
 		productsTable.getColumnModel().getColumn(5).setPreferredWidth(115);
 		productsTable.getColumnModel().getColumn(6).setPreferredWidth(115);
 		
+		productsTab.add(addProductButton, "2, 4");
 		addProductButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -310,9 +312,8 @@ public class SellerMainFrame extends JFrame
 			}
 		});
 		
-		productsTab.add(addProductButton, "2, 4");
-		
 		//BUG: after you delete the last item, pressing it again causes error. it remembers the last selection for some reason
+		productsTab.add(removeProductButton, "2, 6");
 		removeProductButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -323,7 +324,6 @@ public class SellerMainFrame extends JFrame
 					ptm.removeSelectedProduct(selectedRow);
 			}
 		});
-		productsTab.add(removeProductButton, "2, 6");
 		
 		productsTab.add(new JScrollPane(productsTable), "4, 4, 7, 5, fill, fill");
 		
@@ -342,13 +342,13 @@ public class SellerMainFrame extends JFrame
 		
 		
 		
-		//History
-		tabbedPane.addTab("Ιστορικό Παρραγγελιών", null, historyTab, null);
+		//Record
+		tabbedPane.addTab("Ιστορικό Παρραγγελιών", null, recordTab, null);
 		
-		String[] historyColumnNames = {"Ονοματεπώνυμο", "ΑΦΜ", "Ημερομηνία", "Πωλητής"};
-		String[][] historytData = {{"", ""}};
+		//String[] recordColumnNames = {"Ονοματεπώνυμο", "ΑΦΜ", "Ημερομηνία", "Πωλητής"};
+		//String[][] recordData = {{"", ""}};
 		
-		historyTab.setLayout(new FormLayout(new ColumnSpec[] {
+		recordTab.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("114px:grow"),
 				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
@@ -362,46 +362,54 @@ public class SellerMainFrame extends JFrame
 				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC,
 				RowSpec.decode("fill:default:grow"),}));
 		
-		historyTab.add(DateLabel, "2, 2, right, center");
+		recordTab.add(DateLabel, "2, 2, right, center");
 		
 		//this makes all cells not editable
-		historyTable = new JTable(historytData, historyColumnNames);
-		historyTable.setModel(new DefaultTableModel(historytData, historyColumnNames) 
+		/*recordTable = new JTable(recordData, recordColumnNames);
+		recordTable.setModel(new DefaultTableModel(recordData, recordColumnNames)
 		{
 			@Override
 			public boolean isCellEditable(int row, int column)
 			{
 				return false;
 			}
-		});
+		});*/
+		
+		ArrayList<Order> testOrdersRecordArray = new ArrayList<>();
+		testOrdersRecordArray = OrderingManagment.fetchRecord();
+		
+		RecordTableModel rtm = new RecordTableModel(testOrdersRecordArray);
+		recordTable = new JTable(rtm);
+		
+		rtm.update(testOrdersRecordArray);
 		
 		//this disallows reordering of columns
-		historyTable.getTableHeader().setReorderingAllowed(false);
+		recordTable.getTableHeader().setReorderingAllowed(false);
 		
 		//these make that so you can only select a whole lines on click
-		historyTable.setCellSelectionEnabled(false);
-		historyTable.setColumnSelectionAllowed(false);		
-		historyTable.setRowSelectionAllowed(true);
+		recordTable.setCellSelectionEnabled(false);
+		recordTable.setColumnSelectionAllowed(false);		
+		recordTable.setRowSelectionAllowed(true);
 
 		//these make that so you can only select a single line on click
-		historyTable.setSelectionModel(new ForcedListSelectionModel());
+		recordTable.setSelectionModel(new ForcedListSelectionModel());
 		
-		historyTable.addMouseListener(new MouseAdapter()
+		recordTable.addMouseListener(new MouseAdapter()
 		{
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				ListSelectionModel rowSM = historyTable.getSelectionModel();
+				ListSelectionModel rowSM = recordTable.getSelectionModel();
 				System.out.println("Row " + rowSM.getMinSelectionIndex() + " is now selected.");
 			}
 		});
 		
-		historyTable.getColumnModel().getColumn(0).setPreferredWidth(165);
-		historyTable.getColumnModel().getColumn(1).setPreferredWidth(104);
-		historyTable.getColumnModel().getColumn(2).setPreferredWidth(143);
-		historyTable.getColumnModel().getColumn(3).setPreferredWidth(145);
+		recordTable.getColumnModel().getColumn(0).setPreferredWidth(165);
+		recordTable.getColumnModel().getColumn(1).setPreferredWidth(104);
+		recordTable.getColumnModel().getColumn(2).setPreferredWidth(143);
+		recordTable.getColumnModel().getColumn(3).setPreferredWidth(145);
 		
-		historyTab.add(new JScrollPane(historyTable), "2, 4, 5, 1, fill, fill");
+		recordTab.add(new JScrollPane(recordTable), "2, 4, 5, 1, fill, fill");
 		
 		
 		
@@ -419,7 +427,7 @@ public class SellerMainFrame extends JFrame
 		this.setLocation(100, 100);
 		this.setVisible(true);
 		this.setTitle("Easy Orders 1.0");
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		addWindowListener(new WindowAdapter()
 		{
