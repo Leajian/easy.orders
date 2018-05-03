@@ -22,7 +22,7 @@ public class Client
 	{
 		try
 		{
-			String query = "SELECT name FROM customer WHERE id = " + id;
+			String query = "SELECT name FROM client WHERE id = " + id;
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
@@ -41,7 +41,7 @@ public class Client
 	{
 		try
 		{
-			String query = "SELECT city FROM customer WHERE id = " + id;
+			String query = "SELECT city FROM client WHERE id = " + id;
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
@@ -60,7 +60,7 @@ public class Client
 	{
 		try
 		{
-			String query = "SELECT phoneNumber FROM customer WHERE id = " + id;
+			String query = "SELECT phoneNumber FROM client WHERE id = " + id;
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
@@ -79,7 +79,7 @@ public class Client
 	{
 		try
 		{
-			String query = "SELECT email FROM customer WHERE id = " + id;
+			String query = "SELECT email FROM client WHERE id = " + id;
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
@@ -98,7 +98,7 @@ public class Client
 	{
 		try
 		{
-			String query = "SELECT address FROM customer WHERE id = " + id;
+			String query = "SELECT address FROM client WHERE id = " + id;
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
@@ -117,7 +117,7 @@ public class Client
 	{
 		try
 		{
-			String query = "SELECT fax FROM customer WHERE id = " + id;
+			String query = "SELECT fax FROM client WHERE id = " + id;
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
@@ -136,7 +136,7 @@ public class Client
 	{
 		try
 		{
-			String query = "SELECT zipCode FROM customer WHERE id = " + id;
+			String query = "SELECT zipCode FROM client WHERE id = " + id;
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
@@ -155,7 +155,7 @@ public class Client
 	{
 		try
 		{
-			String query = "SELECT notes FROM customer WHERE id = " + id;
+			String query = "SELECT notes FROM client WHERE id = " + id;
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
