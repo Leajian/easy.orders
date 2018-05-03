@@ -1,5 +1,4 @@
 import java.awt.Dialog;
-import java.awt.Dialog.ModalExclusionType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -15,8 +14,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 
 public class NewProductFrame extends JDialog
@@ -25,7 +22,7 @@ public class NewProductFrame extends JDialog
 	private JTextField nameField = new JTextField();
 	private JTextField qualityField = new JTextField();
 	private JTextField locationField = new JTextField();
-	private JTextField supplierField = new JTextField();
+	private JTextField producerField = new JTextField();
 	private JTextField packagingField = new JTextField();
 	private JTextField priceField = new JTextField();
 	
@@ -33,7 +30,7 @@ public class NewProductFrame extends JDialog
 	private JLabel nameLab = new JLabel("Όνομα");
 	private JLabel qualityLab = new JLabel("Ποιότητα");
 	private JLabel locationLab = new JLabel("Προέλευση");
-	private JLabel supplierLab = new JLabel("Προμηθευτής");
+	private JLabel producerLab = new JLabel("Προμηθευτής");
 	private JLabel priceLab = new JLabel("Τιμή (€)");
 	private JLabel packagingLab = new JLabel("Συσκευασία");
 	private JLabel stockLab = new JLabel("Απόθεμα");
@@ -80,10 +77,10 @@ public class NewProductFrame extends JDialog
 		locationField.setBounds(101, 72, 129, 20);
 		panel.add(locationField);
 		
-		supplierLab.setBounds(19, 100, 93, 14);
-		panel.add(supplierLab);
-		supplierField.setBounds(101, 97, 129, 20);
-		panel.add(supplierField);
+		producerLab.setBounds(19, 100, 93, 14);
+		panel.add(producerLab);
+		producerField.setBounds(101, 97, 129, 20);
+		panel.add(producerField);
 		
 		packagingLab.setBounds(286, 50, 93, 14);
 		panel.add(packagingLab);
@@ -129,7 +126,7 @@ public class NewProductFrame extends JDialog
 				String name = nameField.getText();
 				String quality = qualityField.getText();
 				String location = locationField.getText();
-				String supplier = supplierField.getText();
+				String producer = producerField.getText();
 				String packaging = packagingField.getText();
 				String price = priceField.getText();
 				int stock = (Integer)stockSpinner.getValue();
@@ -138,7 +135,7 @@ public class NewProductFrame extends JDialog
 				{
 					try
 					{
-						String query = "INSERT INTO product (id, name, quality, location, supplier, packaging, price, stock) VALUES ('" + id + "', " + "'" + name + "', " + "'" + quality + "', " + "'" + location + "', " + "'" + supplier + "', " + "'" + packaging + "', " + "'" + price + "', " + "'" + stock + "')";
+						String query = "INSERT INTO product (id, name, quality, location, producer, packaging, price, stock) VALUES ('" + id + "', " + "'" + name + "', " + "'" + quality + "', " + "'" + location + "', " + "'" + producer + "', " + "'" + packaging + "', " + "'" + price + "', " + "'" + stock + "')";
 						int rs = db.getStatement().executeUpdate(query);
 						
 						JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.");
@@ -147,7 +144,7 @@ public class NewProductFrame extends JDialog
 						nameField.setText("");
 						qualityField.setText("");
 						locationField.setText("");
-						supplierField.setText("");
+						producerField.setText("");
 						packagingField.setText("");
 						priceField.setText("");
 						stockSpinner.setValue(0);
@@ -164,7 +161,6 @@ public class NewProductFrame extends JDialog
 
 		this.setContentPane(panel);
 		
-		//window listener must be set before setVisible, otherwise it won't work
 		addWindowListener(new WindowAdapter()
 		{
 			@Override
@@ -178,7 +174,7 @@ public class NewProductFrame extends JDialog
 					dispose();
 			}
 		});
-		
+
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(500, 200);
 		this.setSize(458, 219);

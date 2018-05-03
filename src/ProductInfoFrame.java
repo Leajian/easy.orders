@@ -24,7 +24,7 @@ public class ProductInfoFrame extends JDialog
 	private JTextField nameField = new JTextField();
 	private JTextField qualityField = new JTextField();
 	private JTextField locationField = new JTextField();
-	private JTextField supplierField = new JTextField();
+	private JTextField producerField = new JTextField();
 	private JTextField packagingField = new JTextField();
 	private JTextField priceField = new JTextField();
 	
@@ -32,7 +32,7 @@ public class ProductInfoFrame extends JDialog
 	private JLabel nameLab = new JLabel("Όνομα");
 	private JLabel qualityLab = new JLabel("Ποιότητα");
 	private JLabel locationLab = new JLabel("Προέλευση");
-	private JLabel supplierLab = new JLabel("Προμηθευτής");
+	private JLabel producerLab = new JLabel("Προμηθευτής");
 	private JLabel priceLab = new JLabel("Τιμή (€)");
 	private JLabel packagingLab = new JLabel("Συσκευασία");
 	private JLabel stockLab = new JLabel("Απόθεμα");
@@ -66,7 +66,7 @@ public class ProductInfoFrame extends JDialog
 			nameField.setText(rs.getString("name"));
 			qualityField.setText(rs.getString("quality"));
 			locationField.setText(rs.getString("location"));
-			supplierField.setText(rs.getString("producer"));
+			producerField.setText(rs.getString("producer"));
 			packagingField.setText(rs.getString("packaging"));
 			priceField.setText(rs.getString("price"));
 			stockSpinner.setValue(rs.getObject("stock"));
@@ -103,11 +103,11 @@ public class ProductInfoFrame extends JDialog
 		locationField.setBounds(101, 72, 129, 20);
 		panel.add(locationField);
 		
-		supplierLab.setBounds(19, 100, 93, 14);
-		panel.add(supplierLab);
-		supplierField.setEditable(false);
-		supplierField.setBounds(101, 97, 129, 20);
-		panel.add(supplierField);
+		producerLab.setBounds(19, 100, 93, 14);
+		panel.add(producerLab);
+		producerField.setEditable(false);
+		producerField.setBounds(101, 97, 129, 20);
+		panel.add(producerField);
 		
 		packagingLab.setBounds(286, 50, 93, 14);
 		panel.add(packagingLab);
@@ -143,7 +143,7 @@ public class ProductInfoFrame extends JDialog
 				String name = nameField.getText();
 				String quality = qualityField.getText();
 				String location = locationField.getText();
-				String supplier = supplierField.getText();
+				String producer = producerField.getText();
 				String packaging = packagingField.getText();
 				String price = priceField.getText();
 				int stock = (Integer)stockSpinner.getValue();
@@ -152,7 +152,7 @@ public class ProductInfoFrame extends JDialog
 				{
 					try
 					{
-						String query = "UPDATE product SET name = " + "'" + name + "', " + "quality = " + "'" + quality + "', " + "location = " + "'" + location + "', " + "supplier = " + "'" + supplier + "', " +  "packaging = " + "'" + packaging + "', " + "price = " + "'" + price + "', " + "stock = " + "'" + stock + "' WHERE product.id = " + "'" + id + "'";
+						String query = "UPDATE product SET name = " + "'" + name + "', " + "quality = " + "'" + quality + "', " + "location = " + "'" + location + "', " + "producer = " + "'" + producer + "', " +  "packaging = " + "'" + packaging + "', " + "price = " + "'" + price + "', " + "stock = " + "'" + stock + "' WHERE product.id = " + "'" + id + "'";
 						int rs = db.getStatement().executeUpdate(query);
 						
 						JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
@@ -165,7 +165,7 @@ public class ProductInfoFrame extends JDialog
 					nameField.setEditable(false);
 					qualityField.setEditable(false);
 					locationField.setEditable(false);
-					supplierField.setEditable(false);
+					producerField.setEditable(false);
 					packagingField.setEditable(false);
 					priceField.setEditable(false);
 					stockSpinner.setEnabled(false);
@@ -189,7 +189,7 @@ public class ProductInfoFrame extends JDialog
 					nameField.setEditable(true);
 					qualityField.setEditable(true);
 					locationField.setEditable(true);
-					supplierField.setEditable(true);
+					producerField.setEditable(true);
 					packagingField.setEditable(true);
 					priceField.setEditable(true);
 					stockSpinner.setEnabled(true);
@@ -201,7 +201,7 @@ public class ProductInfoFrame extends JDialog
 					nameField.setEditable(false);
 					qualityField.setEditable(false);
 					locationField.setEditable(false);
-					supplierField.setEditable(false);
+					producerField.setEditable(false);
 					packagingField.setEditable(false);
 					priceField.setEditable(false);
 					stockSpinner.setEnabled(false);
