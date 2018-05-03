@@ -66,7 +66,7 @@ public class ProductInfoFrame extends JDialog
 			nameField.setText(rs.getString("name"));
 			qualityField.setText(rs.getString("quality"));
 			locationField.setText(rs.getString("location"));
-			supplierField.setText(rs.getString("supplier"));
+			supplierField.setText(rs.getString("producer"));
 			packagingField.setText(rs.getString("packaging"));
 			priceField.setText(rs.getString("price"));
 			stockSpinner.setValue(rs.getObject("stock"));
@@ -227,9 +227,8 @@ public class ProductInfoFrame extends JDialog
 					String ObjButtons[] = {"Ναι", "Όχι"};			
 					PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 				}
-				
 				if(PromptResult == JOptionPane.YES_OPTION)
-					dispose();				
+					dispose();
 			}
 		});
 
@@ -239,7 +238,5 @@ public class ProductInfoFrame extends JDialog
 		this.setVisible(true);
 		this.setResizable(false);
 		this.setTitle("Στοιχεία Προιόντος");
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-
 	}
 }
