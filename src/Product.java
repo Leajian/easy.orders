@@ -15,6 +15,13 @@ public class Product
 		this.quantity_weight = quantity_weight;
 		this.price = price;
 	}
+	
+	public Product(String id)
+	{
+		db.connect();
+		
+		this.id = id;
+	}
 
 	public String getId()
 	{
