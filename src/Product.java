@@ -3,7 +3,7 @@ import java.sql.ResultSet;
 public class Product
 {
 	private String id;
-	private String quantity_weight, price;
+	private String quantityWeight, price;
 
 	private DBConnect db = new DBConnect();
 	
@@ -12,7 +12,7 @@ public class Product
 		db.connect();
 		
 		this.id = id;
-		this.quantity_weight = quantity_weight;
+		this.quantityWeight = quantity_weight;
 		this.price = price;
 	}
 	
@@ -144,11 +144,25 @@ public class Product
 
 	public String getQuantity_weight()
 	{
-		return quantity_weight;
+		return quantityWeight;
 	}
 
 	public String getPrice()
 	{
-		return price;
+		try
+		{
+			String query = "SELECT price FROM product WHERE id = " + id;
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			rs.next();
+			
+			return rs.getString("price");
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		return "";
 	}
 }
