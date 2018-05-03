@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import java.sql.ResultSet;
 
 import javax.swing.ImageIcon;
@@ -194,7 +195,7 @@ public class ClientInfoFrame extends JDialog
 				{
 					try
 					{
-						String query = "UPDATE client SET name = " + "'" + name + "', " + "city = " + "'" + city + "', " + "phoneNumber = " + "'" + phoneNumber + "', " + "email = " + "'" + email + "', " +  "address = " + "'" + address + "', " + "fax = " + "'" + fax + "', " + "zipCode = " + "'" + zipCode + "', " + "notes = " + "'" + notes + "' WHERE customer.id = " + "'" + id + "'";
+						String query = "UPDATE client SET name = " + "'" + name + "', " + "city = " + "'" + city + "', " + "phoneNumber = " + "'" + phoneNumber + "', " + "email = " + "'" + email + "', " +  "address = " + "'" + address + "', " + "fax = " + "'" + fax + "', " + "zipCode = " + "'" + zipCode + "', " + "notes = " + "'" + notes + "' WHERE client.id = " + "'" + id + "'";
 						int rs = db.getStatement().executeUpdate(query);
 						
 						JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
