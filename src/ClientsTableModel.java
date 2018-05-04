@@ -84,10 +84,8 @@ public class ClientsTableModel extends AbstractTableModel
 	public void removeClientByID(String id)
     {
     	for (Client client: clients)
-    	{
     		if (client.getId().equals(id))
     			clients.remove(client);
-    	}
 					
 		//not sure if array list adds the item last
 		fireTableDataChanged(); //to be changed, not efficient
@@ -95,10 +93,23 @@ public class ClientsTableModel extends AbstractTableModel
 	
 	public void removeSelectedClient(int row)
     {
-    	if (!clients.isEmpty())
-    		clients.remove(clients.get(row));
+		DBConnect db = new DBConnect();    	
+    	db.connect();
 		
-		//INSERT DELETION FROM DATABASE CODE HERE
+    	if (!clients.isEmpty())
+    	{
+    		try
+    		{
+    			String query = "DELETE FROM client WHERE client.id = " + "'" + clients.get(row).getId() + "'";
+    			int rs = db.getStatement().executeUpdate(query);
+			} 
+    		catch (Exception ex)
+    		{
+				ex.printStackTrace();
+			}
+
+    		clients.remove(clients.get(row));
+    	}
     	
 		fireTableDataChanged(); //to be changed, not efficient
 	}

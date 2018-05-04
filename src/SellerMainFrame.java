@@ -195,6 +195,7 @@ public class SellerMainFrame extends JFrame
 		clientsTable.getColumnModel().getColumn(7).setPreferredWidth(159);
 		clientsTable.getColumnModel().getColumn(8).setPreferredWidth(227);
 		
+		clientsTab.add(addClientButton, "2, 4");
 		addClientButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -203,8 +204,19 @@ public class SellerMainFrame extends JFrame
 			}
 		});
 		
-		clientsTab.add(addClientButton, "2, 4");
+		
 		clientsTab.add(removeClientButton, "2, 6");
+		removeClientButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				int selectedRow = clientsTable.getSelectionModel().getMinSelectionIndex();
+				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
+				if (selectedRow != -1)
+					ctm.removeSelectedClient(selectedRow);
+			}
+		});
 		
 		clientsTable.setBounds(46, 35, 881, 319);
 		

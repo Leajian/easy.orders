@@ -80,13 +80,9 @@ public class ProductsTableModel extends AbstractTableModel
     public void removeProductByID(String id)
     {
     	if (!products.isEmpty())
-    	{
-    		for (Product product : products)
-    		{
+    		for (Product product: products)
     			if(product.getId().equals(id))
     				products.remove(product);
-    		}
-        }
     	
     	//INSERT DELETION FROM DATABASE CODE HERE		
 		//not sure if array list adds the item last
@@ -95,11 +91,24 @@ public class ProductsTableModel extends AbstractTableModel
         
     public void removeSelectedProduct(int row)
     {
+    	DBConnect db = new DBConnect();    	
+    	db.connect();
+
     	if(!products.isEmpty())
-    		products.remove(products.get(row));
-			
-		//INSERT DELETION FROM DATABASE CODE HERE
+    	{
+        	try
+        	{
+    			String query = "DELETE FROM product WHERE product.id = " + products.get(row).getId();
+    			int rs = db.getStatement().executeUpdate(query);
+    		}
+        	catch (Exception ex)
+        	{
+    			ex.printStackTrace();
+    		}
         	
+        	products.remove(products.get(row));
+    	}
+
 		fireTableDataChanged(); //to be changed, not efficient
 	}
         
@@ -110,7 +119,7 @@ public class ProductsTableModel extends AbstractTableModel
         products.add(product);
         int lastRowAfterUpdate = this.getRowCount() - 1;
         fireTableRowsInserted(lastRowBeforeUpdate, lastRowAfterUpdate);
-        }
+    }
         
     //this updates the table model, using a data structure and informs the table that it must refresh it's contents
 	public void update()
