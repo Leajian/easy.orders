@@ -17,6 +17,11 @@ import javax.swing.JSpinner;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.border.EtchedBorder;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.FormSpecs;
+import javax.swing.SwingConstants;
 
 public class ProductInfoFrame extends JDialog
 {
@@ -47,6 +52,8 @@ public class ProductInfoFrame extends JDialog
 	
 	private DBConnect db = new DBConnect();
 	
+	private final JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
+	
 	public ProductInfoFrame(String id, ProductsTableModel ptm)
 	{
 		//this blocks other windows unless this is closed.
@@ -76,63 +83,102 @@ public class ProductInfoFrame extends JDialog
 			System.out.println(ex);
 		}
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("183px:grow"),
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("max(60dlu;default):grow"),
+				FormSpecs.RELATED_GAP_COLSPEC,},
+			new RowSpec[] {
+				RowSpec.decode("fill:168px:grow"),
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("fill:23px"),
+				FormSpecs.LINE_GAP_ROWSPEC,
+				RowSpec.decode("fill:23px"),
+				FormSpecs.LINE_GAP_ROWSPEC,
+				RowSpec.decode("fill:23px"),
+				FormSpecs.LINE_GAP_ROWSPEC,
+				RowSpec.decode("fill:23px"),
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("fill:max(15dlu;default):grow"),
+				FormSpecs.RELATED_GAP_ROWSPEC,}));
 		
-		panel.setLayout(null);
+		panel.add(ProductDetailsLabel, "2, 1, 7, 1, center, center");
+		panel.add(idLab, "2, 3, left, fill");
 		
-		idLab.setBounds(19, 25, 93, 14);
-		panel.add(idLab);
 		idField.setEditable(false);
-		idField.setBounds(101, 22, 65, 20);
-		panel.add(idField);
-		
-		nameLab.setBounds(19, 50, 93, 14);
-		panel.add(nameLab);
-		nameField.setEditable(false);
-		nameField.setBounds(101, 47, 129, 20);
-		panel.add(nameField);
-		
-		qualityLab.setBounds(286, 25, 93, 14);
-		panel.add(qualityLab);
+		panel.add(idField, "4, 3, fill, fill");
+
 		qualityField.setEditable(false);
-		qualityField.setBounds(371, 22, 65, 20);
-		panel.add(qualityField);
-		
-		locationLab.setBounds(19, 75, 93, 14);
-		panel.add(locationLab);
-		locationField.setEditable(false);
-		locationField.setBounds(101, 72, 129, 20);
-		panel.add(locationField);
-		
-		producerLab.setBounds(19, 100, 93, 14);
-		panel.add(producerLab);
-		producerField.setEditable(false);
-		producerField.setBounds(101, 97, 129, 20);
-		panel.add(producerField);
-		
-		packagingLab.setBounds(286, 50, 93, 14);
-		panel.add(packagingLab);
+		panel.add(qualityField, "8, 3, fill, fill");
+		panel.add(nameLab, "2, 5, left, fill");
+		panel.add(qualityLab, "6, 3, left, center");
+
+		nameField.setEditable(false);
+		panel.add(nameField, "4, 5, fill, fill");
+
 		packagingField.setEditable(false);
-		packagingField.setBounds(371, 47, 65, 20);
-		panel.add(packagingField);
-		
-		priceLab.setBounds(286, 100, 93, 14);
-		panel.add(priceLab);
-		priceField.setEditable(false);
-		priceField.setBounds(371, 97, 65, 20);
-		panel.add(priceField);
-		
-		stockLab.setBounds(286, 75, 93, 14);
-		panel.add(stockLab);
+		panel.add(packagingField, "8, 5, fill, fill");
+		panel.add(locationLab, "2, 7, fill, fill");
+
+		locationField.setEditable(false);
+		panel.add(locationField, "4, 7, fill, fill");
+
 		stockSpinner.setEnabled(false);
-		stockSpinner.setBounds(371, 72, 65, 20);
-		panel.add(stockSpinner);
+		panel.add(stockSpinner, "8, 7, fill, fill");
+		panel.add(producerLab, "2, 9, left, center");
+		panel.add(packagingLab, "6, 5, left, center");
+
+		producerField.setEditable(false);
+		panel.add(producerField, "4, 9, fill, fill");
+		panel.add(priceLab, "6, 9, left, center");
+		panel.add(stockLab, "6, 7, left, center");
+
+		priceField.setEditable(false);
+		panel.add(priceField, "8, 9, fill, fill");
+		panel.add(editCheckBox, "6, 11, 3, 1, right, fill");
+		
+		editCheckBox.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if(editCheckBox.isSelected())
+				{
+					nameField.setEditable(true);
+					qualityField.setEditable(true);
+					locationField.setEditable(true);
+					producerField.setEditable(true);
+					packagingField.setEditable(true);
+					priceField.setEditable(true);
+					stockSpinner.setEnabled(true);
+					
+					saveButton.setEnabled(true);
+				}
+				else
+				{
+					nameField.setEditable(false);
+					qualityField.setEditable(false);
+					locationField.setEditable(false);
+					producerField.setEditable(false);
+					packagingField.setEditable(false);
+					priceField.setEditable(false);
+					stockSpinner.setEnabled(false);
+					
+					saveButton.setEnabled(false);
+				}
+			}
+		});
+
+		this.setContentPane(panel);
 		saveButton.setEnabled(false);
-		
-		editCheckBox.setBounds(331, 142, 97, 23);
-		panel.add(editCheckBox);
-		
-		saveButton.setBounds(331, 172, 111, 31);
-		panel.add(saveButton);
+		panel.add(saveButton, "6, 13, 3, 1, fill, fill");
 		
 		saveButton.addActionListener(new ActionListener()
 		{	
@@ -180,46 +226,12 @@ public class ProductInfoFrame extends JDialog
 						editCheckBox.setSelected(false);
 					}
 					else
-						JOptionPane.showMessageDialog(null, "Γράφε καλά.");		
+						JOptionPane.showMessageDialog(null, "Γράφε καλά.");
 				}
 				else
 					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία.");
 			}
 		});
-		
-		editCheckBox.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				if(editCheckBox.isSelected())
-				{
-					nameField.setEditable(true);
-					qualityField.setEditable(true);
-					locationField.setEditable(true);
-					producerField.setEditable(true);
-					packagingField.setEditable(true);
-					priceField.setEditable(true);
-					stockSpinner.setEnabled(true);
-					
-					saveButton.setEnabled(true);
-				}
-				else
-				{
-					nameField.setEditable(false);
-					qualityField.setEditable(false);
-					locationField.setEditable(false);
-					producerField.setEditable(false);
-					packagingField.setEditable(false);
-					priceField.setEditable(false);
-					stockSpinner.setEnabled(false);
-					
-					saveButton.setEnabled(false);
-				}
-			}
-		});
-
-		this.setContentPane(panel);
 		
 		addWindowListener(new WindowAdapter()
 		{
@@ -242,7 +254,7 @@ public class ProductInfoFrame extends JDialog
 
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(500, 200);
-		this.setSize(458, 242);
+		this.setSize(496, 428);
 		this.setResizable(false);
 		this.setTitle("Στοιχεία Προιόντος");
 		this.setVisible(true);
