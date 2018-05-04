@@ -150,32 +150,37 @@ public class ProductInfoFrame extends JDialog
 				
 				if(!(name.trim().equals("")))
 				{
-					try
+					if((id.length() <= 5) & (name.length() <= 30) & (quality.length() <= 2) & (location.length() <= 30) & (producer.length() <= 30) & (packaging.length() <= 2) & (price.length() <= 10) & (stock <= 99999))
 					{
-						String query = "UPDATE product SET name = " + "'" + name + "', " + "quality = " + "'" + quality + "', " + "location = " + "'" + location + "', " + "producer = " + "'" + producer + "', " +  "packaging = " + "'" + packaging + "', " + "price = " + "'" + price + "', " + "stock = " + "'" + stock + "' WHERE product.id = " + "'" + id + "'";
-						int rs = db.getStatement().executeUpdate(query);
+						try
+						{
+							String query = "UPDATE product SET name = " + "'" + name + "', " + "quality = " + "'" + quality + "', " + "location = " + "'" + location + "', " + "producer = " + "'" + producer + "', " +  "packaging = " + "'" + packaging + "', " + "price = " + "'" + price + "', " + "stock = " + "'" + stock + "' WHERE product.id = " + "'" + id + "'";
+							int rs = db.getStatement().executeUpdate(query);
+							
+							//refresh the table after save
+							ptm.refresh();
+							dispose();
+							JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
+						}
+						catch(Exception ex)
+						{
+							ex.printStackTrace();
+						}
 						
-						//refresh the table after save
-						ptm.refresh();
-						dispose();
-						JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
+						nameField.setEditable(false);
+						qualityField.setEditable(false);
+						locationField.setEditable(false);
+						producerField.setEditable(false);
+						packagingField.setEditable(false);
+						priceField.setEditable(false);
+						stockSpinner.setEnabled(false);
+						
+						saveButton.setEnabled(false);
+						
+						editCheckBox.setSelected(false);
 					}
-					catch(Exception ex)
-					{
-						ex.printStackTrace();
-					}
-					
-					nameField.setEditable(false);
-					qualityField.setEditable(false);
-					locationField.setEditable(false);
-					producerField.setEditable(false);
-					packagingField.setEditable(false);
-					priceField.setEditable(false);
-					stockSpinner.setEnabled(false);
-					
-					saveButton.setEnabled(false);
-					
-					editCheckBox.setSelected(false);
+					else
+						JOptionPane.showMessageDialog(null, "Γράφε καλά.");		
 				}
 				else
 					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία.");

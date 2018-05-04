@@ -193,33 +193,38 @@ public class ClientInfoFrame extends JDialog
 				
 				if(!(name.trim().equals("")))
 				{
-					try
+					if((id.length() == 9) & (name.length() <= 30) & (city.length() <= 9) & (phoneNumber.length() <= 15) & (email.length() <= 30) & (address.length() <= 302) & (fax.length() <= 15) & (zipCode.length() <= 10) & (notes.length() <= 120))
 					{
-						String query = "UPDATE client SET name = " + "'" + name + "', " + "city = " + "'" + city + "', " + "phoneNumber = " + "'" + phoneNumber + "', " + "email = " + "'" + email + "', " +  "address = " + "'" + address + "', " + "fax = " + "'" + fax + "', " + "zipCode = " + "'" + zipCode + "', " + "notes = " + "'" + notes + "' WHERE client.id = " + "'" + id + "'";
-						int rs = db.getStatement().executeUpdate(query);
+						try
+						{
+							String query = "UPDATE client SET name = " + "'" + name + "', " + "city = " + "'" + city + "', " + "phoneNumber = " + "'" + phoneNumber + "', " + "email = " + "'" + email + "', " +  "address = " + "'" + address + "', " + "fax = " + "'" + fax + "', " + "zipCode = " + "'" + zipCode + "', " + "notes = " + "'" + notes + "' WHERE client.id = " + "'" + id + "'";
+							int rs = db.getStatement().executeUpdate(query);
 						
-						//refresh the table after save
-						ctm.refresh();
-						dispose();
-						JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
-					}
-					catch(Exception ex)
-					{
-						ex.printStackTrace();
-					}
+							//refresh the table after save
+							ctm.refresh();
+							dispose();
+							JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
+						}
+						catch(Exception ex)
+						{
+							ex.printStackTrace();
+						}
 					
-					nameField.setEditable(false);
-					cityField.setEditable(false);
-					phoneNumberField.setEditable(false);
-					emailField.setEditable(false);
-					addressField.setEditable(false);
-					faxField.setEditable(false);
-					zipCodeField.setEditable(false);
-					notesField.setEditable(false);
+						nameField.setEditable(false);
+						cityField.setEditable(false);
+						phoneNumberField.setEditable(false);
+						emailField.setEditable(false);
+						addressField.setEditable(false);
+						faxField.setEditable(false);
+						zipCodeField.setEditable(false);
+						notesField.setEditable(false);
 
-					saveButton.setEnabled(false);
+						saveButton.setEnabled(false);
 					
-					editCheckBox.setSelected(false);
+						editCheckBox.setSelected(false);
+					}
+					else
+						JOptionPane.showMessageDialog(null, "Γράφε καλά.");	
 				}
 				else
 					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία");

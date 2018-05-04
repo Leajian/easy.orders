@@ -133,29 +133,32 @@ public class NewProductFrame extends JDialog
 				
 				if(!(name.trim().equals("")))
 				{
-					try
-					{
-						String query = "INSERT INTO product (id, name, quality, location, producer, packaging, price, stock) VALUES ('" + id + "', " + "'" + name + "', " + "'" + quality + "', " + "'" + location + "', " + "'" + producer + "', " + "'" + packaging + "', " + "'" + price + "', " + "'" + stock + "')";
-						int rs = db.getStatement().executeUpdate(query);
+					if((id.length() <= 5) & (name.length() <= 30) & (quality.length() <= 2) & (location.length() <= 30) & (producer.length() <= 30) & (packaging.length() <= 2) & (price.length() <= 10) & (stock <= 99999))
+						try
+						{
+							String query = "INSERT INTO product (id, name, quality, location, producer, packaging, price, stock) VALUES ('" + id + "', " + "'" + name + "', " + "'" + quality + "', " + "'" + location + "', " + "'" + producer + "', " + "'" + packaging + "', " + "'" + price + "', " + "'" + stock + "')";
+							int rs = db.getStatement().executeUpdate(query);
 						
-						//refresh the table after save
-						ptm.update();
+							//refresh the table after save
+							ptm.update();
 						
-						JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.");
+							JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.");
 						
-						idField.setText(Integer.toString(Integer.parseInt(id) + 1));
-						nameField.setText("");
-						qualityField.setText("");
-						locationField.setText("");
-						producerField.setText("");
-						packagingField.setText("");
-						priceField.setText("");
-						stockSpinner.setValue(0);
-					}
-					catch(Exception ex)
-					{
-						ex.printStackTrace();
-					}
+							idField.setText(Integer.toString(Integer.parseInt(id) + 1));
+							nameField.setText("");
+							qualityField.setText("");
+							locationField.setText("");
+							producerField.setText("");
+							packagingField.setText("");
+							priceField.setText("");
+							stockSpinner.setValue(0);
+						}
+						catch(Exception ex)
+						{
+							ex.printStackTrace();
+						}
+					else
+						JOptionPane.showMessageDialog(null, "Γράφε καλά.");
 				}
 				else
 					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία.");
@@ -187,3 +190,32 @@ public class NewProductFrame extends JDialog
 		this.setVisible(true);
 	}
 }
+
+/*
+try
+{
+	String query = "INSERT INTO product (id, name, quality, location, producer, 
+
+packaging, price, stock) VALUES ('" + id + "', " + "'" + name + "', " + "'" + quality + "', " + "'" + location + "', " + "'" + producer + "', " + "'" + 
+
+packaging + "', " + "'" + price + "', " + "'" + stock + "')";
+	int rs = db.getStatement().executeUpdate(query);
+	
+	//refresh the table after save
+	ptm.update();
+	
+	JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.");
+	
+	idField.setText(Integer.toString(Integer.parseInt(id) + 1));
+	nameField.setText("");
+	qualityField.setText("");
+	locationField.setText("");
+	producerField.setText("");
+	packagingField.setText("");
+	priceField.setText("");
+	stockSpinner.setValue(0);
+}
+catch(Exception ex)
+{
+	ex.printStackTrace();
+}*/

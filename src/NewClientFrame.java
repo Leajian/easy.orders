@@ -139,30 +139,34 @@ public class NewClientFrame extends JDialog
 				
 				if(!id.trim().equals("") & !(name.trim().equals("")))
 				{
-					try
-					{
-						String query = "INSERT INTO client (id, name, city, phoneNumber, email, address, fax, zipCode, notes) VALUES ('" + id + "', " + "'" + name + "', " + "'" + city + "', " + "'" + phoneNumber + "', " + "'" + email + "', " + "'" + address + "', " + "'" + fax + "', " + "'" + zipCode + "', " + "'" + notes + "')";
-						int rs = db.getStatement().executeUpdate(query);
+					if((id.length() == 9) & (name.length() <= 30) & (city.length() <= 9) & (phoneNumber.length() <= 15) & (email.length() <= 30) & (address.length() <= 302) & (fax.length() <= 15) & (zipCode.length() <= 10) & (notes.length() <= 120))
 						
-						//refresh the table after save
-						ctm.update();
+						try
+						{
+							String query = "INSERT INTO client (id, name, city, phoneNumber, email, address, fax, zipCode, notes) VALUES ('" + id + "', " + "'" + name + "', " + "'" + city + "', " + "'" + phoneNumber + "', " + "'" + email + "', " + "'" + address + "', " + "'" + fax + "', " + "'" + zipCode + "', " + "'" + notes + "')";
+							int rs = db.getStatement().executeUpdate(query);
 						
-						JOptionPane.showMessageDialog(null, "Ο νέος χρήστης καταχωρήθηκε.");
+							//refresh the table after save
+							ctm.update();
 						
-						idField.setText("");
-						nameField.setText("");
-						cityField.setText("");
-						phoneNumberField.setText("");
-						emailField.setText("");
-						addressField.setText("");
-						faxField.setText("");
-						zipCodeField.setText("");
-						notesField.setText("");
-					}
-					catch(Exception ex)
-					{
-						ex.printStackTrace();
-					}
+							JOptionPane.showMessageDialog(null, "Ο νέος χρήστης καταχωρήθηκε.");
+						
+							idField.setText("");
+							nameField.setText("");
+							cityField.setText("");
+							phoneNumberField.setText("");
+							emailField.setText("");
+							addressField.setText("");
+							faxField.setText("");
+							zipCodeField.setText("");
+							notesField.setText("");
+						}
+						catch(Exception ex)
+						{
+							ex.printStackTrace();
+						}
+					else
+						JOptionPane.showMessageDialog(null, "Γράφε καλά.");
 				}
 				else
 					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία");
