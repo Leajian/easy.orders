@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
+import java.awt.Font;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
 
 public class ClientInfoFrame extends JDialog
 {
@@ -40,15 +49,18 @@ public class ClientInfoFrame extends JDialog
 	private JLabel zipCodeLab = new JLabel("Τ.Κ.");
 	private JLabel faxLab = new JLabel("ΦΑΞ");
 	private JLabel notesLab = new JLabel("Σημειώσεις");
+	private JLabel clientDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
 	
 	private JButton saveButton = new JButton("Αποθήκευση");
-	private JButton ordersRecordbutton = new JButton("Ιστορικό Παρραγελιών");
+	private JButton ordersRecordbutton = new JButton("Ιστορικό Παραγγελιών");
 	
 	private JCheckBox editCheckBox = new JCheckBox("Επεξεργασία");
 	
 	private JPanel panel = new JPanel();
 	
 	private DBConnect db = new DBConnect();
+	
+	private JScrollPane notesFieldScrollPane = new JScrollPane();
 	
 	public ClientInfoFrame(String id, ClientsTableModel ctm)
 	{
@@ -73,7 +85,6 @@ public class ClientInfoFrame extends JDialog
 			addressField.setText(rs.getString("address"));
 			faxField.setText(rs.getString("fax"));
 			zipCodeField.setText(rs.getString("zipCode"));
-			notesField.setText(rs.getString("notes"));
 			
 		}
 		catch (Exception ex)
@@ -82,90 +93,89 @@ public class ClientInfoFrame extends JDialog
 		}
 		
 		nameField.setEditable(false);
-		nameField.setBounds(112, 5, 150, 20);
 		nameField.setPreferredSize(new Dimension(150, 20));
 		
 		idField.setEditable(false);
-		idField.setBounds(359, 5, 89, 20);
 		idField.setPreferredSize(new Dimension(70, 20));
 		
 		cityField.setEditable(false);
-		cityField.setBounds(112, 50, 150, 20);
 		cityField.setPreferredSize(new Dimension(150, 20));
 		
 		zipCodeField.setEditable(false);
-		zipCodeField.setBounds(359, 81, 89, 20);
 		zipCodeField.setPreferredSize(new Dimension(70, 20));
 		
 		phoneNumberField.setEditable(false);
-		phoneNumberField.setBounds(112, 152, 150, 20);
 		phoneNumberField.setPreferredSize(new Dimension(150, 20));
 		
 		emailField.setEditable(false);
-		emailField.setBounds(112, 183, 150, 20);
 		emailField.setPreferredSize(new Dimension(150, 20));
 		
-		notesField.setEditable(false);
-		notesField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		notesField.setBounds(112, 231, 150, 60);
-		notesField.setPreferredSize(new Dimension(150, 60));
-		
 		faxField.setEditable(false);
-		faxField.setBounds(359, 152, 89, 20);
 		faxField.setPreferredSize(new Dimension(70, 20));
 		
 		addressField.setEditable(false);
-		addressField.setBounds(112, 81, 150, 20);
 		addressField.setPreferredSize(new Dimension(150, 20));
+
+		panel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("230px:grow"),
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("144px:grow"),
+				FormSpecs.UNRELATED_GAP_COLSPEC,},
+			new RowSpec[] {
+				FormSpecs.LINE_GAP_ROWSPEC,
+				RowSpec.decode("max(146dlu;default):grow"),
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormSpecs.PARAGRAPH_GAP_ROWSPEC,
+				RowSpec.decode("60px:grow"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("23px"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("33px"),
+				FormSpecs.LINE_GAP_ROWSPEC,}));
 		
-		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel.setLayout(null);
+		panel.add(clientDetailsLabel, "2, 2, 7, 1, center, center");
+		panel.add(nameLab, "2, 4, fill, center");
+		panel.add(nameField, "4, 4, fill, fill");
+		panel.add(idLab, "6, 4, fill, center");
+		panel.add(idField, "8, 4, fill, fill");
+		panel.add(cityLab, "2, 6, fill, center");
+		panel.add(cityField, "4, 6, fill, fill");
+		panel.add(addressLab, "2, 8, left, center");
+		panel.add(addressField, "4, 8, fill, fill");
+		panel.add(zipCodeLab, "6, 8, fill, center");
+		panel.add(zipCodeField, "8, 8, fill, fill");
+		panel.add(phoneNumberLab, "2, 10, left, center");
+		panel.add(phoneNumberField, "4, 10, fill, fill");
+		panel.add(faxLab, "6, 10, fill, center");
+		panel.add(faxField, "8, 10, fill, fill");
+		panel.add(emailLab, "2, 12, left, center");
+		panel.add(emailField, "4, 12, fill, fill");
+		panel.add(notesLab, "2, 14, fill, top");
 		
-		nameLab.setBounds(14, 8, 219, 14);
-		panel.add(nameLab);
-		panel.add(nameField);
+		notesFieldScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		
-		idLab.setBounds(326, 8, 80, 14);
-		panel.add(idLab);
-		panel.add(idField);
-		
-		cityLab.setBounds(14, 53, 163, 14);
-		panel.add(cityLab);
-		panel.add(cityField);
-		
-		addressLab.setBounds(14, 84, 108, 14);
-		panel.add(addressLab);
-		panel.add(addressField);
-		
-		zipCodeLab.setBounds(326, 84, 80, 14);
-		panel.add(zipCodeLab);
-		panel.add(zipCodeField);
-		
-		phoneNumberLab.setBounds(14, 155, 108, 14);
-		panel.add(phoneNumberLab);
-		panel.add(phoneNumberField);
-		
-		faxLab.setBounds(326, 155, 70, 14);
-		panel.add(faxLab);
-		panel.add(faxField);
-		
-		emailLab.setBounds(14, 186, 108, 14);
-		panel.add(emailLab);
-		panel.add(emailField);
-		
-		notesLab.setBounds(14, 231, 120, 14);
-		panel.add(notesLab);
-		panel.add(notesField);
-		saveButton.setEnabled(false);
-		
-		saveButton.setBounds(359, 332, 111, 31);
-		panel.add(saveButton);
-		
-		ordersRecordbutton.setBounds(14, 332, 163, 33);
-		panel.add(ordersRecordbutton);
-		
-		editCheckBox.setBounds(359, 298, 97, 23);
-		panel.add(editCheckBox);
+		panel.add(notesFieldScrollPane, "4, 14, fill, fill");
+		notesField.setBackground(UIManager.getColor("TextField.disabledBackground"));
+		notesField.setEditable(false);
+		notesField.setLineWrap(true);
+		notesField.setWrapStyleWord(true);
+		notesFieldScrollPane.setViewportView(notesField);
+		notesField.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		panel.add(ordersRecordbutton, "2, 18, 2, 1, left, fill");
 		
 		ordersRecordbutton.addActionListener(new ActionListener()
 		{	
@@ -175,6 +185,10 @@ public class ClientInfoFrame extends JDialog
 				
 			}
 		});
+		
+		saveButton.setEnabled(false);
+		panel.add(saveButton, "8, 18, right, fill");
+		panel.add(editCheckBox, "8, 16, right, fill");
 		
 		saveButton.addActionListener(new ActionListener()
 		{
@@ -193,7 +207,7 @@ public class ClientInfoFrame extends JDialog
 				
 				if(!(name.trim().equals("")))
 				{
-					if((id.length() == 9) & (name.length() <= 30) & (city.length() <= 9) & (phoneNumber.length() <= 15) & (email.length() <= 30) & (address.length() <= 302) & (fax.length() <= 15) & (zipCode.length() <= 10) & (notes.length() <= 120))
+					if((id.length() == 9) & (name.length() <= 30) & (city.length() <= 30) & (phoneNumber.length() <= 15) & (email.length() <= 30) & (address.length() <= 30) & (fax.length() <= 15) & (zipCode.length() <= 10) & (notes.length() <= 120))
 					{
 						try
 						{
@@ -246,6 +260,7 @@ public class ClientInfoFrame extends JDialog
 					faxField.setEditable(true);
 					zipCodeField.setEditable(true);
 					notesField.setEditable(true);
+					notesField.setBackground(Color.WHITE);
 					
 					saveButton.setEnabled(true);
 				}
@@ -259,6 +274,7 @@ public class ClientInfoFrame extends JDialog
 					faxField.setEditable(false);
 					zipCodeField.setEditable(false);
 					notesField.setEditable(false);
+					notesField.setBackground(UIManager.getColor("TextField.disabledBackground"));
 
 					saveButton.setEnabled(false);
 				}
@@ -288,7 +304,7 @@ public class ClientInfoFrame extends JDialog
 
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(500, 200);
-		this.setSize(494, 408);
+		this.setSize(595, 636);
 		this.setResizable(false);
 		this.setTitle("Στοιχεία Πελάτη");
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
