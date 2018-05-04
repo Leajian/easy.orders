@@ -43,7 +43,7 @@ public class NewProductFrame extends JDialog
 	
 	private DBConnect db = new DBConnect();
 	
-	public NewProductFrame()
+	public NewProductFrame(ProductsTableModel ptm)
 	{
 		//this blocks other windows unless this is closed.
 		//this is important because we don't want to add a new product with the same id
@@ -138,6 +138,9 @@ public class NewProductFrame extends JDialog
 						String query = "INSERT INTO product (id, name, quality, location, producer, packaging, price, stock) VALUES ('" + id + "', " + "'" + name + "', " + "'" + quality + "', " + "'" + location + "', " + "'" + producer + "', " + "'" + packaging + "', " + "'" + price + "', " + "'" + stock + "')";
 						int rs = db.getStatement().executeUpdate(query);
 						
+						//refresh the table after save
+						ptm.update();
+						
 						JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.");
 						
 						idField.setText(Integer.toString(Integer.parseInt(id) + 1));
@@ -178,9 +181,9 @@ public class NewProductFrame extends JDialog
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(500, 200);
 		this.setSize(458, 219);
-		this.setVisible(true);
 		this.setResizable(false);
 		this.setTitle("Νέο Προιόν");
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.setVisible(true);
 	}
 }

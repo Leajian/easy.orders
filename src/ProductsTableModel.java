@@ -52,7 +52,7 @@ public class ProductsTableModel extends AbstractTableModel
         
     public void getProductInfo(int row)
     {
-        new ProductInfoFrame(products.get(row).getId());
+        new ProductInfoFrame(products.get(row).getId(), this);
     }
     
     /*
@@ -113,9 +113,9 @@ public class ProductsTableModel extends AbstractTableModel
         }
         
     //this updates the table model, using a data structure and informs the table that it must refresh it's contents
-	public void update(ArrayList<Product> products)
+	public void update()
 	{
-		this.products = products;
+		this.products = OrderingManagment.fetchProducts();
 		fireTableDataChanged();
 	}
 	
