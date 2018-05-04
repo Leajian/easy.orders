@@ -154,24 +154,11 @@ public class SellerMainFrame extends JFrame
 		clientsGroup.add(clientNameRadioButton);
 		clientsGroup.add(clientIdRadioButton);
 		
-		/*//this makes all cells not editable
-		clientsTable = new JTable(clientData, clientColumnNames);
-		clientsTable.setModel(new DefaultTableModel(clientData, clientColumnNames)
-		{
-			@Override
-			public boolean isCellEditable(int row, int column)
-			{
-				return false;
-			}
-		});*/
-		
-		ArrayList<Client> testClientsArray = new ArrayList<>();
-		testClientsArray = OrderingManagment.fetchClients();
-		
-		ClientsTableModel ctm = new ClientsTableModel(testClientsArray);
+		//we create a table model so that we can manipulate it's data
+		ClientsTableModel ctm = new ClientsTableModel(new ArrayList<>());
 		clientsTable = new JTable(ctm);
 		
-		ctm.update(testClientsArray);
+		ctm.update();
 
 		//this disallows reordering of columns
 		clientsTable.getTableHeader().setReorderingAllowed(false);
@@ -203,6 +190,14 @@ public class SellerMainFrame extends JFrame
 		clientsTable.getColumnModel().getColumn(6).setPreferredWidth(115);
 		clientsTable.getColumnModel().getColumn(7).setPreferredWidth(159);
 		clientsTable.getColumnModel().getColumn(8).setPreferredWidth(227);
+		
+		addClientButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				new NewClientFrame(ctm);
+			}
+		});
 		
 		clientsTab.add(addClientButton, "2, 4");
 		clientsTab.add(removeClientButton, "2, 6");
@@ -263,16 +258,12 @@ public class SellerMainFrame extends JFrame
 		productsGroup.add(locationNameRadioButton);
 		productsGroup.add(producerNameRadioButton);
 		
-		//testing without refresh
-		ArrayList<Product> testProductsArray = OrderingManagment.fetchProducts();
-		
 		//we create a table model so that we can manipulate it's data
-		ProductsTableModel ptm = new ProductsTableModel(testProductsArray);
-		
+		ProductsTableModel ptm = new ProductsTableModel(new ArrayList<>());
 		productsTable = new JTable(ptm);
 		
 		//now we call the model to populate the data to the table from the list
-		ptm.update(testProductsArray);
+		ptm.update();
 		
 		//this disallows reordering of columns
 		productsTable.getTableHeader().setReorderingAllowed(false);
@@ -308,7 +299,7 @@ public class SellerMainFrame extends JFrame
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				new NewProductFrame();
+				new NewProductFrame(ptm);
 			}
 		});
 		
@@ -363,18 +354,8 @@ public class SellerMainFrame extends JFrame
 				RowSpec.decode("fill:default:grow"),}));
 		
 		recordTab.add(DateLabel, "2, 2, right, center");
-		
-		//this makes all cells not editable
-		/*recordTable = new JTable(recordData, recordColumnNames);
-		recordTable.setModel(new DefaultTableModel(recordData, recordColumnNames)
-		{
-			@Override
-			public boolean isCellEditable(int row, int column)
-			{
-				return false;
-			}
-		});*/
-		
+
+		//we create a table model so that we can manipulate it's data
 		ArrayList<Order> testOrdersRecordArray = new ArrayList<>();
 		testOrdersRecordArray = OrderingManagment.fetchRecord();
 		
