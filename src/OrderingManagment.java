@@ -56,25 +56,24 @@ public class OrderingManagment
 	
 	public static ArrayList<Product> fetchProductsFromOrder(Order order)
 	{
-		ArrayList<Product> products = new ArrayList<>();
 		DBConnect db = new DBConnect();
 		
 		db.connect();
 		
 		try
 		{
-			String query = "SELECT productId FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND customerId = '" + order.getClientId() + "'";
+			String query = "SELECT productId FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND clientId = '" + order.getClientId() + "'";
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
-				products.add(new Product(rs.getString("id")));
+				order.getProducts().add(new Product(rs.getString("id")));
 		} 
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
 		}
 		
-		return products;
+		return order.getProducts();
 	}
 	
 	public static ArrayList<Order> fetchRecord()

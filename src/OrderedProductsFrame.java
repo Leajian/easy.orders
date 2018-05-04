@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JScrollPane;
 
 public class OrderedProductsFrame extends JFrame
 {
@@ -15,33 +16,22 @@ public class OrderedProductsFrame extends JFrame
 	
 	public OrderedProductsFrame(Order order)
 	{
-		ProductsTableModel ptm = new ProductsTableModel(OrderingManagment.fetchProductsFromOrder(order));
+		ProductsTableModel ptm = new ProductsTableModel(order.getProducts());
+		
+		JScrollPane scrollPane = new JScrollPane();
+		panel.add(scrollPane);
 		productsTable = new JTable(ptm);
+		scrollPane.setViewportView(productsTable);
 		
 		//this disallows reordering of columns
 		productsTable.getTableHeader().setReorderingAllowed(false);
-				
+		
 		//these make that so you can only select a whole lines on click
 		productsTable.setCellSelectionEnabled(false);
 		productsTable.setColumnSelectionAllowed(false);		
 		productsTable.setRowSelectionAllowed(true);
 		
 		productsTable.setSelectionModel(new ForcedListSelectionModel());
-		
-		productsTable.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mouseReleased(MouseEvent e)
-			{
-				int selectedRow = productsTable.getSelectionModel().getMinSelectionIndex();
-				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
-				
-				//show info on double click
-				if (e.getClickCount() == 2) {
-					ptm.getProductInfo(selectedRow);
-				}
-			}
-		});
 		
 		
 		
@@ -51,9 +41,6 @@ public class OrderedProductsFrame extends JFrame
 		productsTable.getColumnModel().getColumn(3).setPreferredWidth(145);
 		productsTable.getColumnModel().getColumn(5).setPreferredWidth(115);
 		productsTable.getColumnModel().getColumn(6).setPreferredWidth(115);
-		
-		
-		panel.add(productsTable);
 		
 		
 		

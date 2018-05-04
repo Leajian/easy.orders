@@ -405,8 +405,10 @@ public class SellerMainFrame extends JFrame
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				ListSelectionModel rowSM = recordTable.getSelectionModel();
-				System.out.println("Row " + rowSM.getMinSelectionIndex() + " is now selected.");
+				int selectedRow = recordTable.getSelectionModel().getMinSelectionIndex();
+				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
+				if (selectedRow != -1)
+					new OrderedProductsFrame(rtm.getOrderAt(selectedRow));
 			}
 		});
 		

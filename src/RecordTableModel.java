@@ -44,6 +44,11 @@ public class RecordTableModel extends AbstractTableModel
     	}
     }
 	
+	public Order getOrderAt(int row)
+    {
+    	return ordersRecord.get(row);
+    }
+	
 	/*
      * JTable uses this method to determine the default renderer/
      * editor for each cell.  If we didn't implement this method,
