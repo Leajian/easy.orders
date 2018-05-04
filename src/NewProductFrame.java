@@ -16,6 +16,11 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
+
 public class NewProductFrame extends JDialog
 {
 	private JTextField idField = new JTextField();
@@ -26,6 +31,7 @@ public class NewProductFrame extends JDialog
 	private JTextField packagingField = new JTextField();
 	private JTextField priceField = new JTextField();
 	
+	private final JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
 	private JLabel idLab = new JLabel("Κωδικός");
 	private JLabel nameLab = new JLabel("Όνομα");
 	private JLabel qualityLab = new JLabel("Ποιότητα");
@@ -54,51 +60,61 @@ public class NewProductFrame extends JDialog
 		
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
-		panel.setLayout(null);
+		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("183px:grow"),
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("max(60dlu;default):grow"),
+				FormSpecs.RELATED_GAP_COLSPEC,},
+			new RowSpec[] {
+				RowSpec.decode("fill:168px:grow"),
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("fill:23px"),
+				FormSpecs.LINE_GAP_ROWSPEC,
+				RowSpec.decode("fill:23px"),
+				FormSpecs.LINE_GAP_ROWSPEC,
+				RowSpec.decode("fill:23px"),
+				FormSpecs.LINE_GAP_ROWSPEC,
+				RowSpec.decode("fill:23px"),
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("fill:max(15dlu;default):grow"),
+				FormSpecs.RELATED_GAP_ROWSPEC,}));
 		
-		idLab.setBounds(19, 25, 93, 14);
-		panel.add(idLab);
+		panel.add(ProductDetailsLabel, "2, 1, 7, 1, center, center");
+		panel.add(idLab, "2, 3, left, fill");
+		
 		idField.setEditable(false);
-		idField.setBounds(101, 22, 65, 20);
-		panel.add(idField);
+		panel.add(idField, "4, 3, fill, fill");
+
+		panel.add(qualityField, "8, 3, fill, fill");
+		panel.add(nameLab, "2, 5, left, fill");
+		panel.add(qualityLab, "6, 3, left, center");
+
+		panel.add(nameField, "4, 5, fill, fill");
+
+		panel.add(packagingField, "8, 5, fill, fill");
+		panel.add(locationLab, "2, 7, fill, fill");
+
+		panel.add(locationField, "4, 7, fill, fill");
+
+		panel.add(stockSpinner, "8, 7, fill, fill");
+		panel.add(producerLab, "2, 9, left, center");
+		panel.add(packagingLab, "6, 5, left, center");
+
+		panel.add(producerField, "4, 9, fill, fill");
+		panel.add(priceLab, "6, 9, left, center");
+		panel.add(stockLab, "6, 7, left, center");
+
+		panel.add(priceField, "8, 9, fill, fill");
 		
-		nameLab.setBounds(19, 50, 93, 14);
-		panel.add(nameLab);
-		nameField.setBounds(101, 47, 129, 20);
-		panel.add(nameField);
-		
-		qualityLab.setBounds(286, 25, 93, 14);
-		panel.add(qualityLab);
-		qualityField.setBounds(371, 22, 65, 20);
-		panel.add(qualityField);
-		
-		locationLab.setBounds(19, 75, 93, 14);
-		panel.add(locationLab);
-		locationField.setBounds(101, 72, 129, 20);
-		panel.add(locationField);
-		
-		producerLab.setBounds(19, 100, 93, 14);
-		panel.add(producerLab);
-		producerField.setBounds(101, 97, 129, 20);
-		panel.add(producerField);
-		
-		packagingLab.setBounds(286, 50, 93, 14);
-		panel.add(packagingLab);
-		packagingField.setBounds(371, 47, 65, 20);
-		panel.add(packagingField);
-		
-		priceLab.setBounds(286, 100, 93, 14);
-		panel.add(priceLab);
-		priceField.setBounds(371, 97, 65, 20);
-		panel.add(priceField);
-		
-		stockLab.setBounds(286, 75, 93, 14);
-		panel.add(stockLab);
-		stockSpinner.setBounds(371, 72, 65, 20);
-		panel.add(stockSpinner);
-		
-		saveButton.setBounds(325, 149, 111, 31);
-		panel.add(saveButton);
+		panel.add(saveButton, "6, 13, 3, 1, fill, fill");
 		
 		try
 		{
@@ -183,7 +199,7 @@ public class NewProductFrame extends JDialog
 
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(500, 200);
-		this.setSize(458, 219);
+		this.setSize(496, 428);
 		this.setResizable(false);
 		this.setTitle("Νέο Προιόν");
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

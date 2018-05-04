@@ -33,6 +33,7 @@ public class ProductInfoFrame extends JDialog
 	private JTextField packagingField = new JTextField();
 	private JTextField priceField = new JTextField();
 	
+	private final JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
 	private JLabel idLab = new JLabel("Κωδικός");
 	private JLabel nameLab = new JLabel("Όνομα");
 	private JLabel qualityLab = new JLabel("Ποιότητα");
@@ -51,8 +52,6 @@ public class ProductInfoFrame extends JDialog
 	private JPanel panel = new JPanel();
 	
 	private DBConnect db = new DBConnect();
-	
-	private final JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
 	
 	public ProductInfoFrame(String id, ProductsTableModel ptm)
 	{
@@ -257,6 +256,7 @@ public class ProductInfoFrame extends JDialog
 		this.setSize(496, 428);
 		this.setResizable(false);
 		this.setTitle("Στοιχεία Προιόντος");
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setVisible(true);
 	}
 }
