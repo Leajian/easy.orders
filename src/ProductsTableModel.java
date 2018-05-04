@@ -6,6 +6,7 @@ public class ProductsTableModel extends AbstractTableModel
 {
 	String[] productColumnNames = {"Προιόν", "Προέλευση", "Προμυθευτής", "Ποιότητα", "Συσκευασία", "Τιμή", "Απόθεμα"};
 	private ArrayList<Product> products = new ArrayList<>();
+	int n;
 		
 	public ProductsTableModel(ArrayList<Product> products)
 	{
@@ -32,6 +33,8 @@ public class ProductsTableModel extends AbstractTableModel
     	switch (col)
     	{
     	case 0:
+    		n++;
+    		System.out.println(n);
     		return products.get(row).getName();
     	case 1:
 			return products.get(row).getLocation();
@@ -47,8 +50,8 @@ public class ProductsTableModel extends AbstractTableModel
 			return products.get(row).getStock();
 		default:
 			return "ERROR";
-			}
-        }
+		}
+    }
         
     public void getProductInfo(int row)
     {
@@ -100,16 +103,17 @@ public class ProductsTableModel extends AbstractTableModel
         	{
     			String query = "DELETE FROM product WHERE product.id = " + products.get(row).getId();
     			int rs = db.getStatement().executeUpdate(query);
+            	
+    			products.remove(products.get(row));
+        		fireTableDataChanged();
     		}
         	catch (Exception ex)
         	{
     			ex.printStackTrace();
     		}
         	
-        	products.remove(products.get(row));
-    	}
 
-		fireTableDataChanged(); //to be changed, not efficient
+    	}
 	}
         
     //alternative way to add a row
@@ -121,8 +125,8 @@ public class ProductsTableModel extends AbstractTableModel
         fireTableRowsInserted(lastRowBeforeUpdate, lastRowAfterUpdate);
     }
         
-    //this updates the table model, using a data structure and informs the table that it must refresh it's contents
-	public void update()
+    //re-fetch data and refresh table
+    public void update()
 	{
 		this.products = OrderingManagment.fetchProducts();
 		fireTableDataChanged();

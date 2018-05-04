@@ -102,16 +102,17 @@ public class ClientsTableModel extends AbstractTableModel
     		{
     			String query = "DELETE FROM client WHERE client.id = " + "'" + clients.get(row).getId() + "'";
     			int rs = db.getStatement().executeUpdate(query);
+    			
+    			clients.remove(clients.get(row));
+    			fireTableDataChanged();
 			} 
     		catch (Exception ex)
     		{
 				ex.printStackTrace();
 			}
 
-    		clients.remove(clients.get(row));
+    		
     	}
-    	
-		fireTableDataChanged(); //to be changed, not efficient
 	}
 	
 	//alternative way to add a row
@@ -123,7 +124,7 @@ public class ClientsTableModel extends AbstractTableModel
     	fireTableRowsInserted(lastRowBeforeUpdate, lastRowAfterUpdate);
     }
     
-    //this updates the table model, using a data structure and informs the table that it must refresh it's contents
+    //re-fetch data and refresh table
 	public void update()
 	{
 		this.clients = OrderingManagment.fetchClients();
