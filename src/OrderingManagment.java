@@ -8,6 +8,29 @@ public class OrderingManagment
 		
 	}
 	
+	public static ArrayList<Client> fetchClients()
+	{
+		ArrayList<Client> clients = new ArrayList<>();
+		DBConnect db = new DBConnect();
+		
+		db.connect();
+		
+		try
+		{
+			String query = "SELECT id FROM client ORDER BY id";
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			while(rs.next())
+				clients.add(new Client(rs.getString("id")));
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		return clients;
+	}
+	
 	public static ArrayList<Product> fetchProducts()
 	{
 		ArrayList<Product> products = new ArrayList<>();
@@ -17,7 +40,7 @@ public class OrderingManagment
 		
 		try
 		{
-			String query = "SELECT id FROM product";
+			String query = "SELECT id FROM product ORDER BY id";
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
@@ -31,27 +54,27 @@ public class OrderingManagment
 		return products;
 	}
 	
-	public static ArrayList<Client> fetchClients()
+	public static ArrayList<Product> fetchProductsFromOrder(Order order)
 	{
-		ArrayList<Client> clients = new ArrayList<>();
+		ArrayList<Product> products = new ArrayList<>();
 		DBConnect db = new DBConnect();
 		
 		db.connect();
 		
 		try
 		{
-			String query = "SELECT id FROM client";
+			String query = "SELECT productId FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND customerId = '" + order.getClientId() + "'";
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
-				clients.add(new Client(rs.getString("id")));
+				products.add(new Product(rs.getString("id")));
 		} 
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
 		}
 		
-		return clients;
+		return products;
 	}
 	
 	public static ArrayList<Order> fetchRecord()
