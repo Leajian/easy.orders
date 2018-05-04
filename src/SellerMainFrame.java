@@ -119,24 +119,29 @@ public class SellerMainFrame extends JFrame
 		//Clients.
 		tabbedPane.addTab("Πελάτες", null, clientsTab, null);
 		
-		clientsTab.setLayout(new FormLayout(new ColumnSpec[] {
+		FormLayout fl_clientsTab = new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("114px:grow"),
-				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.UNRELATED_GAP_COLSPEC,
 				ColumnSpec.decode("781px:grow"),
-				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.UNRELATED_GAP_COLSPEC,
 				ColumnSpec.decode("109px:grow"),
-				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
-				ColumnSpec.decode("89px:grow"),},
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("89px:grow"),
+				FormSpecs.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:23px"),
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC,
+				FormSpecs.LINE_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("fill:543px:grow"),}));
+				RowSpec.decode("fill:543px:grow"),
+				FormSpecs.RELATED_GAP_ROWSPEC,});
+		fl_clientsTab.setRowGroups(new int[][]{new int[]{4, 6}});
+		fl_clientsTab.setColumnGroups(new int[][]{new int[]{6, 8}});
+		clientsTab.setLayout(fl_clientsTab);
 		
 		clientsTab.add(clientsearchLabel, "2, 2, right, center");
 		
@@ -235,26 +240,31 @@ public class SellerMainFrame extends JFrame
 		//Products.
 		tabbedPane.addTab("Προϊόντα", null, productsTab, null);
 		
-		productsTab.setLayout(new FormLayout(new ColumnSpec[] {
+		FormLayout fl_productsTab = new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("114px:grow"),
 				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("842px:grow"),
 				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("99px:grow"),
-				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("89px:grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
+				ColumnSpec.decode("default:grow"),
+				FormSpecs.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:23px"),
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC,
+				FormSpecs.LINE_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("fill:415px:grow"),}));
+				RowSpec.decode("fill:415px:grow"),
+				FormSpecs.RELATED_GAP_ROWSPEC,});
+		fl_productsTab.setRowGroups(new int[][]{new int[]{4, 6}});
+		fl_productsTab.setColumnGroups(new int[][]{new int[]{6, 8, 10}});
+		productsTab.setLayout(fl_productsTab);
 		
 		productsTab.add(productsearchLabel, "2, 2, right, center");
 
@@ -360,12 +370,13 @@ public class SellerMainFrame extends JFrame
 				ColumnSpec.decode("817px:grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("99px:grow"),
-				FormSpecs.UNRELATED_GAP_COLSPEC,},
+				FormSpecs.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:23px"),
-				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC,
-				RowSpec.decode("fill:default:grow"),}));
+				FormSpecs.LINE_GAP_ROWSPEC,
+				RowSpec.decode("fill:default:grow"),
+				FormSpecs.RELATED_GAP_ROWSPEC,}));
 		
 		recordTab.add(DateLabel, "2, 2, right, center");
 
@@ -479,6 +490,33 @@ public class SellerMainFrame extends JFrame
 		aTabbedPane.addTab("Νέα Παραγγελία",newOrderPanel);
 		
 		JTextField nameTextField;
+		newOrderPanel.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("1px"),
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				ColumnSpec.decode("max(67dlu;default)"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("left:max(574dlu;min):grow"),
+				FormSpecs.UNRELATED_GAP_COLSPEC,},
+			new RowSpec[] {
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("481px:grow"),
+				RowSpec.decode("30dlu"),
+				FormSpecs.LINE_GAP_ROWSPEC,
+				RowSpec.decode("30dlu"),
+				FormSpecs.UNRELATED_GAP_ROWSPEC,}));
+		
+		JLabel nameLabel = new JLabel("Ονοματεπώνυμο");
+		newOrderPanel.add(nameLabel, "3, 2, right, fill");
+		nameTextField = new JTextField();
+		newOrderPanel.add(nameTextField, "5, 2, fill, fill");
+		nameTextField.setColumns(10);
+		
+		JLabel productsLabel = new JLabel("Προϊόντα");
+		newOrderPanel.add(productsLabel, "3, 4, right, fill");
 		
 		JButton deleteOrderButton = new JButton("Διαγραφή Παραγγελίας");
 		deleteOrderButton.addActionListener(new ActionListener()
@@ -489,58 +527,9 @@ public class SellerMainFrame extends JFrame
 			}
 		});
 		deleteOrderButton.setVisible(false);
-		newOrderPanel.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("1px"),
-				FormSpecs.UNRELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(67dlu;default)"),
-				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("755px"),
-				FormSpecs.UNRELATED_GAP_COLSPEC,
-				ColumnSpec.decode("center:123px:grow"),
-				FormSpecs.UNRELATED_GAP_COLSPEC,},
-			new RowSpec[] {
-				FormSpecs.UNRELATED_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
-				FormSpecs.UNRELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("481px"),
-				FormSpecs.GLUE_ROWSPEC,
-				FormSpecs.LINE_GAP_ROWSPEC,
-				FormSpecs.GLUE_ROWSPEC,}));
 		
-		JLabel nameLabel = new JLabel("Ονοματεπώνυμο");
-		newOrderPanel.add(nameLabel, "3, 2, fill, fill");
-		nameTextField = new JTextField();
-		newOrderPanel.add(nameTextField, "5, 2, fill, fill");
-		nameTextField.setColumns(10);
-		
-		JLabel productsLabel = new JLabel("Προϊόντα");
-		newOrderPanel.add(productsLabel, "3, 4, fill, fill");
-
-		
-		newOrderPanel.add(deleteOrderButton, "7, 7, fill, fill");
-		
-		JButton saveButton = new JButton("Αποθήκευση");
-		newOrderPanel.add(saveButton, "7, 9, fill, fill");
-		
-		saveButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent arg0)
-			{
-				//make each tab distinct by name
-				aTabbedPane.setTitleAt(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()), nameTextField.getText());
 				
-				//set each label name to the desired name 
-				tabTitleLabel.setText(nameTextField.getText());
-				
-				//add label to tab, replacing/overriding the title of it
-				aTabbedPane.setTabComponentAt(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()), tabTitleLabel);
-				
-				//the delete button now has purpose
-				deleteOrderButton.setVisible(true);
-			}
-		});
+				newOrderPanel.add(deleteOrderButton, "3, 7, fill, fill");
 		
 		
 		
@@ -588,6 +577,27 @@ public class SellerMainFrame extends JFrame
 		
 		JScrollPane clientsTabScrollPane = new JScrollPane(ordersTable);
 		newOrderPanel.add(clientsTabScrollPane, "5, 4, 1, 6, fill, fill");
+		
+		JButton saveButton = new JButton("Αποθήκευση");
+		newOrderPanel.add(saveButton, "3, 9, fill, fill");
+		
+		saveButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				//make each tab distinct by name
+				aTabbedPane.setTitleAt(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()), nameTextField.getText());
+				
+				//set each label name to the desired name 
+				tabTitleLabel.setText(nameTextField.getText());
+				
+				//add label to tab, replacing/overriding the title of it
+				aTabbedPane.setTabComponentAt(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()), tabTitleLabel);
+				
+				//the delete button now has purpose
+				deleteOrderButton.setVisible(true);
+			}
+		});
 		
 
 		addPlusSignTabAtTheEndOf(aTabbedPane);
