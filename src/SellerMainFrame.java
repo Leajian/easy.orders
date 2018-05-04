@@ -174,11 +174,15 @@ public class SellerMainFrame extends JFrame
 		clientsTable.addMouseListener(new MouseAdapter()
 		{
 			@Override
-			public void mouseReleased(MouseEvent e)
+			public void mouseClicked(MouseEvent e)
 			{
 				int selectedRow = clientsTable.getSelectionModel().getMinSelectionIndex();
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
-				ctm.getClientInfo(selectedRow);
+				
+				//show info on double click
+				if (e.getClickCount() == 2) {
+					ctm.getClientInfo(selectedRow);
+				}
 			}
 		});
 		
@@ -281,9 +285,13 @@ public class SellerMainFrame extends JFrame
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				int selectedRow = productsTable.getSelectionModel().getMinSelectionIndex();
+				int selectedRow = clientsTable.getSelectionModel().getMinSelectionIndex();
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
-				ptm.getProductInfo(selectedRow);
+				
+				//show info on double click
+				if (e.getClickCount() == 2) {
+					ptm.getProductInfo(selectedRow);
+				}
 			}
 		});
 		
@@ -335,9 +343,6 @@ public class SellerMainFrame extends JFrame
 		
 		//Record
 		tabbedPane.addTab("Ιστορικό Παρραγγελιών", null, recordTab, null);
-		
-		//String[] recordColumnNames = {"Ονοματεπώνυμο", "ΑΦΜ", "Ημερομηνία", "Πωλητής"};
-		//String[][] recordData = {{"", ""}};
 		
 		recordTab.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
