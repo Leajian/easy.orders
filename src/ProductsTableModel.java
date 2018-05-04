@@ -118,4 +118,10 @@ public class ProductsTableModel extends AbstractTableModel
 		this.products = products;
 		fireTableDataChanged();
 	}
+	
+	//just refreshes table's existing content
+	public void refresh()
+	{
+		fireTableDataChanged();
+	}
 }

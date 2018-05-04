@@ -71,4 +71,10 @@ public class RecordTableModel extends AbstractTableModel
 		this.ordersRecord = ordersRecord;
 		fireTableDataChanged();
 	}
+	
+	//just refreshes table's existing content
+	public void refresh()
+	{
+		fireTableDataChanged();
+	}
 }

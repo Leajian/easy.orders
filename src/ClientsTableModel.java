@@ -118,4 +118,10 @@ public class ClientsTableModel extends AbstractTableModel
 		this.clients = clients;
 		fireTableDataChanged();
 	}
+	
+	//just refreshes table's existing content
+	public void refresh()
+	{
+		fireTableDataChanged();
+	}
 }
