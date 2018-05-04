@@ -157,7 +157,7 @@ public class ProductInfoFrame extends JDialog
 						
 						//refresh the table after save
 						ptm.refresh();
-						
+						dispose();
 						JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
 					}
 					catch(Exception ex)

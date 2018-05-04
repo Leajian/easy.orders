@@ -56,7 +56,7 @@ public class ClientsTableModel extends AbstractTableModel
 	
 	public void getClientInfo(int row)
     {
-    	new ClientInfoFrame(clients.get(row).getId());
+    	new ClientInfoFrame(clients.get(row).getId(), this);
     }
 	
 	 /*
@@ -113,9 +113,9 @@ public class ClientsTableModel extends AbstractTableModel
     }
     
     //this updates the table model, using a data structure and informs the table that it must refresh it's contents
-	public void update(ArrayList<Client> clients)
+	public void update()
 	{
-		this.clients = clients;
+		this.clients = OrderingManagment.fetchClients();
 		fireTableDataChanged();
 	}
 	

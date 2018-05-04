@@ -44,7 +44,7 @@ public class NewClientFrame extends JDialog
 	
 	private DBConnect db = new DBConnect();
 	
-	public NewClientFrame()
+	public NewClientFrame(ClientsTableModel ctm)
 	{
 		//this blocks other windows unless this is closed.
 		//also it must be here and not the bottom for some reason
@@ -144,6 +144,9 @@ public class NewClientFrame extends JDialog
 						String query = "INSERT INTO client (id, name, city, phoneNumber, email, address, fax, zipCode, notes) VALUES ('" + id + "', " + "'" + name + "', " + "'" + city + "', " + "'" + phoneNumber + "', " + "'" + email + "', " + "'" + address + "', " + "'" + fax + "', " + "'" + zipCode + "', " + "'" + notes + "')";
 						int rs = db.getStatement().executeUpdate(query);
 						
+						//refresh the table after save
+						ctm.update();
+						
 						JOptionPane.showMessageDialog(null, "Ο νέος χρήστης καταχωρήθηκε.");
 						
 						idField.setText("");
@@ -183,10 +186,10 @@ public class NewClientFrame extends JDialog
 		
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(500, 200);
-		this.setVisible(true);
 		this.setSize(502, 337);
 		this.setResizable(false);
 		this.setTitle("Νέος Πελάτης");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.setVisible(true);
 	}
 }

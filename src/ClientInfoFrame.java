@@ -50,7 +50,7 @@ public class ClientInfoFrame extends JDialog
 	
 	private DBConnect db = new DBConnect();
 	
-	public ClientInfoFrame(String id)
+	public ClientInfoFrame(String id, ClientsTableModel ctm)
 	{
 		//this blocks other windows unless this is closed.
 		//also it must be here and not the bottom for some reason
@@ -198,6 +198,9 @@ public class ClientInfoFrame extends JDialog
 						String query = "UPDATE client SET name = " + "'" + name + "', " + "city = " + "'" + city + "', " + "phoneNumber = " + "'" + phoneNumber + "', " + "email = " + "'" + email + "', " +  "address = " + "'" + address + "', " + "fax = " + "'" + fax + "', " + "zipCode = " + "'" + zipCode + "', " + "notes = " + "'" + notes + "' WHERE client.id = " + "'" + id + "'";
 						int rs = db.getStatement().executeUpdate(query);
 						
+						//refresh the table after save
+						ctm.refresh();
+						dispose();
 						JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
 					}
 					catch(Exception ex)
@@ -280,10 +283,10 @@ public class ClientInfoFrame extends JDialog
 
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(500, 200);
-		this.setVisible(true);
 		this.setSize(494, 408);
 		this.setResizable(false);
 		this.setTitle("Στοιχεία Πελάτη");
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.setVisible(true);
 	}
 }
