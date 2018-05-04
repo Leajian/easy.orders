@@ -285,7 +285,7 @@ public class SellerMainFrame extends JFrame
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				int selectedRow = clientsTable.getSelectionModel().getMinSelectionIndex();
+				int selectedRow = productsTable.getSelectionModel().getMinSelectionIndex();
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
 				
 				//show info on double click
