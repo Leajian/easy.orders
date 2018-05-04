@@ -2,7 +2,7 @@ import java.sql.ResultSet;
 
 public class Client
 {
-	private String id;
+	private String id, name, city, phoneNumber, email, address, fax, zipCode, notes;
 	
 	private DBConnect db = new DBConnect();
 	
@@ -11,162 +11,71 @@ public class Client
 		db.connect();
 		
 		this.id = id;
+		
+		try
+		{
+			String query = "SELECT * FROM client WHERE id = '" + id + "'";
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			rs.next();
+			
+			this.name = rs.getString("name");
+			this.city = rs.getString("city");
+			this.phoneNumber = rs.getString("phoneNumber");
+			this.email = rs.getString("email");
+			this.address = rs.getString("address");
+			this.fax = rs.getString("fax");
+			this.zipCode = rs.getString("zipCode");
+			this.notes = rs.getString("notes");
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 	
 	public String getId()
 	{
 		return id;
 	}
-	
+
 	public String getName()
 	{
-		try
-		{
-			String query = "SELECT name FROM client WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("name");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";
+		return name;
 	}
-	
+
 	public String getCity()
 	{
-		try
-		{
-			String query = "SELECT city FROM client WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("city");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";
+		return city;
 	}
-	
+
 	public String getPhoneNumber()
 	{
-		try
-		{
-			String query = "SELECT phoneNumber FROM client WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("phoneNumber");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";
+		return phoneNumber;
 	}
-	
+
 	public String getEmail()
 	{
-		try
-		{
-			String query = "SELECT email FROM client WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("email");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";
+		return email;
 	}
-	
+
 	public String getAddress()
 	{
-		try
-		{
-			String query = "SELECT address FROM client WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("address");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";
+		return address;
 	}
-	
+
 	public String getFax()
 	{
-		try
-		{
-			String query = "SELECT fax FROM client WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("fax");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";
+		return fax;
 	}
-	
+
 	public String getZipCode()
 	{
-		try
-		{
-			String query = "SELECT zipCode FROM client WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("zipCode");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";	
+		return zipCode;
 	}
-	
+
 	public String getNotes()
 	{
-		try
-		{
-			String query = "SELECT notes FROM client WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("notes");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";
+		return notes;
 	}
 }

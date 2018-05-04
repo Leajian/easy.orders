@@ -2,18 +2,36 @@ import java.sql.ResultSet;
 
 public class Product
 {
-	private String id;
-	private String quantityWeight, price;
+	private String id, name, quality, location, producer, packaging, price, stock, quantityWeight;
 
 	private DBConnect db = new DBConnect();
 	
-	public Product(String id, String quantity_weight, String price)
+	public Product(String id, String price, String quantityWeight)
 	{
 		db.connect();
 		
 		this.id = id;
-		this.quantityWeight = quantity_weight;
+		this.quantityWeight = quantityWeight;
 		this.price = price;
+		
+		try
+		{
+			String query = "SELECT * FROM product WHERE id = '" + id + "'";
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			rs.next();
+			
+			this.name = rs.getString("name");
+			this.quality = rs.getString("quality");
+			this.location = rs.getString("location");
+			this.producer = rs.getString("producer");
+			this.packaging = rs.getString("packaging");
+			this.stock = rs.getString("stock");
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 	
 	public Product(String id)
@@ -21,148 +39,75 @@ public class Product
 		db.connect();
 		
 		this.id = id;
+		
+		try
+		{
+			String query = "SELECT * FROM product WHERE id = '" + id + "'";
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			rs.next();
+			
+			this.name = rs.getString("name");
+			this.quality = rs.getString("quality");
+			this.location = rs.getString("location");
+			this.producer = rs.getString("producer");
+			this.packaging = rs.getString("packaging");
+			this.price = rs.getString("price");
+			this.stock = rs.getString("stock");
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 
 	public String getId()
 	{
 		return id;
 	}
-	
+
 	public String getName()
 	{
-		try
-		{
-			String query = "SELECT name FROM product WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("name");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";
-	}
-	
-	public String getQuality()
-	{
-		try
-		{
-			String query = "SELECT quality FROM product WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("quality");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";
-	}
-	
-	public String getLocation()
-	{
-		try
-		{
-			String query = "SELECT location FROM product WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("location");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";
-	}
-	
-	public String getProducer()
-	{
-		try
-		{
-			String query = "SELECT producer FROM product WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("producer");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";
-	}
-	
-	public String getPackaging()
-	{
-		try
-		{
-			String query = "SELECT packaging FROM product WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("packaging");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";
-	}
-	
-	public int getStock()
-	{
-		try
-		{
-			String query = "SELECT stock FROM product WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getInt("stock");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return 0;
+		return name;
 	}
 
-	public String getQuantitWeight()
+	public String getQuality()
 	{
-		return quantityWeight;
+		return quality;
+	}
+
+	public String getLocation()
+	{
+		return location;
+	}
+
+	public String getProducer()
+	{
+		return producer;
+	}
+
+	public String getPackaging()
+	{
+		return packaging;
 	}
 
 	public String getPrice()
 	{
-		try
-		{
-			String query = "SELECT price FROM product WHERE id = " + id;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("price");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return "";
+		return price;
+	}
+
+	public String getStock()
+	{
+		return stock;
+	}
+
+	public String getQuantityWeight()
+	{
+		return quantityWeight;
+	}
+
+	public DBConnect getDb()
+	{
+		return db;
 	}
 }
