@@ -69,11 +69,8 @@ public class SellerMainFrame extends JFrame
 	private JPanel productsTab = new JPanel();
 	private JPanel recordTab = new JPanel();
 	
-	
-	
 	public SellerMainFrame()
 	{
-		setResizable(false);	
 		liveOrdersTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
 		this.setBounds(100, 100, 1300, 750);
@@ -425,6 +422,7 @@ public class SellerMainFrame extends JFrame
 		this.setLocation(100, 100);
 		this.setVisible(true);
 		this.setTitle("Easy Orders 1.0");
+		this.setResizable(true);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		addWindowListener(new WindowAdapter()
@@ -445,28 +443,21 @@ public class SellerMainFrame extends JFrame
 		});
 	}
 	
-	//model for allowing only single line selection
-	public class ForcedListSelectionModel extends DefaultListSelectionModel
-	{
-
-	    public ForcedListSelectionModel () 
-	    {
-	        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	    }
-
-	    @Override
-	    public void clearSelection()
-	    {
-	    	
-	    }
-
-	    @Override
-	    public void removeSelectionInterval(int index0, int index1)
-	    {
-	    	
-	    }
-
-	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	private void createTab(JTabbedPane aTabbedPane)
 	{	
