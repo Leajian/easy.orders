@@ -96,8 +96,6 @@ public class Client
 			
 			if(rs.getInt("isEditable") == 1)
 				return true;
-			else 
-				return false;
 		} 
 		catch (Exception ex)
 		{
