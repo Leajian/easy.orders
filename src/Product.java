@@ -113,43 +113,23 @@ public class Product
 		return quantityWeight;
 	}
 	
-	public void setName(String name)
+	public boolean isEditable()
 	{
-		this.name = name;
-	}
-
-	public void setQuality(String quality)
-	{
-		this.quality = quality;
-	}
-
-	public void setLocation(String location)
-	{
-		this.location = location;
-	}
-
-	public void setProducer(String producer)
-	{
-		this.producer = producer;
-	}
-
-	public void setPackaging(String packaging)
-	{
-		this.packaging = packaging;
-	}
-
-	public void setPrice(String price)
-	{
-		this.price = price;
-	}
-
-	public void setStock(String stock)
-	{
-		this.stock = stock;
-	}
-
-	public void setQuantityWeight(String quantityWeight)
-	{
-		this.quantityWeight = quantityWeight;
+		try
+		{
+			String query = "SELECT isEditable from product WHERE id = '" + id + "'";
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			rs.next();
+			
+			if(rs.getInt("isEditable") == 1)
+				return true;
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		return false;
 	}
 }

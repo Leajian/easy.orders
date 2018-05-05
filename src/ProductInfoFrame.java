@@ -52,7 +52,7 @@ public class ProductInfoFrame extends JDialog
 	
 	private DBConnect db = new DBConnect();
 	
-	public ProductInfoFrame(String id, ProductsTableModel ptm)
+	public ProductInfoFrame(String id, ProductsTableModel ptm, int selectedRow)
 	{
 		//this blocks other windows unless this is closed.
 		//also it must be here and not the bottom for some reason
@@ -200,7 +200,7 @@ public class ProductInfoFrame extends JDialog
 						{
 							String query = "UPDATE product SET name = " + "'" + name + "', " + "quality = " + "'" + quality + "', " + "location = " + "'" + location + "', " + "producer = " + "'" + producer + "', " +  "packaging = " + "'" + packaging + "', " + "price = " + "'" + price + "', " + "stock = " + "'" + stock + "' WHERE product.id = " + "'" + id + "'";
 							int rs = db.getStatement().executeUpdate(query);
-
+							ptm.setProductEditable(selectedRow);
 							dispose();
 							JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
 						}
@@ -244,7 +244,10 @@ public class ProductInfoFrame extends JDialog
 					PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 				}
 				if(PromptResult == JOptionPane.YES_OPTION)
+				{
+					ptm.setProductEditable(selectedRow);
 					dispose();
+				}
 			}
 		});
 

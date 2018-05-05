@@ -6,9 +6,11 @@ public class ProductsTableModel extends AbstractTableModel
 {
 	private String[] productColumnNames = {"Προιόν", "Προέλευση", "Προμυθευτής", "Ποιότητα", "Συσκευασία", "Τιμή", "Απόθεμα"};
 	private ArrayList<Product> products = new ArrayList<>();
+	private DBConnect db = new DBConnect();
 		
 	public ProductsTableModel(ArrayList<Product> products)
 	{
+		db.connect();
 		this.products = products;
 	}
 
@@ -52,8 +54,39 @@ public class ProductsTableModel extends AbstractTableModel
         
     public void getProductInfo(int row)
     {
-        new ProductInfoFrame(products.get(row).getId(), this);
+        new ProductInfoFrame(products.get(row).getId(), this, row);
     }
+    
+    public boolean isProductEditable(int row)
+	{
+		return products.get(row).isEditable();
+	}
+	
+	public void setProductEditable(int row)
+	{
+		try
+		{
+			String query = "UPDATE product SET isEditable = 1 WHERE id = '" + products.get(row).getId() + "'";
+			int rs = db.getStatement().executeUpdate(query);
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+	
+	public void setProductUneditable(int row)
+	{
+		try
+		{
+			String query = "UPDATE product SET isEditable = 0 WHERE id = '" + products.get(row).getId() + "'";
+			int rs = db.getStatement().executeUpdate(query);
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
     
     /*
      * JTable uses this method to determine the default renderer/
