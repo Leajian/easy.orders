@@ -54,28 +54,6 @@ public class OrderingManagment
 		return products;
 	}
 	
-	public static ArrayList<Product> fetchProductsFromOrder(Order order)
-	{
-		DBConnect db = new DBConnect();
-		
-		db.connect();
-		
-		try
-		{
-			String query = "SELECT productId FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND clientId = '" + order.getClientId() + "'";
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			while(rs.next())
-				order.getProducts().add(new Product(rs.getString("id")));
-		} 
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		return order.getProducts();
-	}
-	
 	public static ArrayList<Order> fetchRecord()
 	{
 		ArrayList<Order> ordersRecord = new ArrayList<>();
@@ -91,6 +69,33 @@ public class OrderingManagment
 			while(rs.next())
 				ordersRecord.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getString("closed")));
 		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		try
+		{
+			//Return products.
+			String query = "SELECT lastEdit, product.id AS productId,\r\n" + 
+					"quantityWeight,\r\n" + 
+					"orders.price\r\n" + 
+					"FROM client, product, orders\r\n" + 
+					"WHERE orders.clientId = client.id\r\n" + 
+					"AND orders.productId = product.id\r\n" +
+					"AND closed = '0' ORDER BY lastEdit";
+			
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			for(Order order: ordersRecord)
+			{
+				while(rs.next())
+					if(order.getLastEdit().equals(rs.getString("lastEdit")))
+						order.getProducts().add(new Product(rs.getString("productId"), rs.getString("quantityWeight"), rs.getString("orders.price")));
+				
+				rs.beforeFirst();
+			}
+		}
 		catch (Exception ex)
 		{
 			ex.printStackTrace();

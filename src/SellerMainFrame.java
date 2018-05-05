@@ -10,7 +10,6 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -182,9 +181,8 @@ public class SellerMainFrame extends JFrame
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
 				
 				//show info on double click
-				if (e.getClickCount() == 2) {
+				if (e.getClickCount() == 2)
 					ctm.getClientInfo(selectedRow);
-				}
 			}
 		});
 		
@@ -308,9 +306,8 @@ public class SellerMainFrame extends JFrame
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
 				
 				//show info on double click
-				if (e.getClickCount() == 2) {
+				if (e.getClickCount() == 2)
 					ptm.getProductInfo(selectedRow);
-				}
 			}
 		});
 		
@@ -406,8 +403,8 @@ public class SellerMainFrame extends JFrame
 			public void mouseReleased(MouseEvent e)
 			{
 				int selectedRow = recordTable.getSelectionModel().getMinSelectionIndex();
-				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
-				if (selectedRow != -1)
+
+				if (e.getClickCount() == 2)
 					new OrderedProductsFrame(rtm.getOrderAt(selectedRow));
 			}
 		});
@@ -432,10 +429,10 @@ public class SellerMainFrame extends JFrame
 		
 		
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
-		this.setLocation(100, 100);
+		this.setLocation(80, 50);
 		this.setVisible(true);
 		this.setTitle("Easy Orders 1.0");
-		this.setResizable(true);
+		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		addWindowListener(new WindowAdapter()
