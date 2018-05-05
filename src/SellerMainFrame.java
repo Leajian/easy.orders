@@ -159,7 +159,7 @@ public class SellerMainFrame extends JFrame
 		ClientsTableModel ctm = new ClientsTableModel(new ArrayList<>());
 		clientsTable = new JTable(ctm);
 		
-		ctm.update();
+		ctm.populate();
 
 		//this disallows reordering of columns
 		clientsTable.getTableHeader().setReorderingAllowed(false);
@@ -284,7 +284,7 @@ public class SellerMainFrame extends JFrame
 		productsTable = new JTable(ptm);
 		
 		//now we call the model to populate the data to the table from the list
-		ptm.update();
+		ptm.populate();
 		
 		//this disallows reordering of columns
 		productsTable.getTableHeader().setReorderingAllowed(false);
@@ -384,7 +384,7 @@ public class SellerMainFrame extends JFrame
 		RecordTableModel rtm = new RecordTableModel(testOrdersRecordArray);
 		recordTable = new JTable(rtm);
 		
-		rtm.update(testOrdersRecordArray);
+		rtm.populate(testOrdersRecordArray);
 		
 		//this disallows reordering of columns
 		recordTable.getTableHeader().setReorderingAllowed(false);

@@ -3,25 +3,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.Serializable;
 import java.sql.ResultSet;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.JSpinner;
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
+import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
-import com.jgoodies.forms.layout.FormLayout;
+
 import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
-import javax.swing.SwingConstants;
+import com.jgoodies.forms.layout.RowSpec;
 
 public class ProductInfoFrame extends JDialog
 {
@@ -201,9 +200,7 @@ public class ProductInfoFrame extends JDialog
 						{
 							String query = "UPDATE product SET name = " + "'" + name + "', " + "quality = " + "'" + quality + "', " + "location = " + "'" + location + "', " + "producer = " + "'" + producer + "', " +  "packaging = " + "'" + packaging + "', " + "price = " + "'" + price + "', " + "stock = " + "'" + stock + "' WHERE product.id = " + "'" + id + "'";
 							int rs = db.getStatement().executeUpdate(query);
-							
-							//refresh the table after save
-							ptm.refresh();
+
 							dispose();
 							JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
 						}
@@ -252,7 +249,7 @@ public class ProductInfoFrame extends JDialog
 		});
 
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
-		this.setLocation(500, 200);
+		this.setLocation(480, 120);
 		this.setSize(496, 428);
 		this.setResizable(false);
 		this.setTitle("Στοιχεία Προιόντος");

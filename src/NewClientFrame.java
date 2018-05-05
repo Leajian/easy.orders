@@ -17,8 +17,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.UIManager;
-import javax.swing.border.EtchedBorder;
 
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
@@ -157,7 +155,7 @@ public class NewClientFrame extends JDialog
 							int rs = db.getStatement().executeUpdate(query);
 						
 							//refresh the table after save
-							ctm.update();
+							ctm.populate();
 						
 							JOptionPane.showMessageDialog(null, "Ο νέος χρήστης καταχωρήθηκε.");
 						
@@ -199,7 +197,7 @@ public class NewClientFrame extends JDialog
 		});
 		
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
-		this.setLocation(500, 200);
+		this.setLocation(450, 100);
 		this.setSize(595, 636);
 		this.setResizable(false);
 		this.setTitle("Νέος Πελάτης");

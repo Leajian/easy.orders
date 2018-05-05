@@ -2,7 +2,7 @@ import java.sql.ResultSet;
 
 public class Client
 {
-	private String id, name, city, phoneNumber, email, address, fax, zipCode, notes;
+	private String lastEdit, id, name, city, phoneNumber, email, address, fax, zipCode, notes;
 	
 	private DBConnect db = new DBConnect();
 	
@@ -19,6 +19,7 @@ public class Client
 			
 			rs.next();
 			
+			this.lastEdit = rs.getString("lastEdit");
 			this.name = rs.getString("name");
 			this.city = rs.getString("city");
 			this.phoneNumber = rs.getString("phoneNumber");
@@ -32,6 +33,11 @@ public class Client
 		{
 			ex.printStackTrace();
 		}
+	}
+	
+	public String lastEdit()
+	{
+		return lastEdit;
 	}
 
 	public String getId()
@@ -77,45 +83,5 @@ public class Client
 	public String getNotes()
 	{
 		return notes;
-	}
-	
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-
-	public void setCity(String city)
-	{
-		this.city = city;
-	}
-
-	public void setPhoneNumber(String phoneNumber)
-	{
-		this.phoneNumber = phoneNumber;
-	}
-
-	public void setEmail(String email)
-	{
-		this.email = email;
-	}
-
-	public void setAddress(String address)
-	{
-		this.address = address;
-	}
-
-	public void setFax(String fax)
-	{
-		this.fax = fax;
-	}
-
-	public void setZipCode(String zipCode)
-	{
-		this.zipCode = zipCode;
-	}
-
-	public void setNotes(String notes)
-	{
-		this.notes = notes;
 	}
 }

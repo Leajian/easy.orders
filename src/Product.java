@@ -2,7 +2,7 @@ import java.sql.ResultSet;
 
 public class Product
 {
-	private String id, name, quality, location, producer, packaging, price, stock, quantityWeight;
+	private String lastEdit, id, name, quality, location, producer, packaging, price, stock, quantityWeight;
 
 	private DBConnect db = new DBConnect();
 	
@@ -21,6 +21,7 @@ public class Product
 			
 			rs.next();
 			
+			this.lastEdit = rs.getString("lastEdit");
 			this.name = rs.getString("name");
 			this.quality = rs.getString("quality");
 			this.location = rs.getString("location");
@@ -47,6 +48,7 @@ public class Product
 			
 			rs.next();
 			
+			this.lastEdit = rs.getString("lastEdit");
 			this.name = rs.getString("name");
 			this.quality = rs.getString("quality");
 			this.location = rs.getString("location");
@@ -59,6 +61,11 @@ public class Product
 		{
 			ex.printStackTrace();
 		}
+	}
+	
+	public String getLastEdit()
+	{
+		return lastEdit;
 	}
 
 	public String getId()

@@ -4,7 +4,7 @@ import javax.swing.table.AbstractTableModel;
 
 public class RecordTableModel extends AbstractTableModel
 {
-	String[] recordColumnNames = {"Ονοματεπώνυμο", "ΑΦΜ", "Ημερομηνία", "Πωλητής"};
+	private String[] recordColumnNames = {"Ονοματεπώνυμο", "ΑΦΜ", "Ημερομηνία", "Πωλητής"};
 	private ArrayList<Order> ordersRecord = new ArrayList<>();
 	
 	public RecordTableModel(ArrayList<Order> ordersRecord)
@@ -71,15 +71,9 @@ public class RecordTableModel extends AbstractTableModel
     	return false;
     }
 	
-	public void update(ArrayList<Order> ordersRecord)
+	public void populate(ArrayList<Order> ordersRecord)
 	{
 		this.ordersRecord = ordersRecord;
-		fireTableDataChanged();
-	}
-	
-	//just refreshes table's existing content
-	public void refresh()
-	{
 		fireTableDataChanged();
 	}
 }

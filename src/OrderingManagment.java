@@ -77,20 +77,20 @@ public class OrderingManagment
 		try
 		{
 			//Return products.
-			String query = "SELECT lastEdit, product.id AS productId, client.id AS clientId, quantityWeight, orders.price,\r\n" + 
+			String query = "SELECT orders.lastEdit, product.id AS productId, client.id AS clientId, quantityWeight, orders.price,\r\n" + 
 					"quantityWeight,\r\n" + 
 					"orders.price\r\n" + 
 					"FROM client, product, orders\r\n" + 
 					"WHERE orders.clientId = client.id\r\n" + 
 					"AND orders.productId = product.id\r\n" +
-					"AND closed = '0' ORDER BY lastEdit";
+					"AND closed = '0' ORDER BY orders.lastEdit";
 			
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			for(Order order: ordersRecord)
 			{
 				while(rs.next())
-					if((order.getLastEdit().equals(rs.getString("lastEdit"))) & (order.getClientId().equals(rs.getString("clientId"))))
+					if((order.getLastEdit().equals(rs.getString("orders.lastEdit"))) & (order.getClientId().equals(rs.getString("clientId"))))
 						order.getProducts().add(new Product(rs.getString("productId"), rs.getString("quantityWeight"), rs.getString("orders.price")));
 				
 				rs.beforeFirst();

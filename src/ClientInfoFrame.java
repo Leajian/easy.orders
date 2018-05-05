@@ -214,8 +214,6 @@ public class ClientInfoFrame extends JDialog
 							String query = "UPDATE client SET name = " + "'" + name + "', " + "city = " + "'" + city + "', " + "phoneNumber = " + "'" + phoneNumber + "', " + "email = " + "'" + email + "', " +  "address = " + "'" + address + "', " + "fax = " + "'" + fax + "', " + "zipCode = " + "'" + zipCode + "', " + "notes = " + "'" + notes + "' WHERE client.id = " + "'" + id + "'";
 							int rs = db.getStatement().executeUpdate(query);
 						
-							//refresh the table after save
-							ctm.refresh();
 							dispose();
 							JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
 						}
@@ -303,7 +301,7 @@ public class ClientInfoFrame extends JDialog
 		});
 
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
-		this.setLocation(500, 200);
+		this.setLocation(450, 100);
 		this.setSize(595, 636);
 		this.setResizable(false);
 		this.setTitle("Στοιχεία Πελάτη");

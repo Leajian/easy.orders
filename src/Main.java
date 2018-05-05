@@ -22,7 +22,7 @@ public class Main
 	
 		new SellerMainFrame();
 		
-		/*try
+		try
 		{	
 			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed\r\n" + 
 					"FROM orders\r\n" + 
@@ -41,7 +41,7 @@ public class Main
 		try
 		{
 			//Return products.
-			String query = "SELECT lastEdit, product.id AS productId, client.id AS clientId, quantityWeight, orders.price,\r\n" + 
+			String query = "SELECT orders.lastEdit, product.id AS productId, client.id AS clientId, quantityWeight, orders.price,\r\n" + 
 					"quantityWeight,\r\n" + 
 					"orders.price\r\n" + 
 					"FROM client, product, orders\r\n" + 
@@ -65,8 +65,8 @@ public class Main
 			ex.printStackTrace();
 		}
 		
-		//if(!orders.isEmpty())
-			//orders.remove(orders.size() - 1);
+		if(!orders.isEmpty())
+			orders.remove(orders.size() - 1);
 		
 		for(Order order: orders)
 		{
@@ -107,7 +107,7 @@ public class Main
 							ResultSet rs1 = db.getStatement().executeQuery(query);
 							
 							while(rs1.next())
-								orders.add(new Order(rs1.getString("lastEdit"), rs1.getString("clientId"), rs1.getString("employeeUsername"), rs1.getString("closed")));
+								orders.add(new Order(rs1.getString("orders.lastEdit"), rs1.getString("clientId"), rs1.getString("employeeUsername"), rs1.getString("closed")));
 						}
 						catch (Exception ex)
 						{
@@ -116,20 +116,20 @@ public class Main
 						
 						try 
 						{
-							query = "SELECT lastEdit, product.id AS productId, client.id AS clientId,\r\n" + 
+							query = "SELECT orders.lastEdit, product.id AS productId, client.id AS clientId,\r\n" + 
 									"quantityWeight,\r\n" + 
 									"orders.price\r\n" + 
 									"FROM client, product, orders\r\n" + 
 									"WHERE orders.clientId = client.id\r\n" + 
 									"AND orders.productId = product.id\r\n" +
-									"AND lastEdit >= '" + lastEdit + "' ORDER BY lastEdit";
+									"AND orders.lastEdit >= '" + lastEdit + "' ORDER BY orders.lastEdit";
 							
 							ResultSet rs2 = db.getStatement().executeQuery(query);
 							
 							for(int i = oldLength; i < orders.size(); i++)
 							{
 								while(rs2.next())
-									if(orders.get(i).getLastEdit().equals(rs2.getString("lastEdit")) & (orders.get(i).getClientId().equals(rs2.getString("clientId"))))
+									if(orders.get(i).getLastEdit().equals(rs2.getString("orders.lastEdit")) & (orders.get(i).getClientId().equals(rs2.getString("clientId"))))
 										orders.get(i).getProducts().add(new Product(rs2.getString("productId"), rs2.getString("quantityWeight"), rs2.getString("orders.price")));
 								
 								rs2.beforeFirst();
@@ -158,6 +158,6 @@ public class Main
 					//ex.printStackTrace();
 				}
 			}
-		}, 0, 10, TimeUnit.MILLISECONDS);*/
+		}, 0, 10, TimeUnit.MILLISECONDS);
 	}
 }

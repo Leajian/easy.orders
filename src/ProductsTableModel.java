@@ -4,9 +4,8 @@ import javax.swing.table.AbstractTableModel;
 
 public class ProductsTableModel extends AbstractTableModel
 {
-	String[] productColumnNames = {"Προιόν", "Προέλευση", "Προμυθευτής", "Ποιότητα", "Συσκευασία", "Τιμή", "Απόθεμα"};
+	private String[] productColumnNames = {"Προιόν", "Προέλευση", "Προμυθευτής", "Ποιότητα", "Συσκευασία", "Τιμή", "Απόθεμα"};
 	private ArrayList<Product> products = new ArrayList<>();
-	int n;
 		
 	public ProductsTableModel(ArrayList<Product> products)
 	{
@@ -33,8 +32,6 @@ public class ProductsTableModel extends AbstractTableModel
     	switch (col)
     	{
     	case 0:
-    		n++;
-    		System.out.println(n);
     		return products.get(row).getName();
     	case 1:
 			return products.get(row).getLocation();
@@ -111,8 +108,6 @@ public class ProductsTableModel extends AbstractTableModel
         	{
     			ex.printStackTrace();
     		}
-        	
-
     	}
 	}
         
@@ -126,15 +121,9 @@ public class ProductsTableModel extends AbstractTableModel
     }
         
     //re-fetch data and refresh table
-    public void update()
+    public void populate()
 	{
 		this.products = OrderingManagment.fetchProducts();
-		fireTableDataChanged();
-	}
-	
-	//just refreshes table's existing content
-	public void refresh()
-	{
 		fireTableDataChanged();
 	}
 }

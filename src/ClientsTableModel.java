@@ -4,7 +4,7 @@ import javax.swing.table.AbstractTableModel;
 
 public class ClientsTableModel extends AbstractTableModel
 {
-	String[] clientColumnNames = {"Ονοματεπώνυμο", "ΑΦΜ", "Περιοχή", "Διεύθυνση", "Τ.Κ.", "Τηλέφωνο", "ΦΑΞ", "E-mail", "Σημειώσεις"};
+	private String[] clientColumnNames = {"Ονοματεπώνυμο", "ΑΦΜ", "Περιοχή", "Διεύθυνση", "Τ.Κ.", "Τηλέφωνο", "ΦΑΞ", "E-mail", "Σημειώσεις"};
 	private ArrayList<Client> clients = new ArrayList<>();
 	
 	public ClientsTableModel(ArrayList<Client> clients)
@@ -125,15 +125,9 @@ public class ClientsTableModel extends AbstractTableModel
     }
     
     //re-fetch data and refresh table
-	public void update()
+	public void populate()
 	{
 		this.clients = OrderingManagment.fetchClients();
-		fireTableDataChanged();
-	}
-	
-	//just refreshes table's existing content
-	public void refresh()
-	{
 		fireTableDataChanged();
 	}
 }

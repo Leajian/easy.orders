@@ -156,7 +156,7 @@ public class NewProductFrame extends JDialog
 							int rs = db.getStatement().executeUpdate(query);
 						
 							//refresh the table after save
-							ptm.update();
+							ptm.populate();
 						
 							JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.");
 						
@@ -198,7 +198,7 @@ public class NewProductFrame extends JDialog
 		});
 
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
-		this.setLocation(500, 200);
+		this.setLocation(480, 120);
 		this.setSize(496, 428);
 		this.setResizable(false);
 		this.setTitle("Νέο Προιόν");
@@ -206,32 +206,3 @@ public class NewProductFrame extends JDialog
 		this.setVisible(true);
 	}
 }
-
-/*
-try
-{
-	String query = "INSERT INTO product (id, name, quality, location, producer, 
-
-packaging, price, stock) VALUES ('" + id + "', " + "'" + name + "', " + "'" + quality + "', " + "'" + location + "', " + "'" + producer + "', " + "'" + 
-
-packaging + "', " + "'" + price + "', " + "'" + stock + "')";
-	int rs = db.getStatement().executeUpdate(query);
-	
-	//refresh the table after save
-	ptm.update();
-	
-	JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.");
-	
-	idField.setText(Integer.toString(Integer.parseInt(id) + 1));
-	nameField.setText("");
-	qualityField.setText("");
-	locationField.setText("");
-	producerField.setText("");
-	packagingField.setText("");
-	priceField.setText("");
-	stockSpinner.setValue(0);
-}
-catch(Exception ex)
-{
-	ex.printStackTrace();
-}*/
