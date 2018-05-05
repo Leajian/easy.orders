@@ -1,4 +1,5 @@
 import java.sql.ResultSet;
+
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -21,8 +22,6 @@ public class Main
 	
 		new SellerMainFrame();
 		
-		//new ClientInfoFrame("555555555");
-		
 		/*try
 		{	
 			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed\r\n" + 
@@ -32,7 +31,7 @@ public class Main
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
-				orders.add(new Order(rs.getString("lastEdit"), rs.getString("customerId"), rs.getString("employeeUsername"), rs.getString("closed")));
+				orders.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getString("closed")));
 		}
 		catch (Exception ex)
 		{
@@ -42,7 +41,7 @@ public class Main
 		try
 		{
 			//Return products.
-			String query = "SELECT lastEdit, product.id AS productId,\r\n" + 
+			String query = "SELECT lastEdit, product.id AS productId, client.id AS clientId, quantityWeight, orders.price,\r\n" + 
 					"quantityWeight,\r\n" + 
 					"orders.price\r\n" + 
 					"FROM client, product, orders\r\n" + 
@@ -55,7 +54,7 @@ public class Main
 			for(Order order: orders)
 			{
 				while(rs.next())
-					if(order.getLastEdit().equals(rs.getString("lastEdit")))
+					if((order.getLastEdit().equals(rs.getString("lastEdit"))) & (order.getClientId().equals(rs.getString("clientId"))))
 						order.getProducts().add(new Product(rs.getString("productId"), rs.getString("quantityWeight"), rs.getString("orders.price")));
 				
 				rs.beforeFirst();
@@ -66,17 +65,17 @@ public class Main
 			ex.printStackTrace();
 		}
 		
-		if(!orders.isEmpty())
-			orders.remove(orders.size() - 1);
+		//if(!orders.isEmpty())
+			//orders.remove(orders.size() - 1);
 		
 		for(Order order: orders)
 		{
-			System.out.println(order.getClientName() + " " + order.getLastEdit());
+			System.out.println(order.getClientId() + " " + order.getLastEdit());
 			
 			for(Product product: order.getProducts())
-				System.out.println(product.getName());
+				System.out.println(product.getId());
 		}
-			
+		
 		executorService.scheduleAtFixedRate(new Runnable()
 		{
 			String oldEdit = "";
@@ -117,20 +116,20 @@ public class Main
 						
 						try 
 						{
-							query = "SELECT lastEdit, product.id AS productId,\r\n" + 
+							query = "SELECT lastEdit, product.id AS productId, client.id AS clientId,\r\n" + 
 									"quantityWeight,\r\n" + 
 									"orders.price\r\n" + 
 									"FROM client, product, orders\r\n" + 
 									"WHERE orders.clientId = client.id\r\n" + 
 									"AND orders.productId = product.id\r\n" +
-									"AND last_edit >= '" + lastEdit + "' ORDER BY lastEdit";
+									"AND lastEdit >= '" + lastEdit + "' ORDER BY lastEdit";
 							
 							ResultSet rs2 = db.getStatement().executeQuery(query);
 							
 							for(int i = oldLength; i < orders.size(); i++)
 							{
 								while(rs2.next())
-									if(orders.get(i).getLastEdit().equals(rs2.getString("lastEdit")))
+									if(orders.get(i).getLastEdit().equals(rs2.getString("lastEdit")) & (orders.get(i).getClientId().equals(rs2.getString("clientId"))))
 										orders.get(i).getProducts().add(new Product(rs2.getString("productId"), rs2.getString("quantityWeight"), rs2.getString("orders.price")));
 								
 								rs2.beforeFirst();
@@ -145,13 +144,13 @@ public class Main
 						
 						for(int i = oldLength; i < orders.size(); i++)
 						{
-							System.out.println(orders.get(i).getClientName() + " " + orders.get(i).getLastEdit());
+							System.out.println(orders.get(i).getClientId() + " " + orders.get(i).getLastEdit());
 							
 							for(Product product: orders.get(i).getProducts())
-								System.out.println(product.getName());
+								System.out.println(product.getId());
 						}
 						
-						System.out.println(orders);
+						System.out.println("Size = " + orders.size());
 					}
 				}
 				catch (Exception ex)
