@@ -33,7 +33,7 @@ public class Client
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public String getId()
 	{
 		return id;
@@ -77,5 +77,45 @@ public class Client
 	public String getNotes()
 	{
 		return notes;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public void setCity(String city)
+	{
+		this.city = city;
+	}
+
+	public void setPhoneNumber(String phoneNumber)
+	{
+		this.phoneNumber = phoneNumber;
+	}
+
+	public void setEmail(String email)
+	{
+		this.email = email;
+	}
+
+	public void setAddress(String address)
+	{
+		this.address = address;
+	}
+
+	public void setFax(String fax)
+	{
+		this.fax = fax;
+	}
+
+	public void setZipCode(String zipCode)
+	{
+		this.zipCode = zipCode;
+	}
+
+	public void setNotes(String notes)
+	{
+		this.notes = notes;
 	}
 }

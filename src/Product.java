@@ -33,7 +33,7 @@ public class Product
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public Product(String id)
 	{
 		db.connect();
@@ -105,9 +105,44 @@ public class Product
 	{
 		return quantityWeight;
 	}
-
-	public DBConnect getDb()
+	
+	public void setName(String name)
 	{
-		return db;
+		this.name = name;
+	}
+
+	public void setQuality(String quality)
+	{
+		this.quality = quality;
+	}
+
+	public void setLocation(String location)
+	{
+		this.location = location;
+	}
+
+	public void setProducer(String producer)
+	{
+		this.producer = producer;
+	}
+
+	public void setPackaging(String packaging)
+	{
+		this.packaging = packaging;
+	}
+
+	public void setPrice(String price)
+	{
+		this.price = price;
+	}
+
+	public void setStock(String stock)
+	{
+		this.stock = stock;
+	}
+
+	public void setQuantityWeight(String quantityWeight)
+	{
+		this.quantityWeight = quantityWeight;
 	}
 }
