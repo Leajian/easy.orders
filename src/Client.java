@@ -84,4 +84,26 @@ public class Client
 	{
 		return notes;
 	}
+	
+	public boolean isEditable()
+	{
+		try
+		{
+			String query = "SELECT isEditable from client WHERE id = '" + id + "'";
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			rs.next();
+			
+			if(rs.getInt("isEditable") == 1)
+				return true;
+			else 
+				return false;
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		return false;
+	}
 }

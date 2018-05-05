@@ -181,8 +181,11 @@ public class SellerMainFrame extends JFrame
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
 				
 				//show info on double click
-				if (e.getClickCount() == 2)
+				if ((e.getClickCount() == 2) & (ctm.isClientEditable(selectedRow)))
+				{
+					ctm.setClientUneditable(selectedRow);
 					ctm.getClientInfo(selectedRow);
+				}	
 			}
 		});
 		

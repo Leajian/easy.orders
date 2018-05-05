@@ -6,9 +6,11 @@ public class ClientsTableModel extends AbstractTableModel
 {
 	private String[] clientColumnNames = {"Ονοματεπώνυμο", "ΑΦΜ", "Περιοχή", "Διεύθυνση", "Τ.Κ.", "Τηλέφωνο", "ΦΑΞ", "E-mail", "Σημειώσεις"};
 	private ArrayList<Client> clients = new ArrayList<>();
+	private DBConnect db = new DBConnect();
 	
 	public ClientsTableModel(ArrayList<Client> clients)
 	{
+		db.connect();
 		this.clients = clients;
 	}
 	
@@ -59,6 +61,37 @@ public class ClientsTableModel extends AbstractTableModel
     	new ClientInfoFrame(clients.get(row).getId(), this);
     }
 	
+	public boolean isClientEditable(int row)
+	{
+		return clients.get(row).isEditable();
+	}
+	
+	public void setClientEditable(int row)
+	{
+		try
+		{
+			String query = "UPDATE client SET isEditable = 1 WHERE id = '" + clients.get(row).getId() + "'";
+			int rs = db.getStatement().executeUpdate(query);
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+	
+	public void setClientUneditable(int row)
+	{
+		try
+		{
+			String query = "UPDATE client SET isEditable = 0 WHERE id = '" + clients.get(row).getId() + "'";
+			int rs = db.getStatement().executeUpdate(query);
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+	
 	 /*
      * JTable uses this method to determine the default renderer/
      * editor for each cell.  If we didn't implement this method,
@@ -92,10 +125,7 @@ public class ClientsTableModel extends AbstractTableModel
 	}
 	
 	public void removeSelectedClient(int row)
-    {
-		DBConnect db = new DBConnect();    	
-    	db.connect();
-		
+    {	
     	if (!clients.isEmpty())
     	{
     		try
@@ -110,8 +140,6 @@ public class ClientsTableModel extends AbstractTableModel
     		{
 				ex.printStackTrace();
 			}
-
-    		
     	}
 	}
 	
