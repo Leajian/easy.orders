@@ -77,7 +77,7 @@ public class OrderingManagment
 		try
 		{
 			//Return products.
-			String query = "SELECT lastEdit, product.id AS productId,\r\n" + 
+			String query = "SELECT lastEdit, product.id AS productId, client.id AS clientId, quantityWeight, orders.price,\r\n" + 
 					"quantityWeight,\r\n" + 
 					"orders.price\r\n" + 
 					"FROM client, product, orders\r\n" + 
@@ -90,7 +90,7 @@ public class OrderingManagment
 			for(Order order: ordersRecord)
 			{
 				while(rs.next())
-					if(order.getLastEdit().equals(rs.getString("lastEdit")))
+					if((order.getLastEdit().equals(rs.getString("lastEdit"))) & (order.getClientId().equals(rs.getString("clientId"))))
 						order.getProducts().add(new Product(rs.getString("productId"), rs.getString("quantityWeight"), rs.getString("orders.price")));
 				
 				rs.beforeFirst();
