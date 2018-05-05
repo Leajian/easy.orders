@@ -62,7 +62,7 @@ public class ClientInfoFrame extends JDialog
 	
 	private JScrollPane notesFieldScrollPane = new JScrollPane();
 	
-	public ClientInfoFrame(String id, ClientsTableModel ctm)
+	public ClientInfoFrame(String id, ClientsTableModel ctm, int selectedRow)
 	{
 		//this blocks other windows unless this is closed.
 		//also it must be here and not the bottom for some reason
@@ -213,7 +213,7 @@ public class ClientInfoFrame extends JDialog
 						{
 							String query = "UPDATE client SET name = " + "'" + name + "', " + "city = " + "'" + city + "', " + "phoneNumber = " + "'" + phoneNumber + "', " + "email = " + "'" + email + "', " +  "address = " + "'" + address + "', " + "fax = " + "'" + fax + "', " + "zipCode = " + "'" + zipCode + "', " + "notes = " + "'" + notes + "' WHERE client.id = " + "'" + id + "'";
 							int rs = db.getStatement().executeUpdate(query);
-						
+							ctm.setClientEditable(selectedRow);
 							dispose();
 							JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
 						}
@@ -296,7 +296,10 @@ public class ClientInfoFrame extends JDialog
 					PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 				}
 				if(PromptResult == JOptionPane.YES_OPTION)
+				{
+					ctm.setClientEditable(selectedRow);
 					dispose();
+				}
 			}
 		});
 
