@@ -8,7 +8,7 @@ public class DataFetchingManagment
 		
 	}
 	
-	public static ArrayList<Client> fetchClients()
+	public static ArrayList<Client> initializeClients()
 	{
 		ArrayList<Client> clients = new ArrayList<>();
 		DBConnect db = new DBConnect();
@@ -31,7 +31,7 @@ public class DataFetchingManagment
 		return clients;
 	}
 	
-	public static ArrayList<Product> fetchProducts()
+	public static ArrayList<Product> initializeProducts()
 	{
 		ArrayList<Product> products = new ArrayList<>();
 		DBConnect db = new DBConnect();
@@ -54,7 +54,7 @@ public class DataFetchingManagment
 		return products;
 	}
 	
-	public static ArrayList<Order> fetchRecord()
+	public static ArrayList<Order> initializeRecord()
 	{
 		ArrayList<Order> ordersRecord = new ArrayList<>();
 		DBConnect db = new DBConnect();
