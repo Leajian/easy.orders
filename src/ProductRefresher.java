@@ -2,10 +2,13 @@ import java.sql.ResultSet;
 
 import java.util.ArrayList;
 
+import javax.swing.table.AbstractTableModel;
+
 public class ProductRefresher implements Runnable
 {
-	private ArrayList<Product> refreshedProducts = new ArrayList<>();
 	private ProductsTableModel ptm;
+	
+	private String oldEdit = "";
 		
 	DBConnect db = new DBConnect();
 		
@@ -14,10 +17,10 @@ public class ProductRefresher implements Runnable
 		db.connect();
 		
 		this.ptm = ptm;
+		
+		//now we call the model to populate the data to the table from the list
 		ptm.populate();
 	}
-	
-	String oldEdit = "";
 
 	@Override
 	public void run()
@@ -41,5 +44,7 @@ public class ProductRefresher implements Runnable
 		{
 			ex.printStackTrace();
 		}
+		
+		//ptm.refresh(product);
 	}
 }
