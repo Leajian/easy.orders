@@ -1,13 +1,8 @@
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class DataFetchingManagment
+public abstract class DataFetchingManagment
 {	
-	public DataFetchingManagment(DBConnect db)
-	{
-		
-	}
-	
 	public static ArrayList<Client> initializeClients()
 	{
 		ArrayList<Client> clients = new ArrayList<>();
