@@ -1,6 +1,5 @@
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -27,7 +26,7 @@ public abstract class ThreadManagement {
 		//Products Tab
 		case 2:
 			//Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new ProductRefresher((ProductsTableModel)atm), 0, 5000, TimeUnit.MILLISECONDS);
-			executorService.scheduleAtFixedRate(new ProductRefresher((ProductsTableModel)atm), 0, 5000, TimeUnit.MILLISECONDS);
+			scheduleAtFixedRate(new ProductRefresher((ProductsTableModel)atm), 5000);
 			break;
 			
 		//Record Tab
@@ -37,6 +36,30 @@ public abstract class ThreadManagement {
 			
 		default:
 			break;
+		}
+	}
+	
+	private static void scheduleAtFixedRate(Runnable r, int sleepTime)
+	{
+		Thread t = new Thread(r);
+		
+		
+		//while you are dead
+		while(!t.isAlive())
+		{
+			//revive
+			t.start();
+			
+			try {
+				//wait until you finish
+				t.join();
+				
+				//wait desired interval
+				Thread.sleep(sleepTime);
+				
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
