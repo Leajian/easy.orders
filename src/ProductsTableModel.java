@@ -160,28 +160,32 @@ public class ProductsTableModel extends AbstractTableModel
 		fireTableDataChanged();
 	}
     
-    public void refresh(Product product)
+    //uses an list of new products and changes them in the table according to their id
+    public void refresh(ArrayList<Product> products)
     {
     	int indexOfProductToRefresh = -1;
     	
-    	for (Product item : products)
+    	for (Product oldProduct : this.products)
     	{
-    		if (item.getId().equals(product.getId()))
+    		for (Product newProduct : products)
     		{
-    			indexOfProductToRefresh = products.indexOf(item);
+    		if (oldProduct.getId().equals(newProduct.getId()))
+	    		{
+	    			indexOfProductToRefresh = this.products.indexOf(oldProduct);
+	    			
+	    			if (indexOfProductToRefresh != -1)
+	    	    	{
+	    		    	this.products.remove(indexOfProductToRefresh);
+	    		    	this.products.add(indexOfProductToRefresh, newProduct);
+	    		
+	    		        fireTableRowsUpdated(indexOfProductToRefresh, indexOfProductToRefresh);
+	    	    	}
+	    	    	else
+	    	    	{
+	    	    		System.out.println("Error while trying to refresh product.");
+	    	    	}
+	    		}
     		}
-    	}
-    	
-    	if (indexOfProductToRefresh != -1)
-    	{
-	    	products.remove(indexOfProductToRefresh);
-	    	products.add(indexOfProductToRefresh, product);;
-	
-	        fireTableRowsUpdated(indexOfProductToRefresh, indexOfProductToRefresh);
-    	}
-    	else
-    	{
-    		System.out.println("Error while trying to refresh product.");
     	}
     }
 }
