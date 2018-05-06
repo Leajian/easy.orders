@@ -20,11 +20,14 @@ public class Main
 
 		db.connect();
 	
-		new SellerMainFrame();
+		//new SellerMainFrame();
 		
 		
-		//still opened orders fetch
-		try
+		executorService.scheduleAtFixedRate((new ProductRefresher(new ProductsTableModel(DataFetchingManagment.initializeProducts()))), 0, 10, TimeUnit.MILLISECONDS);
+		
+		
+		
+		/*try
 		{	
 			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed\r\n" + 
 					"FROM orders\r\n" + 
@@ -34,34 +37,6 @@ public class Main
 			
 			while(rs.next())
 				orders.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getString("closed")));
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		
-		
-		try
-		{
-			//Return products.
-			String query = "SELECT orders.lastEdit, product.id AS productId, client.id AS clientId, quantityWeight, orders.price,\r\n" + 
-					"quantityWeight,\r\n" + 
-					"orders.price\r\n" + 
-					"FROM client, product, orders\r\n" + 
-					"WHERE orders.clientId = client.id\r\n" + 
-					"AND orders.productId = product.id\r\n" +
-					"AND closed = '0' ORDER BY lastEdit";
-			
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			for(Order order: orders)
-			{
-				while(rs.next())
-					if((order.getLastEdit().equals(rs.getString("lastEdit"))) & (order.getClientId().equals(rs.getString("clientId"))))
-						order.getProducts().add(new Product(rs.getString("productId"), rs.getString("quantityWeight"), rs.getString("orders.price")));
-				
-				rs.beforeFirst();
-			}
 		}
 		catch (Exception ex)
 		{
@@ -116,32 +91,6 @@ public class Main
 						{
 							ex.printStackTrace();
 						}
-						
-						try
-						{
-							query = "SELECT orders.lastEdit, product.id AS productId, client.id AS clientId,\r\n" + 
-									"quantityWeight,\r\n" + 
-									"orders.price\r\n" + 
-									"FROM client, product, orders\r\n" + 
-									"WHERE orders.clientId = client.id\r\n" + 
-									"AND orders.productId = product.id\r\n" +
-									"AND orders.lastEdit >= '" + lastEdit + "' ORDER BY orders.lastEdit";
-							
-							ResultSet rs2 = db.getStatement().executeQuery(query);
-							
-							for(int i = oldLength; i < orders.size(); i++)
-							{
-								while(rs2.next())
-									if(orders.get(i).getLastEdit().equals(rs2.getString("orders.lastEdit")) & (orders.get(i).getClientId().equals(rs2.getString("clientId"))))
-										orders.get(i).getProducts().add(new Product(rs2.getString("productId"), rs2.getString("quantityWeight"), rs2.getString("orders.price")));
-								
-								rs2.beforeFirst();
-							}
-						} 
-						catch (Exception ex)
-						{
-							ex.printStackTrace();
-						}
 											
 						oldEdit = lastEdit;
 						
@@ -161,6 +110,6 @@ public class Main
 					//ex.printStackTrace();
 				}
 			}
-		}, 0, 10, TimeUnit.MILLISECONDS);
+		}, 0, 10, TimeUnit.MILLISECONDS);*/
 	}
 }
