@@ -382,7 +382,7 @@ public class SellerMainFrame extends JFrame
 
 		//we create a table model so that we can manipulate it's data
 		ArrayList<Order> testOrdersRecordArray = new ArrayList<>();
-		testOrdersRecordArray = OrderingManagment.fetchRecord();
+		testOrdersRecordArray = DataFetchingManagment.fetchRecord();
 		
 		RecordTableModel rtm = new RecordTableModel(testOrdersRecordArray);
 		recordTable = new JTable(rtm);

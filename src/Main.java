@@ -22,6 +22,8 @@ public class Main
 	
 		new SellerMainFrame();
 		
+		
+		//still opened orders fetch
 		try
 		{	
 			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed\r\n" + 
@@ -37,6 +39,7 @@ public class Main
 		{
 			ex.printStackTrace();
 		}
+		
 		
 		try
 		{
@@ -114,7 +117,7 @@ public class Main
 							ex.printStackTrace();
 						}
 						
-						try 
+						try
 						{
 							query = "SELECT orders.lastEdit, product.id AS productId, client.id AS clientId,\r\n" + 
 									"quantityWeight,\r\n" + 

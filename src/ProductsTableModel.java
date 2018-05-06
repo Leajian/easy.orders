@@ -123,7 +123,7 @@ public class ProductsTableModel extends AbstractTableModel
     //re-fetch data and refresh table
     public void populate()
 	{
-		this.products = OrderingManagment.fetchProducts();
+		this.products = DataFetchingManagment.fetchProducts();
 		fireTableDataChanged();
 	}
 }
