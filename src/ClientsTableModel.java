@@ -155,7 +155,7 @@ public class ClientsTableModel extends AbstractTableModel
     //re-fetch data and refresh table
 	public void populate()
 	{
-		this.clients = DataFetchingManagment.initializeClients();
+		this.clients = DataFetcher.initializeClients();
 		fireTableDataChanged();
 	}
 }

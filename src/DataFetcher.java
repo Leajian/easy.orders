@@ -1,7 +1,7 @@
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public abstract class DataFetchingManagment
+public abstract class DataFetcher
 {	
 	public static ArrayList<Client> initializeClients()
 	{

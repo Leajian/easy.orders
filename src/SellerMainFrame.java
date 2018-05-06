@@ -75,8 +75,6 @@ public class SellerMainFrame extends JFrame
 	ProductsTableModel ptm = new ProductsTableModel(new ArrayList<>());
 	RecordTableModel rtm = new RecordTableModel(new ArrayList<>());
 	
-	int c = 0;
-	
 	public SellerMainFrame()
 	{
 		liveOrdersTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -106,8 +104,6 @@ public class SellerMainFrame extends JFrame
 					
 				//Products Tab
 				case 2:
-					c++;
-					System.out.println(c);
 					ThreadManagement.ManageModelUpdateAtTab(selectedTabIndex, ptm);
 					break;
 					
