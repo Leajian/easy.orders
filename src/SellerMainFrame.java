@@ -75,11 +75,13 @@ public class SellerMainFrame extends JFrame
 	ProductsTableModel ptm = new ProductsTableModel(new ArrayList<>());
 	RecordTableModel rtm = new RecordTableModel(new ArrayList<>());
 	
+	int c = 0;
+	
 	public SellerMainFrame()
 	{
 		liveOrdersTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
-		this.setBounds(100, 100, 1300, 750);
+		this.setBounds(100, 100, 1300, 790);
 		
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		tabbedPane.addChangeListener(new ChangeListener() {
@@ -104,6 +106,8 @@ public class SellerMainFrame extends JFrame
 					
 				//Products Tab
 				case 2:
+					c++;
+					System.out.println(c);
 					ThreadManagement.ManageModelUpdateAtTab(selectedTabIndex, ptm);
 					break;
 					
@@ -127,6 +131,14 @@ public class SellerMainFrame extends JFrame
 		
 		//Orders.
 		tabbedPane.addTab("Παραγγελίες", null, ordersTab, null);
+		
+		//add a fixed-size label as title
+		JLabel tabOrdersLabel = new JLabel("Παραγγελίες");
+		tabOrdersLabel.setPreferredSize(new Dimension(125, 35));
+		tabOrdersLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		tabOrdersLabel.setVerticalAlignment(SwingConstants.CENTER);
+	    tabbedPane.setTabComponentAt(0, tabOrdersLabel);
+		
 		ordersTab.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("1136px:grow"),},
 			new RowSpec[] {
@@ -161,10 +173,17 @@ public class SellerMainFrame extends JFrame
 		//Clients.
 		tabbedPane.addTab("Πελάτες", null, clientsTab, null);
 		
+		//add a fixed-size label as title
+		JLabel tabClientsLabel = new JLabel("Πελάτες");
+		tabClientsLabel.setPreferredSize(new Dimension(125, 35));
+		tabClientsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		tabClientsLabel.setVerticalAlignment(SwingConstants.CENTER);
+	    tabbedPane.setTabComponentAt(1, tabClientsLabel);
+		
 		FormLayout fl_clientsTab = new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("114px:grow"),
-				FormSpecs.UNRELATED_GAP_COLSPEC,
+				ColumnSpec.decode("90px"),
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("781px:grow"),
 				FormSpecs.UNRELATED_GAP_COLSPEC,
 				ColumnSpec.decode("109px:grow"),
@@ -177,7 +196,7 @@ public class SellerMainFrame extends JFrame
 				FormSpecs.LINE_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
+				RowSpec.decode("max(30dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:543px:grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,});
@@ -237,7 +256,7 @@ public class SellerMainFrame extends JFrame
 		clientsTable.getColumnModel().getColumn(7).setPreferredWidth(159);
 		clientsTable.getColumnModel().getColumn(8).setPreferredWidth(227);
 		
-		clientsTab.add(addClientButton, "2, 4");
+		clientsTab.add(addClientButton, "2, 4, fill, fill");
 		addClientButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -246,7 +265,7 @@ public class SellerMainFrame extends JFrame
 			}
 		});
 
-		clientsTab.add(removeClientButton, "2, 6");
+		clientsTab.add(removeClientButton, "2, 6, fill, fill");
 		removeClientButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -279,10 +298,17 @@ public class SellerMainFrame extends JFrame
 		//Products.
 		tabbedPane.addTab("Προϊόντα", null, productsTab, null);
 		
+		//add a fixed-size label as title
+		JLabel tabProductsLabel = new JLabel("Προϊόντα");
+		tabProductsLabel.setPreferredSize(new Dimension(125, 35));
+		tabProductsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		tabProductsLabel.setVerticalAlignment(SwingConstants.CENTER);
+		tabbedPane.setTabComponentAt(2, tabProductsLabel);
+		
 		FormLayout fl_productsTab = new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("114px:grow"),
-				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+				ColumnSpec.decode("90px"),
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("842px:grow"),
 				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("99px:grow"),
@@ -295,9 +321,9 @@ public class SellerMainFrame extends JFrame
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:23px"),
 				FormSpecs.LINE_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
+				RowSpec.decode("fill:0px"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
+				RowSpec.decode("fill:max(30dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:415px:grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,});
@@ -313,7 +339,7 @@ public class SellerMainFrame extends JFrame
 		productNameRadioButton.setSelected(true);
 		productsTab.add(productNameRadioButton, "6, 2, left, top");
 		productsTab.add(locationNameRadioButton, "8, 2, left, top");
-		productsTab.add(producerNameRadioButton, "10, 2");
+		productsTab.add(producerNameRadioButton, "10, 2, left, top");
 		
 		ButtonGroup productsGroup = new ButtonGroup();
 		productsGroup.add(productNameRadioButton);
@@ -337,7 +363,7 @@ public class SellerMainFrame extends JFrame
 		productsTable.addMouseListener(new MouseAdapter()
 		{
 			@Override
-			public void mouseReleased(MouseEvent e)
+			public void mouseClicked(MouseEvent e)
 			{
 				int selectedRow = productsTable.getSelectionModel().getMinSelectionIndex();
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
@@ -358,7 +384,7 @@ public class SellerMainFrame extends JFrame
 		productsTable.getColumnModel().getColumn(5).setPreferredWidth(115);
 		productsTable.getColumnModel().getColumn(6).setPreferredWidth(115);
 		
-		productsTab.add(addProductButton, "2, 4");
+		productsTab.add(addProductButton, "2, 4, fill, fill");
 		addProductButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -368,7 +394,7 @@ public class SellerMainFrame extends JFrame
 		});
 		
 		//BUG: after you delete the last item, pressing it again causes error. it remembers the last selection for some reason
-		productsTab.add(removeProductButton, "2, 6");
+		productsTab.add(removeProductButton, "2, 6, fill, fill");
 		removeProductButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -399,6 +425,13 @@ public class SellerMainFrame extends JFrame
 		
 		//Record
 		tabbedPane.addTab("Ιστορικό Παρραγγελιών", null, recordTab, null);
+
+		//add a fixed-size label as title
+		JLabel tabRecordLabel = new JLabel("Ιστορικό Παρραγγελιών");
+		tabRecordLabel.setPreferredSize(new Dimension(125, 35));
+		tabRecordLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		tabRecordLabel.setVerticalAlignment(SwingConstants.CENTER);
+		tabbedPane.setTabComponentAt(3, tabRecordLabel);
 		
 		recordTab.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -433,7 +466,7 @@ public class SellerMainFrame extends JFrame
 		recordTable.addMouseListener(new MouseAdapter()
 		{
 			@Override
-			public void mouseReleased(MouseEvent e)
+			public void mouseClicked(MouseEvent e)
 			{
 				int selectedRow = recordTable.getSelectionModel().getMinSelectionIndex();
 
@@ -465,7 +498,6 @@ public class SellerMainFrame extends JFrame
 		this.setLocation(80, 50);
 		this.setVisible(true);
 		this.setTitle("Easy Orders 1.0");
-		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		addWindowListener(new WindowAdapter()
@@ -525,9 +557,9 @@ public class SellerMainFrame extends JFrame
 		newOrderPanel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("1px"),
 				FormSpecs.UNRELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(67dlu;default)"),
+				ColumnSpec.decode("155px"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("left:max(574dlu;min):grow"),
+				ColumnSpec.decode("max(574dlu;min):grow"),
 				FormSpecs.UNRELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormSpecs.UNRELATED_GAP_ROWSPEC,
@@ -598,7 +630,7 @@ public class SellerMainFrame extends JFrame
 		ordersTable.addMouseListener(new MouseAdapter()
 		{
 			@Override
-			public void mouseReleased(MouseEvent e)
+			public void mouseClicked(MouseEvent e)
 			{
 				ListSelectionModel rowSM = ordersTable.getSelectionModel();
 				System.out.println("Row " + rowSM.getMinSelectionIndex() + " is now selected.");
