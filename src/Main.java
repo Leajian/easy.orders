@@ -20,10 +20,10 @@ public class Main
 
 		db.connect();
 	
-		//new SellerMainFrame();
+		new SellerMainFrame();
 		
 		
-		executorService.scheduleAtFixedRate((new ProductRefresher(new ProductsTableModel(DataFetchingManagment.initializeProducts()))), 0, 10, TimeUnit.MILLISECONDS);
+		//executorService.scheduleAtFixedRate((new ProductRefresher(new ProductsTableModel(DataFetchingManagment.initializeProducts()))), 0, 10, TimeUnit.MILLISECONDS);
 		
 		
 		
