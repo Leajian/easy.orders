@@ -26,9 +26,7 @@ public class Order
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
-				this.getProducts().add(new Product(rs.getString("productId"), rs.getString("quantityWeight"), rs.getString("price")));
-			
-			rs.beforeFirst();
+				products.add(new Product(rs.getString("productId"), rs.getString("quantityWeight"), rs.getString("price")));
 		} 
 		catch (Exception ex)
 		{
