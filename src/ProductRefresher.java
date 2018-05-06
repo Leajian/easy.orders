@@ -20,19 +20,29 @@ public class ProductRefresher implements Runnable
 		ptm.populate();
 		
 		lastUpdate = getLastEdit();
+		
+		System.out.println("i runned once again");
 	}
 
 	@Override
 	public void run()
 	{
-		if (!getLastEdit().equals(lastUpdate))
+		try
 		{
-			System.out.println(lastUpdate);
-				
-			ptm.refresh(getNewestProducts());
-		}
+			System.out.println("im still running bitch");
+			System.out.println("lastUpdate B4 check : " + lastUpdate);
+			if (!getLastEdit().equals(lastUpdate))
+			{	
+				ptm.refresh(getNewestProducts());
+			}
 			
-		lastUpdate = getLastEdit();
+			lastUpdate = getLastEdit();
+			System.out.println("lastUpdate AFTER check : " + lastUpdate);
+			}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		//TODO: implement sync
 	}
 	
 	private String getLastEdit()
