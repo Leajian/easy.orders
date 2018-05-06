@@ -8,6 +8,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -68,6 +70,11 @@ public class SellerMainFrame extends JFrame
 	private JPanel productsTab = new JPanel();
 	private JPanel recordTab = new JPanel();
 	
+	//we create table models so that we can manipulate tables' data
+	ClientsTableModel ctm = new ClientsTableModel(new ArrayList<>());
+	ProductsTableModel ptm = new ProductsTableModel(new ArrayList<>());
+	RecordTableModel rtm = new RecordTableModel(new ArrayList<>());
+	
 	public SellerMainFrame()
 	{
 		liveOrdersTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -75,6 +82,42 @@ public class SellerMainFrame extends JFrame
 		this.setBounds(100, 100, 1300, 750);
 		
 		getContentPane().setLayout(new BorderLayout(0, 0));
+		tabbedPane.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent evt)
+			{
+				//TODO: add a thread pool... WIP
+				
+				JTabbedPane tabbedPane = (JTabbedPane)evt.getSource();
+				int selectedTabIndex = tabbedPane.getSelectedIndex();
+				
+				switch (selectedTabIndex) {
+				
+				//Orders Tab
+				case 0:
+					
+					break;
+					
+				//Clients Tab
+				case 1:
+					//ThreadManagement.ManageModelUpdateAtTab(selectedTabIndex, ctm);
+					break;
+					
+				//Products Tab
+				case 2:
+					ThreadManagement.ManageModelUpdateAtTab(selectedTabIndex, ptm);
+					break;
+					
+				//Record Tab
+				case 3:
+					//ThreadManagement.ManageModelUpdateAtTab(selectedTabIndex, rtm);
+					break;
+					
+				default:
+					break;
+				}
+			}
+		});
+		
 		this.getContentPane().add(tabbedPane);
 		
 		
@@ -155,11 +198,7 @@ public class SellerMainFrame extends JFrame
 		clientsGroup.add(clientNameRadioButton);
 		clientsGroup.add(clientIdRadioButton);
 		
-		//we create a table model so that we can manipulate it's data
-		ClientsTableModel ctm = new ClientsTableModel(new ArrayList<>());
 		clientsTable = new JTable(ctm);
-		
-		ctm.populate();
 
 		//this disallows reordering of columns
 		clientsTable.getTableHeader().setReorderingAllowed(false);
@@ -281,12 +320,8 @@ public class SellerMainFrame extends JFrame
 		productsGroup.add(locationNameRadioButton);
 		productsGroup.add(producerNameRadioButton);
 		
-		//we create a table model so that we can manipulate it's data
-		ProductsTableModel ptm = new ProductsTableModel(new ArrayList<>());
 		productsTable = new JTable(ptm);
 		
-		//now we call the model to populate the data to the table from the list
-		ptm.populate();
 		
 		//this disallows reordering of columns
 		productsTable.getTableHeader().setReorderingAllowed(false);
@@ -382,14 +417,7 @@ public class SellerMainFrame extends JFrame
 		
 		recordTab.add(DateLabel, "2, 2, right, center");
 
-		//we create a table model so that we can manipulate it's data
-		ArrayList<Order> testOrdersRecordArray = new ArrayList<>();
-		testOrdersRecordArray = DataFetchingManagment.fetchRecord();
-		
-		RecordTableModel rtm = new RecordTableModel(testOrdersRecordArray);
 		recordTable = new JTable(rtm);
-		
-		rtm.populate(testOrdersRecordArray);
 		
 		//this disallows reordering of columns
 		recordTable.getTableHeader().setReorderingAllowed(false);
