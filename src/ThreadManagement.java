@@ -1,11 +1,12 @@
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.table.AbstractTableModel;
 
 public abstract class ThreadManagement {
 	
-	private DBConnect db = new DBConnect();
+	private static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 	
 	public static void ManageModelUpdateAtTab(int selectedTabIndex, AbstractTableModel atm)
 	{
@@ -25,7 +26,8 @@ public abstract class ThreadManagement {
 			
 		//Products Tab
 		case 2:
-			Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new ProductRefresher((ProductsTableModel)atm), 0, 10, TimeUnit.MILLISECONDS);
+			//Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new ProductRefresher((ProductsTableModel)atm), 0, 5000, TimeUnit.MILLISECONDS);
+			executorService.scheduleAtFixedRate(new ProductRefresher((ProductsTableModel)atm), 0, 5000, TimeUnit.MILLISECONDS);
 			break;
 			
 		//Record Tab
