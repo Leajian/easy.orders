@@ -156,7 +156,32 @@ public class ProductsTableModel extends AbstractTableModel
     //re-fetch data and refresh table
     public void populate()
 	{
-		this.products = DataFetchingManagment.fetchProducts();
+		this.products = DataFetchingManagment.initializeProducts();
 		fireTableDataChanged();
 	}
+    
+    public void refresh(Product product)
+    {
+    	int indexOfProductToRefresh = -1;
+    	
+    	for (Product item : products)
+    	{
+    		if (item.getId().equals(product.getId()))
+    		{
+    			indexOfProductToRefresh = products.indexOf(item);
+    		}
+    	}
+    	
+    	if (indexOfProductToRefresh != -1)
+    	{
+	    	products.remove(indexOfProductToRefresh);
+	    	products.add(indexOfProductToRefresh, product);;
+	
+	        fireTableRowsUpdated(indexOfProductToRefresh, indexOfProductToRefresh);
+    	}
+    	else
+    	{
+    		System.out.println("Error while trying to refresh product.");
+    	}
+    }
 }
