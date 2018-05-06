@@ -16,6 +16,24 @@ public class Order
 		this.clientId = clientId;
 		this.employeeUsername = employeeUsername;
 		this.closed = closed;
+		
+		try
+		{
+			String query = "SELECT productId, quantityWeight, price \n" + 
+					"FROM orders \n" + 
+					"WHERE lastEdit = '" + lastEdit + "'" + "AND clientId = '" + clientId + "'";
+			
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			while(rs.next())
+				this.getProducts().add(new Product(rs.getString("productId"), rs.getString("quantityWeight"), rs.getString("price")));
+			
+			rs.beforeFirst();
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 
 	public void addProduct(Product aProduct)

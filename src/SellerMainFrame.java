@@ -185,7 +185,7 @@ public class SellerMainFrame extends JFrame
 				{
 					ctm.setClientUneditable(selectedRow);
 					ctm.getClientInfo(selectedRow);
-				}	
+				}
 			}
 		});
 		
@@ -206,8 +206,7 @@ public class SellerMainFrame extends JFrame
 				new NewClientFrame(ctm);
 			}
 		});
-		
-		
+
 		clientsTab.add(removeClientButton, "2, 6");
 		removeClientButton.addActionListener(new ActionListener()
 		{
@@ -309,8 +308,11 @@ public class SellerMainFrame extends JFrame
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
 				
 				//show info on double click
-				if (e.getClickCount() == 2)
+				if ((e.getClickCount() == 2) & (ptm.isProductEditable(selectedRow)))
+				{
+					ptm.setProductUneditable(selectedRow);
 					ptm.getProductInfo(selectedRow);
+				}	
 			}
 		});
 		
@@ -530,8 +532,7 @@ public class SellerMainFrame extends JFrame
 		});
 		deleteOrderButton.setVisible(false);
 		
-				
-				newOrderPanel.add(deleteOrderButton, "3, 7, fill, fill");
+		newOrderPanel.add(deleteOrderButton, "3, 7, fill, fill");
 		
 		
 		
@@ -601,7 +602,6 @@ public class SellerMainFrame extends JFrame
 			}
 		});
 		
-
 		addPlusSignTabAtTheEndOf(aTabbedPane);
 		
 		//the pre-last index is the New Order tab (index starts from 0)
