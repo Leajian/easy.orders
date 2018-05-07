@@ -10,7 +10,6 @@ public class ProductsTableModel extends AbstractTableModel
 		
 	public ProductsTableModel(ArrayList<Product> products)
 	{
-		db.connect();
 		this.products = products;
 	}
 
@@ -64,6 +63,8 @@ public class ProductsTableModel extends AbstractTableModel
 	
 	public void setProductEditable(int row)
 	{
+		db.connect();
+		
 		try
 		{
 			String query = "UPDATE product SET isEditable = 1 WHERE id = '" + products.get(row).getId() + "'";
@@ -73,10 +74,14 @@ public class ProductsTableModel extends AbstractTableModel
 		{
 			ex.printStackTrace();
 		}
+		
+		db.closeConnection();
 	}
 	
 	public void setProductUneditable(int row)
 	{
+		db.connect();
+		
 		try
 		{
 			String query = "UPDATE product SET isEditable = 0 WHERE id = '" + products.get(row).getId() + "'";
@@ -86,6 +91,8 @@ public class ProductsTableModel extends AbstractTableModel
 		{
 			ex.printStackTrace();
 		}
+		
+		db.closeConnection();
 	}
     
     /*
@@ -123,12 +130,11 @@ public class ProductsTableModel extends AbstractTableModel
 	}
         
     public void removeSelectedProduct(int row)
-    {
-    	DBConnect db = new DBConnect();    	
-    	db.connect();
-
+    { 	
     	if(!products.isEmpty())
     	{
+    		db.connect();
+    		
         	try
         	{
     			String query = "DELETE FROM product WHERE product.id = " + products.get(row).getId();
@@ -141,6 +147,8 @@ public class ProductsTableModel extends AbstractTableModel
         	{
     			ex.printStackTrace();
     		}
+        	
+        	db.closeConnection();
     	}
 	}
         
@@ -165,27 +173,21 @@ public class ProductsTableModel extends AbstractTableModel
     {
     	int indexOfProductToRefresh = -1;
     	
-    	for (Product oldProduct : this.products)
-    	{
-    		for (Product newProduct : products)
-    		{
-    		if (oldProduct.getId().equals(newProduct.getId()))
+    	for(Product oldProduct: products)
+    		for(Product newProduct : products)
+    			if (oldProduct.getId().equals(newProduct.getId()))
 	    		{
-	    			indexOfProductToRefresh = this.products.indexOf(oldProduct);
+	    			indexOfProductToRefresh = products.indexOf(oldProduct);
 	    			
 	    			if (indexOfProductToRefresh != -1)
 	    	    	{
-	    		    	this.products.remove(indexOfProductToRefresh);
-	    		    	this.products.add(indexOfProductToRefresh, newProduct);
+	    		    	products.remove(indexOfProductToRefresh);
+	    		    	products.add(indexOfProductToRefresh, newProduct);
 	    		
 	    		        fireTableRowsUpdated(indexOfProductToRefresh, indexOfProductToRefresh);
 	    	    	}
 	    	    	else
-	    	    	{
 	    	    		System.out.println("Error while trying to refresh product.");
-	    	    	}
 	    		}
-    		}
-    	}
     }
 }

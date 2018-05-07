@@ -8,11 +8,11 @@ public class Product
 	
 	public Product(String id, String price, String quantityWeight)
 	{
-		db.connect();
-		
 		this.id = id;
 		this.quantityWeight = quantityWeight;
 		this.price = price;
+		
+		db.connect();
 		
 		try
 		{
@@ -33,6 +33,8 @@ public class Product
 		{
 			ex.printStackTrace();
 		}
+		
+		db.closeConnection();
 	}
 
 	public Product(String id)
@@ -40,6 +42,8 @@ public class Product
 		db.connect();
 		
 		this.id = id;
+		
+		db.connect();
 		
 		try
 		{
@@ -61,6 +65,8 @@ public class Product
 		{
 			ex.printStackTrace();
 		}
+		
+		db.closeConnection();
 	}
 	
 	public String getLastEdit()
@@ -115,6 +121,8 @@ public class Product
 	
 	public boolean isEditable()
 	{
+		db.connect();
+		
 		try
 		{
 			String query = "SELECT isEditable from product WHERE id = '" + id + "'";
@@ -129,6 +137,8 @@ public class Product
 		{
 			ex.printStackTrace();
 		}
+		
+		db.closeConnection();
 		
 		return false;
 	}

@@ -60,8 +60,6 @@ public class NewClientFrame extends JDialog
 		//also it must be here and not the bottom for some reason
 		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		
-		db.connect();
-		
 		nameField.setPreferredSize(new Dimension(150, 20));
 		idField.setPreferredSize(new Dimension(70, 20));
 		cityField.setPreferredSize(new Dimension(150, 20));
@@ -148,6 +146,8 @@ public class NewClientFrame extends JDialog
 				if(!id.trim().equals("") & !(name.trim().equals("")))
 				{
 					if((id.length() == 9) & (name.length() <= 30) & (city.length() <= 30) & (phoneNumber.length() <= 15) & (email.length() <= 30) & (address.length() <= 30) & (fax.length() <= 15) & (zipCode.length() <= 10) & (notes.length() <= 120))
+					{
+						db.connect();
 						
 						try
 						{
@@ -173,6 +173,9 @@ public class NewClientFrame extends JDialog
 						{
 							ex.printStackTrace();
 						}
+						
+						db.closeConnection();
+					}
 					else
 						JOptionPane.showMessageDialog(null, "Γράφε καλά.");
 				}

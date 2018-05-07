@@ -10,7 +10,6 @@ public class ClientsTableModel extends AbstractTableModel
 	
 	public ClientsTableModel(ArrayList<Client> clients)
 	{
-		db.connect();
 		this.clients = clients;
 	}
 	
@@ -68,6 +67,8 @@ public class ClientsTableModel extends AbstractTableModel
 	
 	public void setClientEditable(int row)
 	{
+		db.connect();
+		
 		try
 		{
 			String query = "UPDATE client SET isEditable = 1 WHERE id = '" + clients.get(row).getId() + "'";
@@ -77,10 +78,14 @@ public class ClientsTableModel extends AbstractTableModel
 		{
 			ex.printStackTrace();
 		}
+		
+		db.closeConnection();
 	}
 	
 	public void setClientUneditable(int row)
 	{
+		db.connect();
+		
 		try
 		{
 			String query = "UPDATE client SET isEditable = 0 WHERE id = '" + clients.get(row).getId() + "'";
@@ -90,6 +95,8 @@ public class ClientsTableModel extends AbstractTableModel
 		{
 			ex.printStackTrace();
 		}
+		
+		db.closeConnection();
 	}
 	
 	 /*
@@ -128,6 +135,8 @@ public class ClientsTableModel extends AbstractTableModel
     {	
     	if (!clients.isEmpty())
     	{
+    		db.connect();
+    		
     		try
     		{
     			String query = "DELETE FROM client WHERE client.id = " + "'" + clients.get(row).getId() + "'";
@@ -140,6 +149,8 @@ public class ClientsTableModel extends AbstractTableModel
     		{
 				ex.printStackTrace();
 			}
+    		
+    		db.closeConnection();
     	}
 	}
 	

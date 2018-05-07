@@ -82,7 +82,8 @@ public class SellerMainFrame extends JFrame
 		this.setBounds(100, 100, 1300, 790);
 		
 		getContentPane().setLayout(new BorderLayout(0, 0));
-		tabbedPane.addChangeListener(new ChangeListener() {
+		tabbedPane.addChangeListener(new ChangeListener()
+		{
 			public void stateChanged(ChangeEvent evt)
 			{
 				//TODO: add a thread pool... WIP
@@ -90,7 +91,8 @@ public class SellerMainFrame extends JFrame
 				JTabbedPane tabbedPane = (JTabbedPane)evt.getSource();
 				int selectedTabIndex = tabbedPane.getSelectedIndex();
 				
-				switch (selectedTabIndex) {
+				switch (selectedTabIndex)
+				{
 				
 				//Orders Tab
 				case 0:

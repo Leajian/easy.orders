@@ -32,7 +32,7 @@ public class ProductInfoFrame extends JDialog
 	private JTextField packagingField = new JTextField();
 	private JTextField priceField = new JTextField();
 	
-	private final JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
+	private JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
 	private JLabel idLab = new JLabel("Κωδικός");
 	private JLabel nameLab = new JLabel("Όνομα");
 	private JLabel qualityLab = new JLabel("Ποιότητα");
@@ -80,6 +80,9 @@ public class ProductInfoFrame extends JDialog
 		{
 			System.out.println(ex);
 		}
+		
+		db.closeConnection();
+		
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -196,6 +199,8 @@ public class ProductInfoFrame extends JDialog
 				{
 					if((id.length() <= 5) & (name.length() <= 30) & (quality.length() <= 2) & (location.length() <= 30) & (producer.length() <= 30) & (packaging.length() <= 2) & (price.length() <= 10) & (stock <= 99999))
 					{
+						db.connect();
+						
 						try
 						{
 							String query = "UPDATE product SET name = " + "'" + name + "', " + "quality = " + "'" + quality + "', " + "location = " + "'" + location + "', " + "producer = " + "'" + producer + "', " +  "packaging = " + "'" + packaging + "', " + "price = " + "'" + price + "', " + "stock = " + "'" + stock + "' WHERE product.id = " + "'" + id + "'";
@@ -208,6 +213,8 @@ public class ProductInfoFrame extends JDialog
 						{
 							ex.printStackTrace();
 						}
+						
+						db.closeConnection();
 						
 						nameField.setEditable(false);
 						qualityField.setEditable(false);

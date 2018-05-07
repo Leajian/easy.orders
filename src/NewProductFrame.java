@@ -31,7 +31,7 @@ public class NewProductFrame extends JDialog
 	private JTextField packagingField = new JTextField();
 	private JTextField priceField = new JTextField();
 	
-	private final JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
+	private JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
 	private JLabel idLab = new JLabel("Κωδικός");
 	private JLabel nameLab = new JLabel("Όνομα");
 	private JLabel qualityLab = new JLabel("Ποιότητα");
@@ -55,8 +55,6 @@ public class NewProductFrame extends JDialog
 		//this is important because we don't want to add a new product with the same id
 		//also it must be here and not the bottom for some reason
 		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
-		
-		db.connect();
 		
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
@@ -116,6 +114,8 @@ public class NewProductFrame extends JDialog
 		
 		panel.add(saveButton, "6, 13, 3, 1, fill, fill");
 		
+		db.connect();
+		
 		try
 		{
 			String query = "SELECT MAX(id) FROM product";
@@ -132,6 +132,8 @@ public class NewProductFrame extends JDialog
 		{
 			System.out.println(ex);
 		}
+		
+		db.closeConnection();
 		
 		saveButton.addActionListener(new ActionListener()
 		{	
@@ -150,6 +152,9 @@ public class NewProductFrame extends JDialog
 				if(!(name.trim().equals("")))
 				{
 					if((id.length() <= 5) & (name.length() <= 30) & (quality.length() <= 2) & (location.length() <= 30) & (producer.length() <= 30) & (packaging.length() <= 2) & (price.length() <= 10) & (stock <= 99999))
+					{
+						db.connect();
+						
 						try
 						{
 							String query = "INSERT INTO product (id, name, quality, location, producer, packaging, price, stock) VALUES ('" + id + "', " + "'" + name + "', " + "'" + quality + "', " + "'" + location + "', " + "'" + producer + "', " + "'" + packaging + "', " + "'" + price + "', " + "'" + stock + "')";
@@ -173,6 +178,9 @@ public class NewProductFrame extends JDialog
 						{
 							ex.printStackTrace();
 						}
+						
+						db.closeConnection();
+					}						
 					else
 						JOptionPane.showMessageDialog(null, "Γράφε καλά.");
 				}
