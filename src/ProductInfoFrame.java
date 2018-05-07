@@ -207,7 +207,7 @@ public class ProductInfoFrame extends JDialog
 							int rs = db.getStatement().executeUpdate(query);
 							ptm.setProductEditable(selectedRow);
 							dispose();
-							JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
+							JOptionPane.showMessageDialog(null, "Easy Orders 1.0", "Οι αλλαγές αποθηκεύτηκαν.", JOptionPane.INFORMATION_MESSAGE);
 						}
 						catch(Exception ex)
 						{
@@ -229,10 +229,10 @@ public class ProductInfoFrame extends JDialog
 						editCheckBox.setSelected(false);
 					}
 					else
-						JOptionPane.showMessageDialog(null, "Γράφε καλά.");
+						JOptionPane.showMessageDialog(null, "Easy Orders 1.0", "Γράφε καλά.", JOptionPane.WARNING_MESSAGE);
 				}
 				else
-					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία.");
+					JOptionPane.showMessageDialog(null, "Easy Orders 1.0", "Συμπληρώστε τα απαραίτητα στοιχεία.", JOptionPane.WARNING_MESSAGE);
 			}
 		});
 		

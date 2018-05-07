@@ -157,7 +157,7 @@ public class NewClientFrame extends JDialog
 							//refresh the table after save
 							ctm.populate();
 						
-							JOptionPane.showMessageDialog(null, "Ο νέος χρήστης καταχωρήθηκε.");
+							JOptionPane.showMessageDialog(null, "Easy Orders 1.0", "Ο νέος χρήστης καταχωρήθηκε.", JOptionPane.INFORMATION_MESSAGE);
 						
 							idField.setText("");
 							nameField.setText("");
@@ -177,10 +177,11 @@ public class NewClientFrame extends JDialog
 						db.closeConnection();
 					}
 					else
-						JOptionPane.showMessageDialog(null, "Γράφε καλά.");
+						JOptionPane.showMessageDialog(null, "Easy Orders 1.0", "Γράφε καλά.", JOptionPane.WARNING_MESSAGE);
 				}
 				else
-					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία");
+					JOptionPane.showMessageDialog(null, "Easy Orders 1.0", "Συμπληρώστε τα απαραίτητα στοιχεία.", JOptionPane.WARNING_MESSAGE);
+				
 			}
 		});
 		

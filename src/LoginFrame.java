@@ -116,14 +116,14 @@ public class LoginFrame extends JFrame
 					int privilege = rs.getInt("privilege");
 					
 					if(privilege == 1)
-						JOptionPane.showMessageDialog(null, "You are Administrator.");
+						JOptionPane.showMessageDialog(null, "Easy Orders 1.0",  "You are Administrator.", JOptionPane.INFORMATION_MESSAGE);
 					else
-						JOptionPane.showMessageDialog(null, "You are User.");
+						JOptionPane.showMessageDialog(null, "Easy Orders 1.0",  "You are User.", JOptionPane.INFORMATION_MESSAGE);
 				}
 				catch (Exception ex)
 				{
 					ex.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Λάθος όνομα χρήστη ή κωδικός.");
+					JOptionPane.showMessageDialog(null, "Easy Orders 1.0",  "Λάθος όνομα χρήστη ή κωδικός.", JOptionPane.WARNING_MESSAGE);
 				}
 				
 				db.closeConnection();

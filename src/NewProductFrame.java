@@ -163,7 +163,7 @@ public class NewProductFrame extends JDialog
 							//refresh the table after save
 							ptm.populate();
 						
-							JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.");
+							JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.", "Easy Orders 1.0", JOptionPane.INFORMATION_MESSAGE);
 						
 							idField.setText(Integer.toString(Integer.parseInt(id) + 1));
 							nameField.setText("");
@@ -182,10 +182,10 @@ public class NewProductFrame extends JDialog
 						db.closeConnection();
 					}						
 					else
-						JOptionPane.showMessageDialog(null, "Γράφε καλά.");
+						JOptionPane.showMessageDialog(null, "Γράφε καλά.", "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
 				}
 				else
-					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία.");
+					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία.", "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
 			}
 		});
 
@@ -197,7 +197,7 @@ public class NewProductFrame extends JDialog
 			public void windowClosing(WindowEvent we)
 			{
 				String ObjButtons[] = {"Ναι", "Όχι"};			
-				int PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+				int PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, ObjButtons, ObjButtons[1]);
 				
 					
 				if(PromptResult == JOptionPane.YES_OPTION)
