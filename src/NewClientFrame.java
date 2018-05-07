@@ -177,10 +177,10 @@ public class NewClientFrame extends JDialog
 						db.closeConnection();
 					}
 					else
-						JOptionPane.showMessageDialog(null, "Easy Orders 1.0", "Γράφε καλά.", JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Γράφε καλά.", "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
 				}
 				else
-					JOptionPane.showMessageDialog(null, "Easy Orders 1.0", "Συμπληρώστε τα απαραίτητα στοιχεία.", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία.", "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
 				
 			}
 		});
