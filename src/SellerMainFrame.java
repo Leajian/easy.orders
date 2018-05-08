@@ -372,16 +372,16 @@ public class SellerMainFrame extends JFrame
 				if (e.getClickCount() == 2)
 				{
 					//threadManager.stopModelUpdates();
-//					if (ptm.isProductEditable(selectedRow))
-//					{
-//						ptm.setProductUneditable(selectedRow);
+					if (ptm.isProductEditable(selectedRow))
+					{
+						ptm.setProductUneditable(selectedRow);
 						threadManager.stopProductRefresher();
 						JDialog pif = new ProductInfoFrame(ptm.getProductAt(selectedRow));
 						while (!pif.isDisplayable()) break;
 //						ptm.setProductEditable(selectedRow);
 						threadManager.startProductRefresher();
-//					}
-					//threadManager.startProductsTableModelUpdates(ptm);
+					}
+//					threadManager.startProductsTableModelUpdates(ptm);
 				}	
 			}
 		});
