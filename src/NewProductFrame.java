@@ -49,7 +49,7 @@ public class NewProductFrame extends JDialog
 	
 	private DBConnect db = new DBConnect();
 	
-	public NewProductFrame(ProductsTableModel ptm)
+	public NewProductFrame()
 	{
 		//this blocks other windows unless this is closed.
 		//this is important because we don't want to add a new product with the same id
@@ -156,7 +156,7 @@ public class NewProductFrame extends JDialog
 							int rs = db.getStatement().executeUpdate(query);
 						
 							//refresh the table after save
-							ptm.populate();
+							//ptm.populate();
 						
 							JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.");
 						
@@ -171,6 +171,8 @@ public class NewProductFrame extends JDialog
 						}
 						catch(Exception ex)
 						{
+							//TODO: catch exception when the ID happens to exist, because the product was added simultaneously by another instance.
+							//		a way to avoid this is to create the product but delete it if not saved, only if the id works with auto-increment
 							ex.printStackTrace();
 						}
 					else
