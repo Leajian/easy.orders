@@ -31,7 +31,7 @@ public class NewProductFrame extends JDialog
 	private JTextField packagingField = new JTextField();
 	private JTextField priceField = new JTextField();
 	
-	private JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
+	private final JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
 	private JLabel idLab = new JLabel("Κωδικός");
 	private JLabel nameLab = new JLabel("Όνομα");
 	private JLabel qualityLab = new JLabel("Ποιότητα");
@@ -55,6 +55,8 @@ public class NewProductFrame extends JDialog
 		//this is important because we don't want to add a new product with the same id
 		//also it must be here and not the bottom for some reason
 		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+		
+		db.connect();
 		
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
@@ -114,8 +116,6 @@ public class NewProductFrame extends JDialog
 		
 		panel.add(saveButton, "6, 13, 3, 1, fill, fill");
 		
-		db.connect();
-		
 		try
 		{
 			String query = "SELECT MAX(id) FROM product";
@@ -132,8 +132,6 @@ public class NewProductFrame extends JDialog
 		{
 			System.out.println(ex);
 		}
-		
-		db.closeConnection();
 		
 		saveButton.addActionListener(new ActionListener()
 		{	
@@ -152,9 +150,6 @@ public class NewProductFrame extends JDialog
 				if(!(name.trim().equals("")))
 				{
 					if((id.length() <= 5) & (name.length() <= 30) & (quality.length() <= 2) & (location.length() <= 30) & (producer.length() <= 30) & (packaging.length() <= 2) & (price.length() <= 10) & (stock <= 99999))
-					{
-						db.connect();
-						
 						try
 						{
 							String query = "INSERT INTO product (id, name, quality, location, producer, packaging, price, stock) VALUES ('" + id + "', " + "'" + name + "', " + "'" + quality + "', " + "'" + location + "', " + "'" + producer + "', " + "'" + packaging + "', " + "'" + price + "', " + "'" + stock + "')";
@@ -163,7 +158,7 @@ public class NewProductFrame extends JDialog
 							//refresh the table after save
 							//ptm.populate();
 						
-							JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.", "Easy Orders 1.0", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Το νέο προιόν καταχωρήθηκε.");
 						
 							idField.setText(Integer.toString(Integer.parseInt(id) + 1));
 							nameField.setText("");
@@ -180,14 +175,11 @@ public class NewProductFrame extends JDialog
 							//		a way to avoid this is to create the product but delete it if not saved, only if the id works with auto-increment
 							ex.printStackTrace();
 						}
-						
-						db.closeConnection();
-					}						
 					else
-						JOptionPane.showMessageDialog(null, "Γράφε καλά.", "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Γράφε καλά.");
 				}
 				else
-					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία.", "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία.");
 			}
 		});
 
@@ -199,7 +191,7 @@ public class NewProductFrame extends JDialog
 			public void windowClosing(WindowEvent we)
 			{
 				String ObjButtons[] = {"Ναι", "Όχι"};			
-				int PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, ObjButtons, ObjButtons[1]);
+				int PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 				
 					
 				if(PromptResult == JOptionPane.YES_OPTION)

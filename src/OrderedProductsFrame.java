@@ -13,7 +13,7 @@ public class OrderedProductsFrame extends JFrame
 {
 	private JTable orderedProductsTable;
 	
-	private JPanel panel = new JPanel();
+	JPanel panel = new JPanel();
 	private JProgressBar progressBar;
 	
 	public OrderedProductsFrame(Order order)
@@ -52,6 +52,24 @@ public class OrderedProductsFrame extends JFrame
 		
 		
 		this.setContentPane(panel);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(350, 150);

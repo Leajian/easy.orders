@@ -23,8 +23,6 @@ public abstract class DataFetcher
 			ex.printStackTrace();
 		}
 		
-		db.closeConnection();
-		
 		return clients;
 	}
 	
@@ -48,8 +46,6 @@ public abstract class DataFetcher
 			ex.printStackTrace();
 		}
 		
-		db.closeConnection();
-		
 		return products;
 	}
 	
@@ -72,8 +68,6 @@ public abstract class DataFetcher
 		{
 			ex.printStackTrace();
 		}
-		
-		db.closeConnection();
 		
 		return ordersRecord;
 	}

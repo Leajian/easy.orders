@@ -9,13 +9,13 @@ public class Order
 	private DBConnect db = new DBConnect();
 	
 	public Order(String lastEdit, String clientId, String employeeUsername, String closed)
-	{			
+	{
+		db.connect();
+		
 		this.lastEdit = lastEdit;
 		this.clientId = clientId;
 		this.employeeUsername = employeeUsername;
 		this.closed = closed;
-		
-		db.connect();
 		
 		try
 		{
@@ -32,8 +32,6 @@ public class Order
 		{
 			ex.printStackTrace();
 		}
-		
-		db.closeConnection();
 	}
 
 	public void addProduct(Product aProduct)
@@ -58,8 +56,6 @@ public class Order
 	
 	public String getClientName()
 	{
-		db.connect();
-		
 		try
 		{
 			String query = "SELECT name FROM client WHERE id = " + clientId;
@@ -73,8 +69,6 @@ public class Order
 		{
 			ex.printStackTrace();
 		}
-		
-		db.closeConnection();
 		
 		return "";
 	}

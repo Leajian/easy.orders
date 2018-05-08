@@ -32,7 +32,7 @@ public class ProductInfoFrame extends JDialog
 	private JTextField packagingField = new JTextField();
 	private JTextField priceField = new JTextField();
 	
-	private JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
+	private final JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
 	private JLabel idLab = new JLabel("Κωδικός");
 	private JLabel nameLab = new JLabel("Όνομα");
 	private JLabel qualityLab = new JLabel("Ποιότητα");
@@ -71,25 +71,6 @@ public class ProductInfoFrame extends JDialog
 		priceField.setText(product.getPrice());
 		stockSpinner.setValue(Integer.parseInt(product.getStock()));
 			
-<<<<<<< HEAD
-=======
-			idField.setText(rs.getString("id"));
-			nameField.setText(rs.getString("name"));
-			qualityField.setText(rs.getString("quality"));
-			locationField.setText(rs.getString("location"));
-			producerField.setText(rs.getString("producer"));
-			packagingField.setText(rs.getString("packaging"));
-			priceField.setText(rs.getString("price"));
-			stockSpinner.setValue(rs.getObject("stock"));
-		}
-		catch (Exception ex)
-		{
-			System.out.println(ex);
-		}
-		
-		db.closeConnection();
-		
->>>>>>> f8739ddc920f3022cd8a66066987bea3f3a814ec
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -206,21 +187,17 @@ public class ProductInfoFrame extends JDialog
 				{
 					if((id.length() <= 5) & (name.length() <= 30) & (quality.length() <= 2) & (location.length() <= 30) & (producer.length() <= 30) & (packaging.length() <= 2) & (price.length() <= 10) & (stock <= 99999))
 					{
-						db.connect();
-						
 						try
 						{
 							String query = "UPDATE product SET name = " + "'" + name + "', " + "quality = " + "'" + quality + "', " + "location = " + "'" + location + "', " + "producer = " + "'" + producer + "', " +  "packaging = " + "'" + packaging + "', " + "price = " + "'" + price + "', " + "stock = " + "'" + stock + "' WHERE product.id = " + "'" + id + "'";
 							int rs = db.getStatement().executeUpdate(query);
 							dispose();
-							JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.", "Easy Orders 1.0", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
 						}
 						catch(Exception ex)
 						{
 							ex.printStackTrace();
 						}
-						
-						db.closeConnection();
 						
 						nameField.setEditable(false);
 						qualityField.setEditable(false);
@@ -235,10 +212,10 @@ public class ProductInfoFrame extends JDialog
 						editCheckBox.setSelected(false);
 					}
 					else
-						JOptionPane.showMessageDialog(null, "Γράφε καλά.", "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Γράφε καλά.");
 				}
 				else
-					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία.", "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία.");
 			}
 		});
 		

@@ -60,6 +60,8 @@ public class NewClientFrame extends JDialog
 		//also it must be here and not the bottom for some reason
 		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		
+		db.connect();
+		
 		nameField.setPreferredSize(new Dimension(150, 20));
 		idField.setPreferredSize(new Dimension(70, 20));
 		cityField.setPreferredSize(new Dimension(150, 20));
@@ -146,8 +148,6 @@ public class NewClientFrame extends JDialog
 				if(!id.trim().equals("") & !(name.trim().equals("")))
 				{
 					if((id.length() == 9) & (name.length() <= 30) & (city.length() <= 30) & (phoneNumber.length() <= 15) & (email.length() <= 30) & (address.length() <= 30) & (fax.length() <= 15) & (zipCode.length() <= 10) & (notes.length() <= 120))
-					{
-						db.connect();
 						
 						try
 						{
@@ -157,7 +157,7 @@ public class NewClientFrame extends JDialog
 							//refresh the table after save
 							ctm.populate();
 						
-							JOptionPane.showMessageDialog(null, "Easy Orders 1.0", "Ο νέος χρήστης καταχωρήθηκε.", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Ο νέος χρήστης καταχωρήθηκε.");
 						
 							idField.setText("");
 							nameField.setText("");
@@ -173,15 +173,11 @@ public class NewClientFrame extends JDialog
 						{
 							ex.printStackTrace();
 						}
-						
-						db.closeConnection();
-					}
 					else
-						JOptionPane.showMessageDialog(null, "Γράφε καλά.", "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Γράφε καλά.");
 				}
 				else
-					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία.", "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
-				
+					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία");
 			}
 		});
 		
