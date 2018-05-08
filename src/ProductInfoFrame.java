@@ -52,34 +52,25 @@ public class ProductInfoFrame extends JDialog
 	
 	private DBConnect db = new DBConnect();
 	
-	public ProductInfoFrame(String id, ProductsTableModel ptm, int selectedRow)
-	{
+	public ProductInfoFrame(Product product)
+	{	
 		//this blocks other windows unless this is closed.
 		//also it must be here and not the bottom for some reason
 		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		
 		db.connect();
 		
-		try
-		{
-			String query = "SELECT * FROM product WHERE id = " + "'" + id + "'";
-			ResultSet rs = db.getStatement().executeQuery(query);
+		//TODO: create object instead
+
+		idField.setText(product.getId());
+		nameField.setText(product.getName());
+		qualityField.setText(product.getQuality());
+		locationField.setText(product.getLocation());
+		producerField.setText(product.getProducer());
+		packagingField.setText(product.getPackaging());
+		priceField.setText(product.getPrice());
+		stockSpinner.setValue(Integer.parseInt(product.getStock()));
 			
-			rs.next();
-			
-			idField.setText(rs.getString("id"));
-			nameField.setText(rs.getString("name"));
-			qualityField.setText(rs.getString("quality"));
-			locationField.setText(rs.getString("location"));
-			producerField.setText(rs.getString("producer"));
-			packagingField.setText(rs.getString("packaging"));
-			priceField.setText(rs.getString("price"));
-			stockSpinner.setValue(rs.getObject("stock"));
-		}
-		catch (Exception ex)
-		{
-			System.out.println(ex);
-		}
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -200,7 +191,6 @@ public class ProductInfoFrame extends JDialog
 						{
 							String query = "UPDATE product SET name = " + "'" + name + "', " + "quality = " + "'" + quality + "', " + "location = " + "'" + location + "', " + "producer = " + "'" + producer + "', " +  "packaging = " + "'" + packaging + "', " + "price = " + "'" + price + "', " + "stock = " + "'" + stock + "' WHERE product.id = " + "'" + id + "'";
 							int rs = db.getStatement().executeUpdate(query);
-							ptm.setProductEditable(selectedRow);
 							dispose();
 							JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
 						}
@@ -245,7 +235,6 @@ public class ProductInfoFrame extends JDialog
 				}
 				if(PromptResult == JOptionPane.YES_OPTION)
 				{
-					ptm.setProductEditable(selectedRow);
 					dispose();
 				}
 			}
