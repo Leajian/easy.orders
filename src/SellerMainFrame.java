@@ -7,14 +7,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,6 +26,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -34,6 +35,7 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
+import com.sun.java.swing.plaf.windows.resources.windows;
 
 public class SellerMainFrame extends JFrame
 {
@@ -75,6 +77,8 @@ public class SellerMainFrame extends JFrame
 	ProductsTableModel ptm = new ProductsTableModel(new ArrayList<>());
 	RecordTableModel rtm = new RecordTableModel(new ArrayList<>());
 	
+	ThreadManagement threadManager = new ThreadManagement();
+	
 	public SellerMainFrame()
 	{
 		liveOrdersTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -104,7 +108,7 @@ public class SellerMainFrame extends JFrame
 					
 				//Products Tab
 				case 2:
-					ThreadManagement.ManageModelUpdateAtTab(selectedTabIndex, ptm);
+					threadManager.ManageModelUpdateAtTab(selectedTabIndex, ptm);
 					break;
 					
 				//Record Tab
@@ -365,10 +369,19 @@ public class SellerMainFrame extends JFrame
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
 				
 				//show info on double click
-				if ((e.getClickCount() == 2) & (ptm.isProductEditable(selectedRow)))
+				if (e.getClickCount() == 2)
 				{
-					ptm.setProductUneditable(selectedRow);
-					ptm.getProductInfo(selectedRow);
+					//threadManager.stopModelUpdates();
+//					if (ptm.isProductEditable(selectedRow))
+//					{
+//						ptm.setProductUneditable(selectedRow);
+						threadManager.stopProductRefresher();
+						JDialog pif = new ProductInfoFrame(ptm.getProductAt(selectedRow));
+						while (!pif.isDisplayable()) break;
+//						ptm.setProductEditable(selectedRow);
+						threadManager.startProductRefresher();
+//					}
+					//threadManager.startProductsTableModelUpdates(ptm);
 				}	
 			}
 		});
@@ -385,7 +398,15 @@ public class SellerMainFrame extends JFrame
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				new NewProductFrame(ptm);
+//				threadManager.stopModelUpdates();
+//				JDialog pf = new NewProductFrame();
+//				while (true)
+//				{
+//					if (!pf.isDisplayable()) break;
+//				}
+//				threadManager.startProductsTableModelUpdates(ptm);
+				
+				new NewProductFrame();
 			}
 		});
 		
@@ -397,8 +418,16 @@ public class SellerMainFrame extends JFrame
 			{
 				int selectedRow = productsTable.getSelectionModel().getMinSelectionIndex();
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
-				if (selectedRow != -1)
-					ptm.removeSelectedProduct(selectedRow);
+				if (!productsTable.getSelectionModel().isSelectionEmpty())
+				{
+					removeProductButton.setEnabled(true);
+					if (ptm.isProductEditable(selectedRow))
+						ptm.removeSelectedProduct(selectedRow);
+					
+					productsTable.getSelectionModel().clearSelection();
+				}
+				
+				
 			}
 		});
 		
