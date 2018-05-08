@@ -1,12 +1,15 @@
 import java.util.ArrayList;
 
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 
 public class ProductsTableModel extends AbstractTableModel
 {
 	private String[] productColumnNames = {"Προιόν", "Προέλευση", "Προμυθευτής", "Ποιότητα", "Συσκευασία", "Τιμή", "Απόθεμα"};
-	private ArrayList<Product> products = new ArrayList<>();
+	private volatile ArrayList<Product> products = new ArrayList<>();
 	private DBConnect db = new DBConnect();
+	
+	//private boolean locked = false;
 		
 	public ProductsTableModel(ArrayList<Product> products)
 	{
@@ -52,18 +55,37 @@ public class ProductsTableModel extends AbstractTableModel
 		}
     }
         
-    public void getProductInfo(int row)
+//    public synchronized void getProductInfo(int row)
+//    {
+//    	setProductUneditable(row);
+//
+//    	String id = products.get(row).getId();
+//    	
+//    	this.
+////        ProductInfoFrame pif = new ProductInfoFrame(id, row);
+////        while (pif.isActive())
+////        	lock("info frame");
+////        unlock("info frame");
+//        
+//        setProductEditable(row);
+//    }
+    public Product getProductAt(int row)
     {
-        new ProductInfoFrame(products.get(row).getId(), this, row);
+    	return products.get(row);
     }
     
     public boolean isProductEditable(int row)
 	{
-		return products.get(row).isEditable();
+    	//lock("isEditable");
+    	boolean isEditable = products.get(row).isEditable();
+    	//unlock("isEditable");
+		return isEditable;
 	}
 	
 	public void setProductEditable(int row)
 	{
+		//lock("setProductEditable");
+		
 		try
 		{
 			String query = "UPDATE product SET isEditable = 1 WHERE id = '" + products.get(row).getId() + "'";
@@ -73,10 +95,14 @@ public class ProductsTableModel extends AbstractTableModel
 		{
 			ex.printStackTrace();
 		}
+		
+		//unlock("setProductEditable");
 	}
 	
 	public void setProductUneditable(int row)
 	{
+		//lock("setProductUneditable");
+		
 		try
 		{
 			String query = "UPDATE product SET isEditable = 0 WHERE id = '" + products.get(row).getId() + "'";
@@ -86,6 +112,8 @@ public class ProductsTableModel extends AbstractTableModel
 		{
 			ex.printStackTrace();
 		}
+		
+		//unlock("setProductUneditable");
 	}
     
     /*
@@ -160,32 +188,96 @@ public class ProductsTableModel extends AbstractTableModel
 		fireTableDataChanged();
 	}
     
-    //uses an list of new products and changes them in the table according to their id
-    public void refresh(ArrayList<Product> products)
+    //uses an list of altered existing products and changes them in the table according to their id
+    //if the product in the list is new, it is added as well
+    public void refresh(ArrayList<Product> newProducts)
     {
-    	int indexOfProductToRefresh = -1;
+    	//lock("refresh from model"); 
+    	//int oldProductsSize = this.products.size();
     	
     	for (Product oldProduct : this.products)
+    	//for (int i=0; i < oldProductsSize; i++)
     	{
-    		for (Product newProduct : products)
+
+    		for (Product newProduct : newProducts)
     		{
-    		if (oldProduct.getId().equals(newProduct.getId()))
+    			if (oldProduct.getId().equals(newProduct.getId()))
 	    		{
-	    			indexOfProductToRefresh = this.products.indexOf(oldProduct);
+    	
+	    			int indexOfProductToRefresh = this.products.indexOf(oldProduct);
 	    			
 	    			if (indexOfProductToRefresh != -1)
 	    	    	{
+	    				//remove old entry
 	    		    	this.products.remove(indexOfProductToRefresh);
+	    		    	//add altered entry
 	    		    	this.products.add(indexOfProductToRefresh, newProduct);
-	    		
-	    		        fireTableRowsUpdated(indexOfProductToRefresh, indexOfProductToRefresh);
+	    		    	//remove the product from newProducts list, because it's been already added
+	    		    	//newProducts.remove(indexOfProductToRefresh);
+	    		    	System.out.println("b4 fireupd");
+	    		    	//update only the row of the new product
+	    		    	
+	    		    	fireTableRowsUpdated(indexOfProductToRefresh, indexOfProductToRefresh);
 	    	    	}
 	    	    	else
 	    	    	{
 	    	    		System.out.println("Error while trying to refresh product.");
 	    	    	}
 	    		}
+    			
     		}
     	}
+    	
+    	//this.populate();
+    	
+    	//if there are unmatched products left, it means they are new entries
+//		if (!newProducts.isEmpty())
+//		{
+//			//max rows before adding
+//			int fromHere = getRowCount() - 1;
+//			//for every remaining newProduct
+//			for (Product newProduct : newProducts)
+//			{
+//				//add new entry
+//				this.products.add(newProduct);
+//				
+//			}
+//			
+//			//max rows after adding
+//			int toHere = getRowCount() - 1;
+//			//update only the rows of new products
+//			fireTableRowsInserted(fromHere, toHere);
+//		}
+    	
+    	//unlock("refresh from model");
     }
+    
+    
+    //lock mechanism for AWT thread
+//    public synchronized void lock(String msg)
+//    {
+//    	System.out.println(msg + " - lock state : " + locked);
+//    	if (locked)
+//		{
+//			try {
+//				this.wait();
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}	
+//		}
+//    	
+//    	locked = true;
+//		System.out.println(msg + " has set lock to true - lock state : " + locked);
+//    	
+//    }
+//    
+//    public synchronized void unlock(String msg)
+//    {
+//    	locked = false;
+//    	System.out.println(msg + " has set lock to false - lock state : " + locked);
+//		
+//		this.notifyAll();
+//    	
+//    }
 }

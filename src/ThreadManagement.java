@@ -1,13 +1,18 @@
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.table.AbstractTableModel;
 
-public abstract class ThreadManagement {
+public class ThreadManagement {
 	
-	private static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+	private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+	//private final static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+	private ScheduledFuture<?> future;
+	private ProductRefresher pr;
 	
-	public static void ManageModelUpdateAtTab(int selectedTabIndex, AbstractTableModel atm)
+	public void ManageModelUpdateAtTab(int selectedTabIndex, AbstractTableModel atm)
 	{
 		//TODO: Create a thread pool and run one at a time
 		
@@ -20,18 +25,19 @@ public abstract class ThreadManagement {
 			
 		//Clients Tab
 		case 1:
-			//Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new ClientRefresher((ClientsTableModel)atm), 0, 10, TimeUnit.MILLISECONDS);
+			
 			break;
 			
 		//Products Tab
 		case 2:
-			//Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new ProductRefresher((ProductsTableModel)atm), 0, 5000, TimeUnit.MILLISECONDS);
-			scheduleAtFixedRate(new ProductRefresher((ProductsTableModel)atm), 5000);
+			((ProductsTableModel)atm).populate();
+			//startProductsTableModelUpdates(atm);
+			pr = new ProductRefresher((ProductsTableModel) atm, 1000);
 			break;
 			
 		//Record Tab
 		case 3:
-			//Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new RecordRefresher((RecordTableModel)atm), 0, 10, TimeUnit.MILLISECONDS);
+			
 			break;
 			
 		default:
@@ -39,29 +45,24 @@ public abstract class ThreadManagement {
 		}
 	}
 	
-	private static void scheduleAtFixedRate(Runnable r, int sleepTime)
+	public void stopProductRefresher()
 	{
-		Thread t = new Thread(r);
-		
-		
-		//while you are dead
-		while(!t.isAlive())
-		{
-			//revive
-			t.start();
-			
-			try {
-				//wait until you finish
-				t.join();
-				
-				//wait desired interval
-				Thread.sleep(sleepTime);
-				
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		pr.stop();
 	}
 	
+	public void startProductRefresher()
+	{
+		pr.start();
+	}
+	
+//	public void startProductsTableModelUpdates(AbstractTableModel atm)
+//	{
+//		//stopModelUpdates();
+//		try {
+//		this.future = executorService.scheduleAtFixedRate(new ProductRefresher((ProductsTableModel) atm), 0, 1500, TimeUnit.MILLISECONDS);
+//		}catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 }
