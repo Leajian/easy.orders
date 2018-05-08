@@ -10,7 +10,7 @@ import javax.swing.Timer;
 public class ProductRefresher// extends Thread
 {
 	private ProductsTableModel ptm;
-	
+
 	private String lastUpdate = "";
 		
 	private DBConnect db = new DBConnect();
@@ -29,6 +29,7 @@ public class ProductRefresher// extends Thread
 		
 		lastUpdate = getLastEdit();
 		
+<<<<<<< HEAD
 		System.out.println("i run once again");
 		
 		timer = new Timer(interval, new ActionListener() {
@@ -62,6 +63,29 @@ public class ProductRefresher// extends Thread
 		
 		timer.start();
 		
+=======
+		db.closeConnection();
+	}
+
+	@Override
+	public void run()
+	{
+		try
+		{
+			if(!getLastEdit().equals(lastUpdate))
+			{
+				//System.out.println(lastUpdate);				
+				ptm.refresh(getNewestProducts());
+			}
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
+			
+		lastUpdate = getLastEdit();
+>>>>>>> f8739ddc920f3022cd8a66066987bea3f3a814ec
 	}
 
 //	@Override
@@ -90,16 +114,23 @@ public class ProductRefresher// extends Thread
 	
 	private String getLastEdit()
 	{
-		String query = "SELECT DISTINCT MAX(lastEdit) FROM product";
-		ResultSet rs;
-		try {
-			rs = db.getStatement().executeQuery(query);
+		db.connect();
+		
+		try
+		{
+			String query = "SELECT DISTINCT MAX(lastEdit) FROM product";	
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
 			rs.next();
-			System.out.println("time[" + rs.getString("MAX(lastEdit)") + "]  Refresh tick");
 			return rs.getString("MAX(lastEdit)");
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} 
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
 		}
+		
+		db.closeConnection();
+		
 		return null;	
 	}
 	
@@ -107,21 +138,27 @@ public class ProductRefresher// extends Thread
 	{
 		ArrayList<Product> newProductsList = new ArrayList<>();
 		
+<<<<<<< HEAD
 		String query = "SELECT DISTINCT id FROM product WHERE lastEdit > '" + lastUpdate + "'";
 		ResultSet rs1;
+=======
+		db.connect();
+		
+>>>>>>> f8739ddc920f3022cd8a66066987bea3f3a814ec
 		try
 		{
-			rs1 = db.getStatement().executeQuery(query);
+			String query = "SELECT id FROM product WHERE lastEdit > '" + lastUpdate + "'";
+			ResultSet rs1 = db.getStatement().executeQuery(query);
 			
 			while(rs1.next())
-			{
 				newProductsList.add(new Product(rs1.getString("id")));
-				System.out.println("id[" + rs1.getString("id") + "]  New product found or viewed!");
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} 
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
 		}
+		
+		db.closeConnection();
 		
 		return newProductsList;
 	}

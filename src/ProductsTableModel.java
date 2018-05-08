@@ -13,7 +13,6 @@ public class ProductsTableModel extends AbstractTableModel
 		
 	public ProductsTableModel(ArrayList<Product> products)
 	{
-		db.connect();
 		this.products = products;
 	}
 
@@ -84,7 +83,11 @@ public class ProductsTableModel extends AbstractTableModel
 	
 	public void setProductEditable(int row)
 	{
+<<<<<<< HEAD
 		//lock("setProductEditable");
+=======
+		db.connect();
+>>>>>>> f8739ddc920f3022cd8a66066987bea3f3a814ec
 		
 		try
 		{
@@ -96,12 +99,20 @@ public class ProductsTableModel extends AbstractTableModel
 			ex.printStackTrace();
 		}
 		
+<<<<<<< HEAD
 		//unlock("setProductEditable");
+=======
+		db.closeConnection();
+>>>>>>> f8739ddc920f3022cd8a66066987bea3f3a814ec
 	}
 	
 	public void setProductUneditable(int row)
 	{
+<<<<<<< HEAD
 		//lock("setProductUneditable");
+=======
+		db.connect();
+>>>>>>> f8739ddc920f3022cd8a66066987bea3f3a814ec
 		
 		try
 		{
@@ -113,7 +124,11 @@ public class ProductsTableModel extends AbstractTableModel
 			ex.printStackTrace();
 		}
 		
+<<<<<<< HEAD
 		//unlock("setProductUneditable");
+=======
+		db.closeConnection();
+>>>>>>> f8739ddc920f3022cd8a66066987bea3f3a814ec
 	}
     
     /*
@@ -151,12 +166,11 @@ public class ProductsTableModel extends AbstractTableModel
 	}
         
     public void removeSelectedProduct(int row)
-    {
-    	DBConnect db = new DBConnect();    	
-    	db.connect();
-
+    { 	
     	if(!products.isEmpty())
     	{
+    		db.connect();
+    		
         	try
         	{
     			String query = "DELETE FROM product WHERE product.id = " + products.get(row).getId();
@@ -169,6 +183,8 @@ public class ProductsTableModel extends AbstractTableModel
         	{
     			ex.printStackTrace();
     		}
+        	
+        	db.closeConnection();
     	}
 	}
         
@@ -195,6 +211,7 @@ public class ProductsTableModel extends AbstractTableModel
     	//lock("refresh from model"); 
     	//int oldProductsSize = this.products.size();
     	
+<<<<<<< HEAD
     	for (Product oldProduct : this.products)
     	//for (int i=0; i < oldProductsSize; i++)
     	{
@@ -218,12 +235,25 @@ public class ProductsTableModel extends AbstractTableModel
 	    		    	//update only the row of the new product
 	    		    	
 	    		    	fireTableRowsUpdated(indexOfProductToRefresh, indexOfProductToRefresh);
+=======
+    	for(Product oldProduct: products)
+    		for(Product newProduct : products)
+    			if (oldProduct.getId().equals(newProduct.getId()))
+	    		{
+	    			indexOfProductToRefresh = products.indexOf(oldProduct);
+	    			
+	    			if (indexOfProductToRefresh != -1)
+	    	    	{
+	    		    	products.remove(indexOfProductToRefresh);
+	    		    	products.add(indexOfProductToRefresh, newProduct);
+	    		
+	    		        fireTableRowsUpdated(indexOfProductToRefresh, indexOfProductToRefresh);
+>>>>>>> f8739ddc920f3022cd8a66066987bea3f3a814ec
 	    	    	}
 	    	    	else
-	    	    	{
 	    	    		System.out.println("Error while trying to refresh product.");
-	    	    	}
 	    		}
+<<<<<<< HEAD
     			
     		}
     	}
@@ -250,6 +280,8 @@ public class ProductsTableModel extends AbstractTableModel
 //		}
     	
     	//unlock("refresh from model");
+=======
+>>>>>>> f8739ddc920f3022cd8a66066987bea3f3a814ec
     }
     
     

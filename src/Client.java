@@ -3,7 +3,6 @@ import java.sql.ResultSet;
 public class Client
 {
 	private String lastEdit, id, name, city, phoneNumber, email, address, fax, zipCode, notes;
-	
 	private DBConnect db = new DBConnect();
 	
 	public Client(String id)
@@ -33,6 +32,8 @@ public class Client
 		{
 			ex.printStackTrace();
 		}
+		
+		db.closeConnection();
 	}
 	
 	public String lastEdit()
@@ -87,6 +88,8 @@ public class Client
 	
 	public boolean isEditable()
 	{
+		db.connect();
+		
 		try
 		{
 			String query = "SELECT isEditable from client WHERE id = '" + id + "'";
@@ -101,6 +104,8 @@ public class Client
 		{
 			ex.printStackTrace();
 		}
+		
+		db.closeConnection();
 		
 		return false;
 	}

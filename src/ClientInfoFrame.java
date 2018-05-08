@@ -92,6 +92,8 @@ public class ClientInfoFrame extends JDialog
 			System.out.println(ex);
 		}
 		
+		db.closeConnection();
+		
 		nameField.setEditable(false);
 		nameField.setPreferredSize(new Dimension(150, 20));
 		
@@ -209,18 +211,22 @@ public class ClientInfoFrame extends JDialog
 				{
 					if((id.length() == 9) & (name.length() <= 30) & (city.length() <= 30) & (phoneNumber.length() <= 15) & (email.length() <= 30) & (address.length() <= 30) & (fax.length() <= 15) & (zipCode.length() <= 10) & (notes.length() <= 120))
 					{
+						db.connect();
+						
 						try
 						{
 							String query = "UPDATE client SET name = " + "'" + name + "', " + "city = " + "'" + city + "', " + "phoneNumber = " + "'" + phoneNumber + "', " + "email = " + "'" + email + "', " +  "address = " + "'" + address + "', " + "fax = " + "'" + fax + "', " + "zipCode = " + "'" + zipCode + "', " + "notes = " + "'" + notes + "' WHERE client.id = " + "'" + id + "'";
 							int rs = db.getStatement().executeUpdate(query);
 							ctm.setClientEditable(selectedRow);
 							dispose();
-							JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
+							JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.", "Easy Orders 1.0", JOptionPane.INFORMATION_MESSAGE);
 						}
 						catch(Exception ex)
 						{
 							ex.printStackTrace();
 						}
+						
+						db.closeConnection();
 					
 						nameField.setEditable(false);
 						cityField.setEditable(false);
@@ -236,10 +242,10 @@ public class ClientInfoFrame extends JDialog
 						editCheckBox.setSelected(false);
 					}
 					else
-						JOptionPane.showMessageDialog(null, "Γράφε καλά.");	
+						JOptionPane.showMessageDialog(null, "Γράφε καλά.", "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
 				}
 				else
-					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία");
+					JOptionPane.showMessageDialog(null, "Συμπληρώστε τα απαραίτητα στοιχεία.",  "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
 			}
 		});
 		

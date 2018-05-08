@@ -24,16 +24,16 @@ import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import java.awt.Window.Type;
 
-public class LoginFrame extends JFrame{
+public class LoginFrame extends JFrame
+{
 
 	private JPasswordField passwordField;
-	DBConnect db = new DBConnect();
+	private DBConnect db = new DBConnect();
 
-	public LoginFrame() {
+	public LoginFrame()
+	{
 		setType(Type.UTILITY);
 		setResizable(false);
-		
-		db.connect();
 		
 		this.setTitle("EasyOrders");
 		this.setBounds(100, 100, 385, 400);;
@@ -82,8 +82,10 @@ public class LoginFrame extends JFrame{
 		this.getContentPane().add(passwordLabel, "2, 5, right, center");
 		
 		JCheckBox passwordVisibilityCheckbox = new JCheckBox("Εμφάνιση κωδικού");
-		passwordVisibilityCheckbox.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
+		passwordVisibilityCheckbox.addChangeListener(new ChangeListener()
+		{
+			public void stateChanged(ChangeEvent arg0)
+			{
 				if (passwordVisibilityCheckbox.isSelected())
 					passwordField.setEchoChar((char) 0);
 				else
@@ -94,12 +96,15 @@ public class LoginFrame extends JFrame{
 		this.getContentPane().add(passwordVisibilityCheckbox, "4, 7, left, top");
 		
 		JButton loginButton = new JButton("Είσοδος");
-		loginButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		loginButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
 				String username = usernameField.getText();
 				String password = md5(passwordField.getPassword().toString());
+
+				db.connect();
 				
-	
 				try
 				{
 					//maybe "SELECT DISTINCT" for extra security?
@@ -111,15 +116,17 @@ public class LoginFrame extends JFrame{
 					int privilege = rs.getInt("privilege");
 					
 					if(privilege == 1)
-						JOptionPane.showMessageDialog(null, "You are Administrator.");
+						JOptionPane.showMessageDialog(null, "You are Administrator.",  "Easy Orders 1.0", JOptionPane.INFORMATION_MESSAGE);
 					else
-						JOptionPane.showMessageDialog(null, "You are User.");
+						JOptionPane.showMessageDialog(null, "You are User.",  "Easy Orders 1.0", JOptionPane.INFORMATION_MESSAGE);
 				}
 				catch (Exception ex)
 				{
 					ex.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Λάθος όνομα χρήστη ή κωδικός.");
+					JOptionPane.showMessageDialog(null, "Λάθος όνομα χρήστη ή κωδικός.",  "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
 				}
+				
+				db.closeConnection();
 			}
 		});
 		loginButton.setFont(new Font("Tahoma", Font.PLAIN, 27));
