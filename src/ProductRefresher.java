@@ -4,12 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
 public class ProductRefresher// extends Thread
 {
-	private ProductsTableModel ptm;
+	//private ProductsTableModel ptm;
 	
 	private String lastUpdate = "";
 		
@@ -22,7 +23,7 @@ public class ProductRefresher// extends Thread
 	{
 		db.connect();
 		
-		this.ptm = ptm;
+		//this.ptm = ptm;
 		
 		//now we call the model to populate the data to the table from the list
 		//ptm.populate();
@@ -35,28 +36,37 @@ public class ProductRefresher// extends Thread
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				timer.stop();
-				try
-				{
-					System.out.println("im still running");
-					System.out.println("lastUpdate B4 check : " + lastUpdate);
-					if (!getLastEdit().equals(lastUpdate))
-					{	
-						//for (Product prd : getNewestProducts())
-
-							ptm.refresh(getNewestProducts());
-					}
-					
-					lastUpdate = getLastEdit();
-					
-					System.out.println("lastUpdate AFTER check : " + lastUpdate);
-					timer.start();
-					
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-				
+//				timer.stop();
+//				try
+//				{
+//					System.out.println("im still running");
+//					System.out.println("lastUpdate B4 check : " + lastUpdate);
+//					if (!getLastEdit().equals(lastUpdate))
+//					{	
+//
+//						System.out.println("im in");
+//						SwingUtilities.invokeLater(new Runnable() {
+//							
+//							@Override
+//							public void run() {
+//								System.out.println("i run");
+//								ptm.refresh(getNewestProducts());
+//							}
+//						});
+//							
+//					}
+//					
+//					lastUpdate = getLastEdit();
+//					
+//					System.out.println("lastUpdate AFTER check : " + lastUpdate);
+//					timer.start();
+//					
+//				}
+//				catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//				
+				ptm.populate();
 			}
 		});
 		
