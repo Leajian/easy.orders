@@ -9,7 +9,6 @@ public abstract class DataFetcher
 		DBConnect db = new DBConnect();
 		
 		db.connect();
-		
 		try
 		{
 			String query = "SELECT id FROM client ORDER BY id";
@@ -22,6 +21,7 @@ public abstract class DataFetcher
 		{
 			ex.printStackTrace();
 		}
+		db.closeConnection();
 		
 		return clients;
 	}
@@ -32,7 +32,6 @@ public abstract class DataFetcher
 		DBConnect db = new DBConnect();
 		
 		db.connect();
-		
 		try
 		{
 			String query = "SELECT id FROM product ORDER BY id";
@@ -45,6 +44,7 @@ public abstract class DataFetcher
 		{
 			ex.printStackTrace();
 		}
+		db.closeConnection();
 		
 		return products;
 	}
@@ -54,8 +54,7 @@ public abstract class DataFetcher
 		ArrayList<Order> ordersRecord = new ArrayList<>();
 		DBConnect db = new DBConnect();
 		
-		db.connect();
-		
+		db.connect();		
 		try
 		{
 			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed FROM orders ORDER BY lastEdit";
@@ -68,6 +67,7 @@ public abstract class DataFetcher
 		{
 			ex.printStackTrace();
 		}
+		db.closeConnection();
 		
 		return ordersRecord;
 	}

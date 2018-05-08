@@ -39,10 +39,17 @@ public class DBConnect
 		}
 	}
 	
-	public void closeConnection() throws SQLException, Exception
+	public void closeConnection()
 	{
-		stmt.close();
-		conn.close();
+		try
+		{
+			stmt.close();
+			conn.close();
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 	
 	public java.sql.Statement getStatement()

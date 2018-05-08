@@ -69,7 +69,6 @@ public class ClientInfoFrame extends JDialog
 		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		
 		db.connect();
-		
 		try
 		{
 			String query = "SELECT * FROM client WHERE id = " + "'" + id + "'";
@@ -91,6 +90,7 @@ public class ClientInfoFrame extends JDialog
 		{
 			System.out.println(ex);
 		}
+		db.closeConnection();
 		
 		nameField.setEditable(false);
 		nameField.setPreferredSize(new Dimension(150, 20));
@@ -209,6 +209,7 @@ public class ClientInfoFrame extends JDialog
 				{
 					if((id.length() == 9) & (name.length() <= 30) & (city.length() <= 30) & (phoneNumber.length() <= 15) & (email.length() <= 30) & (address.length() <= 30) & (fax.length() <= 15) & (zipCode.length() <= 10) & (notes.length() <= 120))
 					{
+						db.closeConnection();
 						try
 						{
 							String query = "UPDATE client SET name = " + "'" + name + "', " + "city = " + "'" + city + "', " + "phoneNumber = " + "'" + phoneNumber + "', " + "email = " + "'" + email + "', " +  "address = " + "'" + address + "', " + "fax = " + "'" + fax + "', " + "zipCode = " + "'" + zipCode + "', " + "notes = " + "'" + notes + "' WHERE client.id = " + "'" + id + "'";
@@ -221,6 +222,7 @@ public class ClientInfoFrame extends JDialog
 						{
 							ex.printStackTrace();
 						}
+						db.closeConnection();
 					
 						nameField.setEditable(false);
 						cityField.setEditable(false);

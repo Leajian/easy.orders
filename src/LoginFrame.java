@@ -33,8 +33,6 @@ public class LoginFrame extends JFrame{
 		setType(Type.UTILITY);
 		setResizable(false);
 		
-		db.connect();
-		
 		this.setTitle("EasyOrders");
 		this.setBounds(100, 100, 385, 400);;
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
@@ -99,7 +97,7 @@ public class LoginFrame extends JFrame{
 				String username = usernameField.getText();
 				String password = md5(passwordField.getPassword().toString());
 				
-	
+				db.connect();
 				try
 				{
 					//maybe "SELECT DISTINCT" for extra security?
@@ -120,6 +118,7 @@ public class LoginFrame extends JFrame{
 					ex.printStackTrace();
 					JOptionPane.showMessageDialog(null, "Λάθος όνομα χρήστη ή κωδικός.");
 				}
+				db.closeConnection();
 			}
 		});
 		loginButton.setFont(new Font("Tahoma", Font.PLAIN, 27));

@@ -90,16 +90,23 @@ public class ProductRefresher// extends Thread
 	
 	private String getLastEdit()
 	{
-		String query = "SELECT DISTINCT MAX(lastEdit) FROM product";
-		ResultSet rs;
-		try {
-			rs = db.getStatement().executeQuery(query);
+		db.connect();
+		try
+		{
+			String query = "SELECT DISTINCT MAX(lastEdit) FROM product";
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
 			rs.next();
+			
 			System.out.println("time[" + rs.getString("MAX(lastEdit)") + "]  Refresh tick");
 			return rs.getString("MAX(lastEdit)");
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} 
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
 		}
+		db.closeConnection();
+		
 		return null;	
 	}
 	
@@ -107,21 +114,24 @@ public class ProductRefresher// extends Thread
 	{
 		ArrayList<Product> newProductsList = new ArrayList<>();
 		
-		String query = "SELECT DISTINCT id FROM product WHERE lastEdit > '" + lastUpdate + "'";
-		ResultSet rs1;
+		db.connect();
 		try
 		{
-			rs1 = db.getStatement().executeQuery(query);
+			String query = "SELECT DISTINCT id FROM product WHERE lastEdit > '" + lastUpdate + "'";
+			ResultSet  rs = db.getStatement().executeQuery(query);
 			
-			while(rs1.next())
+			while(rs.next())
 			{
-				newProductsList.add(new Product(rs1.getString("id")));
-				System.out.println("id[" + rs1.getString("id") + "]  New product found or viewed!");
+				newProductsList.add(new Product(rs.getString("id")));
+				System.out.println("id[" + rs.getString("id") + "]  New product found or viewed!");
 			}
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} 
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
 		}
+		db.closeConnection();
 		
 		return newProductsList;
 	}

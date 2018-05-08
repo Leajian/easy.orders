@@ -7,11 +7,10 @@ public class Client
 	private DBConnect db = new DBConnect();
 	
 	public Client(String id)
-	{
-		db.connect();
-		
+	{	
 		this.id = id;
 		
+		db.connect();
 		try
 		{
 			String query = "SELECT * FROM client WHERE id = '" + id + "'";
@@ -33,6 +32,7 @@ public class Client
 		{
 			ex.printStackTrace();
 		}
+		db.closeConnection();
 	}
 	
 	public String lastEdit()
@@ -87,6 +87,7 @@ public class Client
 	
 	public boolean isEditable()
 	{
+		db.connect();
 		try
 		{
 			String query = "SELECT isEditable from client WHERE id = '" + id + "'";
@@ -101,6 +102,7 @@ public class Client
 		{
 			ex.printStackTrace();
 		}
+		db.closeConnection();
 		
 		return false;
 	}

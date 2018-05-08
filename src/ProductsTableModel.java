@@ -13,7 +13,6 @@ public class ProductsTableModel extends AbstractTableModel
 		
 	public ProductsTableModel(ArrayList<Product> products)
 	{
-		db.connect();
 		this.products = products;
 	}
 
@@ -86,6 +85,7 @@ public class ProductsTableModel extends AbstractTableModel
 	{
 		//lock("setProductEditable");
 		
+		db.connect();
 		try
 		{
 			String query = "UPDATE product SET isEditable = 1 WHERE id = '" + products.get(row).getId() + "'";
@@ -95,6 +95,7 @@ public class ProductsTableModel extends AbstractTableModel
 		{
 			ex.printStackTrace();
 		}
+		db.closeConnection();
 		
 		//unlock("setProductEditable");
 	}
@@ -103,6 +104,7 @@ public class ProductsTableModel extends AbstractTableModel
 	{
 		//lock("setProductUneditable");
 		
+		db.connect();
 		try
 		{
 			String query = "UPDATE product SET isEditable = 0 WHERE id = '" + products.get(row).getId() + "'";
@@ -112,6 +114,7 @@ public class ProductsTableModel extends AbstractTableModel
 		{
 			ex.printStackTrace();
 		}
+		db.closeConnection();
 		
 		//unlock("setProductUneditable");
 	}
@@ -157,6 +160,7 @@ public class ProductsTableModel extends AbstractTableModel
 
     	if(!products.isEmpty())
     	{
+    		db.connect();
         	try
         	{
     			String query = "DELETE FROM product WHERE product.id = " + products.get(row).getId();
@@ -169,6 +173,7 @@ public class ProductsTableModel extends AbstractTableModel
         	{
     			ex.printStackTrace();
     		}
+        	db.closeConnection();
     	}
 	}
         
