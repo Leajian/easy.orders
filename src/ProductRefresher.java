@@ -66,7 +66,11 @@ public class ProductRefresher// extends Thread
 //					e.printStackTrace();
 //				}
 //				
-				ptm.populate();
+				
+				if (!getLastEdit().equals(lastUpdate))
+				{
+					ptm.populate();
+				}
 			}
 		});
 		
