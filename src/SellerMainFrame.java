@@ -77,7 +77,7 @@ public class SellerMainFrame extends JFrame
 	ProductsTableModel ptm = new ProductsTableModel(new ArrayList<>());
 	RecordTableModel rtm = new RecordTableModel(new ArrayList<>());
 	
-	ThreadManagement threadManager = new ThreadManagement();
+	ThreadManagement threadManager = new ThreadManagement(1000);
 	
 	public SellerMainFrame()
 	{
@@ -382,11 +382,11 @@ public class SellerMainFrame extends JFrame
 					if (ptm.isProductEditable(selectedRow))
 					{
 						ptm.setProductUneditable(selectedRow);
-						threadManager.stopProductRefresher();
+						threadManager.stopTicking();
 						JDialog pif = new ProductInfoFrame(ptm.getProductAt(selectedRow));
 						while (!pif.isDisplayable()) break;
 						ptm.setProductEditable(selectedRow);
-						threadManager.startProductRefresher();
+						threadManager.startTicking();
 					}
 //					threadManager.startProductsTableModelUpdates(ptm);
 				}	

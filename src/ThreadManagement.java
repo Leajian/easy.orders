@@ -1,24 +1,29 @@
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.Timer;
 import javax.swing.table.AbstractTableModel;
 
-public class ThreadManagement
-{
-	private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-	//private final static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-	private ScheduledFuture<?> future;
-	private ProductRefresher pr;
-	private ClientRefresher cl;
+public class ThreadManagement {
 	
+	private Timer timer;
+	private int interval;
+	
+	private ClientRefresher cl;
+	private ProductRefresher pr;
+	private RecordRefresher rr;
+	
+	public ThreadManagement(int interval)
+	{
+		this.interval = interval;
+		this.timer = new Timer(interval, null);
+	}
+
 	public void ManageModelUpdateAtTab(int selectedTabIndex, AbstractTableModel atm)
 	{
 		//TODO: Create a thread pool and run one at a time
 		
-		switch (selectedTabIndex)
-		{
+		switch (selectedTabIndex) {
 		
 		//Orders Tab
 		case 0:
@@ -27,21 +32,53 @@ public class ThreadManagement
 			
 		//Clients Tab
 		case 1:
-			((ClientsTableModel)atm).populate();
-			//startProductsTableModelUpdates(atm);
-			cl = new ClientRefresher((ClientsTableModel) atm, 1000);
+			if (timer.isRunning())
+				timer.stop();
+			cl = new ClientRefresher((ClientsTableModel) atm);
+			timer = new Timer(interval, new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					cl.refreshTick();
+					
+				}
+			});
+			timer.setInitialDelay(0);
+			timer.start();
 			break;
 			
 		//Products Tab
 		case 2:
-			((ProductsTableModel)atm).populate();
-			//startProductsTableModelUpdates(atm);
-			pr = new ProductRefresher((ProductsTableModel) atm, 1000);
+			if (timer.isRunning())
+				timer.stop();
+			pr = new ProductRefresher((ProductsTableModel) atm);
+			timer = new Timer(interval, new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pr.refreshTick();
+					
+				}
+			});
+			timer.setInitialDelay(0);
+			timer.start();
 			break;
 			
 		//Record Tab
 		case 3:
-			
+			if (timer.isRunning())
+				timer.stop();
+			rr = new RecordRefresher((RecordTableModel) atm);
+			timer = new Timer(interval, new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					rr.refreshTick();
+					
+				}
+			});
+			timer.setInitialDelay(0);
+			timer.start();
 			break;
 			
 		default:
@@ -49,24 +86,13 @@ public class ThreadManagement
 		}
 	}
 	
-	public void stopProductRefresher()
+	public void stopTicking()
 	{
-		pr.stop();
+		timer.stop();
 	}
 	
-	public void startProductRefresher()
+	public void startTicking()
 	{
-		pr.start();
+		timer.start();
 	}
-	
-//	public void startProductsTableModelUpdates(AbstractTableModel atm)
-//	{
-//		//stopModelUpdates();
-//		try {
-//		this.future = executorService.scheduleAtFixedRate(new ProductRefresher((ProductsTableModel) atm), 0, 1500, TimeUnit.MILLISECONDS);
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-
 }

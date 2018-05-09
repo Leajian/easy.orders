@@ -71,9 +71,9 @@ public class RecordTableModel extends AbstractTableModel
     	return false;
     }
 	
-	public void populate(ArrayList<Order> ordersRecord)
+	public void populate()
 	{
-		this.ordersRecord = ordersRecord;
+		this.ordersRecord = DataFetcher.initializeRecord();
 		fireTableDataChanged();
 	}
 }
