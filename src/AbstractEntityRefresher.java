@@ -1,39 +1,20 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.Timer;
 import javax.swing.table.AbstractTableModel;
 
-public abstract class AbstractEntityRefresher {
-
-	private String lastUpdate = "";
+public abstract class AbstractEntityRefresher
+{
+	protected String lastUpdate = "";
+	private String entity;
 	
 	private DBConnect db = new DBConnect();
-	private Timer timer;
+	private AbstractTableModel atm;
 	
-	public AbstractEntityRefresher(AbstractTableModel atm, int interval, String entity) {
-		
-		db.connect();
-		
-		lastUpdate = getLastEditOf(entity);
-		
-		System.out.println("i run once again");
-		
-		timer = new Timer(interval, new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				if (!getLastEditOf(entity).equals(lastUpdate))
-				{
-					populator(atm);
-				}
-			}
-		});
-		
-		timer.start();
+	public AbstractEntityRefresher(AbstractTableModel atm, String entity)
+	{
+		this.atm = atm;
+		this.entity = entity;
 	}
 	
 	protected String getLastEditOf(String entity)
@@ -45,29 +26,35 @@ public abstract class AbstractEntityRefresher {
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
+			String lastEdit = rs.getString("MAX(lastEdit)");
 			
-			System.out.println("time[" + rs.getString("MAX(lastEdit)") + "]  Refresh tick");
-			return rs.getString("MAX(lastEdit)");
+			db.closeConnection();
+			
+			//System.out.println("time[" + rs.getString("MAX(lastEdit)") + "]  MAX asked.");
+			return lastEdit;
 		} 
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
 		}
+		
 		db.closeConnection();
 		
-		return null;	
+		return null;
 	}
 	
 	protected abstract void populator(AbstractTableModel atm);
 	
-	protected void stop()
-    {
-    	timer.stop();
-    }
-    
-	protected void start()
-    {
-    	timer.restart();
-    }
-	
+	protected void refreshTick()
+	{
+		System.out.println("tick");
+		
+		if (!getLastEditOf(entity).equals(lastUpdate))
+		{
+			//System.out.println("populator called");
+			populator(atm);
+		}
+		
+		lastUpdate = getLastEditOf(entity);
+	}
 }
