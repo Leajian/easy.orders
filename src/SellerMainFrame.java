@@ -114,7 +114,7 @@ public class SellerMainFrame extends JFrame
 					
 				//Record Tab
 				case 3:
-					//ThreadManagement.ManageModelUpdateAtTab(selectedTabIndex, rtm);
+					threadManager.ManageModelUpdateAtTab(selectedTabIndex, rtm);
 					break;
 					
 				default:
@@ -240,10 +240,16 @@ public class SellerMainFrame extends JFrame
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
 				
 				//show info on double click
-				if ((e.getClickCount() == 2) & (ctm.isClientEditable(selectedRow)))
+				if (e.getClickCount() == 2)
 				{
-					ctm.setClientUneditable(selectedRow);
-					ctm.getClientInfo(selectedRow);
+					//threadManager.stopModelUpdates();
+					if (ctm.isClientEditable(selectedRow))
+					{
+						ctm.setClientUneditable(selectedRow);
+						JDialog cif = new ClientInfoFrame(ctm.getClientAt(selectedRow));
+						while (!cif.isDisplayable()) break;
+						ctm.setClientEditable(selectedRow);
+					}
 				}
 			}
 		});
@@ -379,7 +385,7 @@ public class SellerMainFrame extends JFrame
 						threadManager.stopProductRefresher();
 						JDialog pif = new ProductInfoFrame(ptm.getProductAt(selectedRow));
 						while (!pif.isDisplayable()) break;
-//						ptm.setProductEditable(selectedRow);
+						ptm.setProductEditable(selectedRow);
 						threadManager.startProductRefresher();
 					}
 //					threadManager.startProductsTableModelUpdates(ptm);

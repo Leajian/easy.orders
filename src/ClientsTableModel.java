@@ -55,9 +55,14 @@ public class ClientsTableModel extends AbstractTableModel
     	}
     }
 	
+	public Client getClientAt(int row)
+    {
+    	return clients.get(row);
+    }
+	
 	public void getClientInfo(int row)
     {
-    	new ClientInfoFrame(clients.get(row).getId(), this, row);
+    	//new ClientInfoFrame(clients.get(row).getId(), this, row);
     }
 	
 	public boolean isClientEditable(int row)

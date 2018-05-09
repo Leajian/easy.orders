@@ -62,35 +62,21 @@ public class ClientInfoFrame extends JDialog
 	
 	private JScrollPane notesFieldScrollPane = new JScrollPane();
 	
-	public ClientInfoFrame(String id, ClientsTableModel ctm, int selectedRow)
+	public ClientInfoFrame(Client client)
 	{
 		//this blocks other windows unless this is closed.
 		//also it must be here and not the bottom for some reason
 		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
-		
-		db.connect();
-		try
-		{
-			String query = "SELECT * FROM client WHERE id = " + "'" + id + "'";
-			ResultSet rs = db.getStatement().executeQuery(query);
 			
-			rs.next();
-			
-			idField.setText(rs.getString("id"));
-			nameField.setText(rs.getString("name"));
-			cityField.setText(rs.getString("city"));
-			phoneNumberField.setText(rs.getString("phoneNumber"));
-			emailField.setText(rs.getString("email"));
-			addressField.setText(rs.getString("address"));
-			faxField.setText(rs.getString("fax"));
-			zipCodeField.setText(rs.getString("zipCode"));
-			
-		}
-		catch (Exception ex)
-		{
-			System.out.println(ex);
-		}
-		db.closeConnection();
+		idField.setText(client.getId());
+		nameField.setText(client.getName());
+		cityField.setText(client.getCity());
+		addressField.setText(client.getAddress());
+		phoneNumberField.setText(client.getPhoneNumber());
+		emailField.setText(client.getEmail());
+		zipCodeField.setText(client.getZipCode());
+		faxField.setText(client.getFax());
+		notesField.setText(client.getNotes());	
 		
 		nameField.setEditable(false);
 		nameField.setPreferredSize(new Dimension(150, 20));
@@ -209,12 +195,11 @@ public class ClientInfoFrame extends JDialog
 				{
 					if((id.length() == 9) & (name.length() <= 30) & (city.length() <= 30) & (phoneNumber.length() <= 15) & (email.length() <= 30) & (address.length() <= 30) & (fax.length() <= 15) & (zipCode.length() <= 10) & (notes.length() <= 120))
 					{
-						db.closeConnection();
+						db.connect();
 						try
 						{
 							String query = "UPDATE client SET name = " + "'" + name + "', " + "city = " + "'" + city + "', " + "phoneNumber = " + "'" + phoneNumber + "', " + "email = " + "'" + email + "', " +  "address = " + "'" + address + "', " + "fax = " + "'" + fax + "', " + "zipCode = " + "'" + zipCode + "', " + "notes = " + "'" + notes + "' WHERE client.id = " + "'" + id + "'";
 							int rs = db.getStatement().executeUpdate(query);
-							ctm.setClientEditable(selectedRow);
 							dispose();
 							JOptionPane.showMessageDialog(null, "Οι αλλαγές αποθηκεύτηκαν.");
 						}
@@ -297,11 +282,9 @@ public class ClientInfoFrame extends JDialog
 					String ObjButtons[] = {"Ναι", "Όχι"};			
 					PromptResult = JOptionPane.showOptionDialog(null, "Έξοδος;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 				}
+				
 				if(PromptResult == JOptionPane.YES_OPTION)
-				{
-					ctm.setClientEditable(selectedRow);
 					dispose();
-				}
 			}
 		});
 
