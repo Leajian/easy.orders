@@ -57,7 +57,7 @@ public abstract class DataFetcher
 		db.connect();		
 		try
 		{
-			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed FROM orders ORDER BY lastEdit";
+			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed FROM orders WHERE closed = 1 ORDER BY lastEdit";
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
@@ -70,5 +70,28 @@ public abstract class DataFetcher
 		db.closeConnection();
 		
 		return ordersRecord;
+	}
+	
+	public static ArrayList<Order> initalizeOrders()
+	{
+		ArrayList<Order> liveOrders = new ArrayList<>();
+		DBConnect db = new DBConnect();
+		
+		db.connect();
+		try
+		{
+			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed FROM orders WHERE closed = 0 ORDER BY lastEdit";
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			while(rs.next())
+				liveOrders.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getString("closed")));
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		db.closeConnection();
+		
+		return liveOrders;
 	}
 }
