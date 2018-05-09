@@ -32,6 +32,8 @@ public class DBConnect
 			//conn = DriverManager.getConnection("jdbc:mysql://192.168.1.14:3306/easyorders_db?useSSL=false", "root", "poytiolas1997");
 			//?useSSL=false
 			stmt = conn.createStatement();
+			StackTraceElement[] st = Thread.currentThread().getStackTrace();
+		    System.out.println(  "create connection called from " + st[2] );
 		}
 		catch (Exception ex)
 		{
@@ -45,6 +47,9 @@ public class DBConnect
 		{
 			stmt.close();
 			conn.close();
+			
+			StackTraceElement[] st = Thread.currentThread().getStackTrace();
+		    System.out.println(  "close connection called from " + st[2] );
 		} 
 		catch (Exception ex)
 		{
