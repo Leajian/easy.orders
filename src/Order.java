@@ -4,16 +4,33 @@ import java.util.ArrayList;
 public class Order
 {
 	private ArrayList<Product> products = new ArrayList<Product>();
-	private String lastEdit, clientId, employeeUsername, closed;
+	private String lastEdit, clientId, employeeUsername, clientName;
+	private int closed;
 	
 	private DBConnect db = new DBConnect();
 	
-	public Order(String lastEdit, String clientId, String employeeUsername, String closed)
+	public Order(String lastEdit, String clientId, String employeeUsername, int closed)
 	{	
 		this.lastEdit = lastEdit;
 		this.clientId = clientId;
 		this.employeeUsername = employeeUsername;
 		this.closed = closed;
+		
+		db.connect();
+		try
+		{
+			String query = "SELECT name FROM client WHERE id = " + clientId;
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			rs.next();
+			
+			this.clientName = rs.getString("name");
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		db.closeConnection();
 		
 		db.connect();
 		try
@@ -34,11 +51,6 @@ public class Order
 		db.closeConnection();
 	}
 
-	public void addProduct(Product aProduct)
-	{
-		products.add(aProduct);
-	}
-
 	public ArrayList<Product> getProducts()
 	{
 		return products;
@@ -56,23 +68,7 @@ public class Order
 	
 	public String getClientName()
 	{
-		db.connect();
-		try
-		{
-			String query = "SELECT name FROM client WHERE id = " + clientId;
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			rs.next();
-			
-			return rs.getString("name");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		db.closeConnection();
-		
-		return "";
+		return clientName;
 	}
 
 	public String getEmployeeUsername()
@@ -80,7 +76,7 @@ public class Order
 		return employeeUsername;
 	}
 
-	public String isClosed()
+	public int isClosed()
 	{
 		return closed;
 	}
