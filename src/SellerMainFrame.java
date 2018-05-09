@@ -94,7 +94,8 @@ public class SellerMainFrame extends JFrame
 				JTabbedPane tabbedPane = (JTabbedPane)evt.getSource();
 				int selectedTabIndex = tabbedPane.getSelectedIndex();
 				
-				switch (selectedTabIndex) {
+				switch (selectedTabIndex)
+				{
 				
 				//Orders Tab
 				case 0:
@@ -103,7 +104,7 @@ public class SellerMainFrame extends JFrame
 					
 				//Clients Tab
 				case 1:
-					//ThreadManagement.ManageModelUpdateAtTab(selectedTabIndex, ctm);
+					threadManager.ManageModelUpdateAtTab(selectedTabIndex, ctm);
 					break;
 					
 				//Products Tab

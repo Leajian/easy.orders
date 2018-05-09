@@ -5,18 +5,20 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.table.AbstractTableModel;
 
-public class ThreadManagement {
-	
+public class ThreadManagement
+{
 	private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 	//private final static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private ScheduledFuture<?> future;
 	private ProductRefresher pr;
+	private ClientRefresher cl;
 	
 	public void ManageModelUpdateAtTab(int selectedTabIndex, AbstractTableModel atm)
 	{
 		//TODO: Create a thread pool and run one at a time
 		
-		switch (selectedTabIndex) {
+		switch (selectedTabIndex)
+		{
 		
 		//Orders Tab
 		case 0:
@@ -25,7 +27,9 @@ public class ThreadManagement {
 			
 		//Clients Tab
 		case 1:
-			
+			((ClientsTableModel)atm).populate();
+			//startProductsTableModelUpdates(atm);
+			cl = new ClientRefresher((ClientsTableModel) atm, 1000);
 			break;
 			
 		//Products Tab
