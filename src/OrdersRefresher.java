@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,7 +28,8 @@ import com.jgoodies.forms.layout.RowSpec;
 
 public class OrdersRefresher extends AbstractEntityRefresher
 {
-	public OrdersRefresher(JTabbedPane aTabbedPane) {
+	public OrdersRefresher(JTabbedPane aTabbedPane)
+	{
 		super(aTabbedPane, "orders");
 		
 		System.out.println("Orders refresher instancieted");
@@ -59,10 +61,15 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	{
 		((JTabbedPane) obj).removeAll();
 		
-		for (Order order : DataFetcher.initalizeOrders())
-		{
-			createNewTab(((JTabbedPane) obj), order);
-		}
+		ArrayList<Order> orders = DataFetcher.initalizeOrders();
+		
+		if(!orders.isEmpty())
+			for (Order order: orders)
+				createNewTab((JTabbedPane) obj, order);
+		else
+			createAddNewOrderTab((JTabbedPane)obj);
+		
+		
 	}
 	
 	/**
@@ -71,7 +78,9 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	public static void createNewTab(JTabbedPane aTabbedPane, Order order)
 	{		
 		JPanel newOrderPanel = new JPanel();
+		
 		JTable ordersTable = null;
+		
 		OrderedProductsTableModel optm = new OrderedProductsTableModel(order);
 		
 		JLabel nameLabel = new JLabel("Ονοματεπώνυμο");
@@ -153,8 +162,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		//a selection model, which allows us to call it and get the selected row at any time
 		ListSelectionModel rowSM = ordersTable.getSelectionModel();
 		
-		
-		if (order != null)
+		if(order != null)
 		{
 			JLabel tabTitleLabel = new JLabel("<html>" + order.getClientName() + "<br>" + order.getLastEdit() + "</html>");
 			tabTitleLabel.setPreferredSize(new Dimension(200, 30));
@@ -168,7 +176,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		    
 		    //set each nameField to the owner's name 
 			nameTextField.setText(order.getClientName());
-			
+			nameTextField.setEditable(false);
 			
 			removeProductButton.setVisible(true);
 			deleteOrderButton.setVisible(true);
@@ -177,7 +185,6 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		}
 		else
 		{
-
 			//if there is already a New Order tab, just switch to this without creating a new one -- avoid cluster
 			if (aTabbedPane.indexOfTab("Νέα Παραγγελία") != -1) //exists
 			{
@@ -209,6 +216,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			
 		    //add a fixed-size label on each tab as title
 		    aTabbedPane.setTabComponentAt(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()), tabTitleLabel);
+		    
 		}
 		
 		
@@ -221,7 +229,6 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				System.out.println("Row " + rowSM.getMinSelectionIndex() + " is now selected.");
 			}
 		});
-		
 		
 		//Action Listeners
 		addProductButton.addActionListener(new ActionListener()

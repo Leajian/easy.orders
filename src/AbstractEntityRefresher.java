@@ -31,13 +31,13 @@ public abstract class AbstractEntityRefresher
 			db.closeConnection();
 			
 			//System.out.println("time[" + rs.getString("MAX(lastEdit)") + "]  MAX asked.");
+
 			return lastEdit;
 		} 
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
 		}
-		
 		db.closeConnection();
 		
 		return null;
@@ -48,13 +48,19 @@ public abstract class AbstractEntityRefresher
 	protected void refreshTick()
 	{
 		System.out.println("tick");
+		String lastEdit = getLastEditOf(entity);
 		
-		if (!getLastEditOf(entity).equals(lastUpdate))
+		if(lastEdit != null)
 		{
-			//System.out.println("populator called");
-			populator();
+			if(!getLastEditOf(entity).equals(lastUpdate))
+				populator();
 		}
+		else
+			System.out.println("NULL");
+			
 		
-		lastUpdate = getLastEditOf(entity);
+		
+		
+		lastUpdate = lastEdit;
 	}
 }
