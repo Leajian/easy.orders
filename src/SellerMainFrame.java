@@ -41,9 +41,9 @@ public class SellerMainFrame extends JFrame
 {
 	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 	
-	private JTabbedPane liveOrdersTabs = new JTabbedPane(JTabbedPane.LEFT);;
+	private JTabbedPane liveOrdersTabs = new JTabbedPane(JTabbedPane.LEFT);
 	
-	private JTable ordersTable;
+
 	private JTable clientsTable;
 	private JTable productsTable;
 	private JTable recordTable;
@@ -65,7 +65,7 @@ public class SellerMainFrame extends JFrame
 	
 	private JLabel clientsearchLabel = new JLabel("Αναζήτηση");
 	private JLabel productsearchLabel = new JLabel("Αναζήτηση");
-	private JLabel DateLabel = new JLabel("Ημερομηνία");
+	private JLabel dateLabel = new JLabel("Ημερομηνία");
 
 	private JPanel ordersTab = new JPanel();
 	private JPanel clientsTab = new JPanel();
@@ -78,19 +78,18 @@ public class SellerMainFrame extends JFrame
 	RecordTableModel rtm = new RecordTableModel(new ArrayList<>());
 	
 	ThreadManagement threadManager = new ThreadManagement(1000);
+	private final JButton addNewOrderButton = new JButton("+");
+	private final JComboBox ordersOfUserComboBox = new JComboBox();
+	private final JLabel ordersFromUserLabel = new JLabel("Παραγγελίες του χρήστη :");
 	
 	public SellerMainFrame()
 	{
 		liveOrdersTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
 		this.setBounds(100, 100, 1300, 790);
-		
-		getContentPane().setLayout(new BorderLayout(0, 0));
 		tabbedPane.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent evt)
 			{
-				//TODO: add a thread pool... WIP
-				
 				JTabbedPane tabbedPane = (JTabbedPane)evt.getSource();
 				int selectedTabIndex = tabbedPane.getSelectedIndex();
 				
@@ -99,7 +98,7 @@ public class SellerMainFrame extends JFrame
 				
 				//Orders Tab
 				case 0:
-					
+					threadManager.ManageModelUpdateAtTab(selectedTabIndex, liveOrdersTabs);
 					break;
 					
 				//Clients Tab
@@ -122,8 +121,12 @@ public class SellerMainFrame extends JFrame
 				}
 			}
 		});
+		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("1284px:grow"),},
+			new RowSpec[] {
+				RowSpec.decode("751px:grow"),}));
 		
-		this.getContentPane().add(tabbedPane);
+		this.getContentPane().add(tabbedPane, "1, 1, left, top");
 		
 		
 		
@@ -139,25 +142,45 @@ public class SellerMainFrame extends JFrame
 		tabOrdersLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		tabOrdersLabel.setVerticalAlignment(SwingConstants.CENTER);
 	    tabbedPane.setTabComponentAt(0, tabOrdersLabel);
-		
-		ordersTab.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("1136px:grow"),},
-			new RowSpec[] {
-				RowSpec.decode("fill:681px:grow"),}));
-		ordersTab.add(liveOrdersTabs, "1, 1, fill, fill");
-		
-		createTab(liveOrdersTabs);
-		liveOrdersTabs.addChangeListener(new ChangeListener()
-	    {
-			@Override
-			public void stateChanged(ChangeEvent evt) 
+		addNewOrderButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
 			{
-				JTabbedPane tabbedPane = (JTabbedPane)evt.getSource();
-
-	            if(tabbedPane.getSelectedIndex() == tabbedPane.indexOfTab(" + "))
-	            	createTab(liveOrdersTabs);
+				OrdersRefresher.createNewTab(liveOrdersTabs, null);
 			}
-	    });
+		});
+		ordersTab.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("51px"),
+				ColumnSpec.decode("868px"),
+				ColumnSpec.decode("125px"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("229px:grow"),},
+			new RowSpec[] {
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("23px"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("fill:677px:grow"),
+				FormSpecs.RELATED_GAP_ROWSPEC,}));
+		
+		ordersTab.add(addNewOrderButton, "1, 2, right, top");
+		
+		ordersTab.add(ordersFromUserLabel, "3, 2, right, center");
+		
+		ordersTab.add(ordersOfUserComboBox, "5, 2, fill, fill");
+		ordersTab.add(liveOrdersTabs, "1, 4, 5, 1, fill, fill");
+		
+//		createNewTab(liveOrdersTabs, null);
+//		liveOrdersTabs.addChangeListener(new ChangeListener()
+//	    {
+//			@Override
+//			public void stateChanged(ChangeEvent evt) 
+//			{
+//				JTabbedPane tabbedPane = (JTabbedPane)evt.getSource();
+//
+//	            if(tabbedPane.getSelectedIndex() == tabbedPane.indexOfTab(" + "))
+//	            	createNewTab(liveOrdersTabs, null);
+//			}
+//	    });
 		
 		
 		
@@ -245,10 +268,12 @@ public class SellerMainFrame extends JFrame
 					//threadManager.stopModelUpdates();
 					if (ctm.isClientEditable(selectedRow))
 					{
+						threadManager.stopTicking();
 						ctm.setClientUneditable(selectedRow);
 						JDialog cif = new ClientInfoFrame(ctm.getClientAt(selectedRow));
 						while (!cif.isDisplayable()) break;
 						ctm.setClientEditable(selectedRow);
+						threadManager.startTicking();
 					}
 				}
 			}
@@ -378,17 +403,15 @@ public class SellerMainFrame extends JFrame
 				//show info on double click
 				if (e.getClickCount() == 2)
 				{
-					//threadManager.stopModelUpdates();
 					if (ptm.isProductEditable(selectedRow))
 					{
-						ptm.setProductUneditable(selectedRow);
 						threadManager.stopTicking();
+						ptm.setProductUneditable(selectedRow);
 						JDialog pif = new ProductInfoFrame(ptm.getProductAt(selectedRow));
 						while (!pif.isDisplayable()) break;
 						ptm.setProductEditable(selectedRow);
 						threadManager.startTicking();
 					}
-//					threadManager.startProductsTableModelUpdates(ptm);
 				}	
 			}
 		});
@@ -480,7 +503,7 @@ public class SellerMainFrame extends JFrame
 				RowSpec.decode("fill:default:grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,}));
 		
-		recordTab.add(DateLabel, "2, 2, right, center");
+		recordTab.add(dateLabel, "2, 2, right, center");
 
 		recordTable = new JTable(rtm);
 		
@@ -548,199 +571,5 @@ public class SellerMainFrame extends JFrame
 				}
 			}
 		});
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	private void createTab(JTabbedPane aTabbedPane)
-	{	
-		//if there is already a New Order tab, just switch to this without creating a new one -- avoid cluster
-		if (aTabbedPane.indexOfTab("Νέα Παραγγελία") != -1) //exists
-		{	
-			aTabbedPane.setSelectedIndex(aTabbedPane.indexOfTab("Νέα Παραγγελία"));
-			return;
-		}
-		
-		//remove "+" tab if exists to add it later
-		if (aTabbedPane.indexOfTab(" + ") != -1) //exists
-			aTabbedPane.remove(aTabbedPane.indexOfTab(" + "));
-
-		JLabel tabTitleLabel = new JLabel("Νέα Παραγγελία");
-		tabTitleLabel.setPreferredSize(new Dimension(200, 30));
-		
-		JPanel newOrderPanel = new JPanel();
-		aTabbedPane.addTab("Νέα Παραγγελία",newOrderPanel);
-		
-		JTextField nameTextField;
-		newOrderPanel.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("1px"),
-				FormSpecs.UNRELATED_GAP_COLSPEC,
-				ColumnSpec.decode("155px"),
-				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(574dlu;min):grow"),
-				FormSpecs.UNRELATED_GAP_COLSPEC,},
-			new RowSpec[] {
-				FormSpecs.UNRELATED_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
-				FormSpecs.UNRELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("481px:grow"),
-				RowSpec.decode("30dlu"),
-				FormSpecs.LINE_GAP_ROWSPEC,
-				RowSpec.decode("30dlu"),
-				FormSpecs.UNRELATED_GAP_ROWSPEC,}));
-		
-		JLabel nameLabel = new JLabel("Ονοματεπώνυμο");
-		newOrderPanel.add(nameLabel, "3, 2, right, fill");
-		nameTextField = new JTextField();
-		newOrderPanel.add(nameTextField, "5, 2, fill, fill");
-		nameTextField.setColumns(10);
-		
-		JLabel productsLabel = new JLabel("Προϊόντα");
-		newOrderPanel.add(productsLabel, "3, 4, right, fill");
-		
-		JButton deleteOrderButton = new JButton("Διαγραφή Παραγγελίας");
-		deleteOrderButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent arg0)
-			{
-				removeSelectedTabFrom(aTabbedPane);
-			}
-		});
-		deleteOrderButton.setVisible(false);
-		
-		newOrderPanel.add(deleteOrderButton, "3, 7, fill, fill");
-		
-		
-		
-		
-		String[] ordersColumnNames = {"Προιόν", "Προέλευση", "Προμηθευτής", "Ποιότητα", "Συσκευασία", "Τεμάχια", "Ποσότητα/Βάρος", "Τιμή"};	
-		String[][] ordersData = {
-				{"Τομάτα", "Από το σπίτι μου", "Η μάνα σου", "ΑΑ", "Καλή", "6", "23", "69"},
-				{"Ακκούρι", "Από το σπίτι μου", "Η μάνα σου", "ΑΑ", "Καλή", "6", "23", "69"},
-		};
-
-		
-		//this makes all cells not editable
-		ordersTable = new JTable(ordersData, ordersColumnNames);
-		ordersTable.setBounds(117, 39, 568, 161);
-		ordersTable.setModel(new DefaultTableModel(ordersData, ordersColumnNames)
-		{
-			@Override
-			public boolean isCellEditable(int row, int column)
-			{
-				return false;
-			}
-		});
-		
-		//this disallows reordering of columns
-		ordersTable.getTableHeader().setReorderingAllowed(false);
-		
-		//these make that so you can only select a whole lines on click
-		ordersTable.setCellSelectionEnabled(false);
-		ordersTable.setColumnSelectionAllowed(false);		
-		ordersTable.setRowSelectionAllowed(true);
-		
-		//these make that so you can only select a single line on click
-		ordersTable.setSelectionModel(new ForcedListSelectionModel());
-		
-		ordersTable.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				ListSelectionModel rowSM = ordersTable.getSelectionModel();
-				System.out.println("Row " + rowSM.getMinSelectionIndex() + " is now selected.");
-			}
-		});
-		
-		
-		JScrollPane clientsTabScrollPane = new JScrollPane(ordersTable);
-		newOrderPanel.add(clientsTabScrollPane, "5, 4, 1, 6, fill, fill");
-		
-		JButton saveButton = new JButton("Αποθήκευση");
-		newOrderPanel.add(saveButton, "3, 9, fill, fill");
-		
-		saveButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent arg0)
-			{
-				//make each tab distinct by name
-				aTabbedPane.setTitleAt(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()), nameTextField.getText());
-				
-				//set each label name to the desired name 
-				tabTitleLabel.setText(nameTextField.getText());
-				
-				//add label to tab, replacing/overriding the title of it
-				aTabbedPane.setTabComponentAt(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()), tabTitleLabel);
-				
-				//the delete button now has purpose
-				deleteOrderButton.setVisible(true);
-			}
-		});
-		
-		addPlusSignTabAtTheEndOf(aTabbedPane);
-		
-		//the pre-last index is the New Order tab (index starts from 0)
-		aTabbedPane.setSelectedIndex(aTabbedPane.getTabCount()-2);
-	    	
-	    //add a fixed-size label on each tab as title
-	    aTabbedPane.setTabComponentAt(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()), tabTitleLabel);
-	}
-	
-	public void removeSelectedTabFrom(JTabbedPane aTabbedPane)
-	{
-		if (aTabbedPane.getTabCount() > 2) 
-		{
-			//when a tab is removed, the next one is selected, but we want the previous one to be selected
-			//if we didn't take care of this, there is a case where a tab just before "+" tab is removed, causing the "+" itself
-			//to be selected again and create a new tab, while there are already other tabs, without user's intent
-			if (aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()) != 0)
-			{
-				//so we select the previous first
-				aTabbedPane.setSelectedIndex(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent())-1);
-				//and then we remove the next of the one we just selected, which is the desired one to remove
-				aTabbedPane.remove(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent())+1);
-			}
-			//otherwise, remove method, conveniently works for us and creates a new order tab, because there are no tabs
-			else
-				aTabbedPane.remove(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()));
-		}
-		else
-		{
-			aTabbedPane.removeAll();
-			//addPlusSignTabAtTheEndOf(aTabbedPane); //alternative method which triggers the stateChanged event of JTabbedPane
-			createTab(aTabbedPane);
-		}
-	}
-	
-	public void addPlusSignTabAtTheEndOf(JTabbedPane aTabbedPane)
-	{
-		JPanel plusSignPanel = new JPanel();
-		
-		//puts the "+" sign tab last
-		aTabbedPane.insertTab(" + ",null,plusSignPanel,null, aTabbedPane.getTabCount());
-		
-		JLabel label = new JLabel("\u0394\u03B7\u03BC\u03B9\u03BF\u03C5\u03C1\u03B3\u03AE\u03C3\u03C4\u03B5 \u03BC\u03AF\u03B1 \u03BD\u03AD\u03B1 \u03C0\u03B1\u03C1\u03B1\u03B3\u03B3\u03B5\u03BB\u03AF\u03B1");
-		plusSignPanel.add(label);
-		
-		label.setIcon(new ImageIcon(SellerMainFrame.class.getResource("/images/contract.png")));
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setFont(new Font("Tahoma", Font.PLAIN, 45));
 	}
 }
