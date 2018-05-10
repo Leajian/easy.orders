@@ -74,7 +74,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	public static void createNewTab(JTabbedPane aTabbedPane, Order order)
 	{		
 		JPanel newOrderPanel = new JPanel();
-		OrderedProductsTableModel optbm = new OrderedProductsTableModel(order);
+		OrderedProductsTableModel optm = new OrderedProductsTableModel(order);
 		
 		JTextField nameTextField;
 		FormLayout fl_newOrderPanel = new FormLayout(new ColumnSpec[] {
@@ -117,18 +117,9 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				//Product productToAdd = 
-				SelectProductFrame spf = new SelectProductFrame();
+				SelectProductFrame spf = new SelectProductFrame(optm);
 
-//				while (!spf.isDisplayable())
-				while (!spf.isVisible())
-				{
-					System.out.println(spf.getSelectedProduct().getId());
-					break;
-				}
-
-				//optbm.addRow(spf.getSelectedProduct());
-				//spf.dispose();
+				while (!spf.isDisplayable()) break;
 				
 			}
 		});
@@ -151,7 +142,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		    //set each nameField to the owner's name 
 			nameTextField.setText(order.getClientName());
 			
-			ordersTable = new JTable(optbm);
+			ordersTable = new JTable(optm);
 			ordersTable.setBounds(117, 39, 568, 161);
 			
 			//this disallows reordering of columns
@@ -185,7 +176,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					int selectedProduct = rowSM.getMinSelectionIndex();
 					
 					if (selectedProduct != -1)
-						optbm.removeRow(selectedProduct);
+						optm.removeRow(selectedProduct);
 					else		
 						JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε το προϊόν προς διαγραφή.", "Προσοχή!", JOptionPane.WARNING_MESSAGE);
 					System.out.println("remove " + selectedProduct);
