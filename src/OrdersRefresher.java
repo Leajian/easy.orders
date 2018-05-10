@@ -80,7 +80,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				FormSpecs.UNRELATED_GAP_COLSPEC,
 				ColumnSpec.decode("155px"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(574dlu;min):grow"),
+				ColumnSpec.decode("max(430dlu;min):grow"),
 				FormSpecs.UNRELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormSpecs.UNRELATED_GAP_ROWSPEC,
@@ -92,11 +92,11 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:223px:grow"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("30dlu"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("30dlu"),
 				FormSpecs.UNRELATED_GAP_ROWSPEC,});
 		fl_newOrderPanel.setRowGroups(new int[][]{new int[]{6, 8}});
 		newOrderPanel.setLayout(fl_newOrderPanel);
@@ -185,10 +185,10 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			});
 			deleteOrderButton.setVisible(false);
 			
-			newOrderPanel.add(deleteOrderButton, "3, 10, fill, fill");
+			newOrderPanel.add(deleteOrderButton, "3, 12, fill, fill");
 			
 			JButton saveButton = new JButton("Αποθήκευση");
-			newOrderPanel.add(saveButton, "3, 12, fill, fill");
+			newOrderPanel.add(saveButton, "3, 14, fill, fill");
 			
 			saveButton.addActionListener(new ActionListener()
 			{

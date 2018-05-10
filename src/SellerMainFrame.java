@@ -86,7 +86,7 @@ public class SellerMainFrame extends JFrame
 	{
 		liveOrdersTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
-		this.setBounds(100, 100, 1300, 790);
+		
 		tabbedPane.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent evt)
 			{
@@ -126,7 +126,7 @@ public class SellerMainFrame extends JFrame
 			new RowSpec[] {
 				RowSpec.decode("751px:grow"),}));
 		
-		this.getContentPane().add(tabbedPane, "1, 1, left, top");
+		this.getContentPane().add(tabbedPane, "1, 1, fill, fill");
 		
 		
 		
@@ -151,10 +151,11 @@ public class SellerMainFrame extends JFrame
 		});
 		ordersTab.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("51px"),
-				ColumnSpec.decode("868px"),
-				ColumnSpec.decode("125px"),
+				ColumnSpec.decode("884px:grow"),
+				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("229px:grow"),},
+				ColumnSpec.decode("196px"),
+				FormSpecs.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormSpecs.UNRELATED_GAP_ROWSPEC,
 				RowSpec.decode("23px"),
@@ -164,7 +165,7 @@ public class SellerMainFrame extends JFrame
 		
 		ordersTab.add(addNewOrderButton, "1, 2, right, top");
 		
-		ordersTab.add(ordersFromUserLabel, "3, 2, right, center");
+		ordersTab.add(ordersFromUserLabel, "3, 2, right, fill");
 		
 		ordersTab.add(ordersOfUserComboBox, "5, 2, fill, fill");
 		ordersTab.add(liveOrdersTabs, "1, 4, 5, 1, fill, fill");
@@ -551,6 +552,8 @@ public class SellerMainFrame extends JFrame
 		
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(80, 50);
+		this.setBounds(100, 100, 1300, 790);
+		this.setMinimumSize(new Dimension(1300, 800));
 		this.setVisible(true);
 		this.setTitle("Easy Orders 1.0");
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
