@@ -9,7 +9,8 @@ public class OrderedProductsTableModel extends AbstractTableModel
 	
 	public OrderedProductsTableModel(Order order)
 	{
-		orderedProducts = order.getProducts();
+		if (order != null)
+			orderedProducts = order.getProducts();
 	}
 	
 	public int getColumnCount()
@@ -56,9 +57,17 @@ public class OrderedProductsTableModel extends AbstractTableModel
      * then the last column would contain text ("true"/"false"),
      * rather than a check box.
      */
-	public Class getColumnClass(int c)
-	{
-		return getValueAt(0, c).getClass();
+	public Class getColumnClass(int c) 
+	{ 
+		for(int rowIndex = 0; rowIndex < getRowCount(); rowIndex++)
+		{
+			Product row = orderedProducts.get(rowIndex);
+			if (getValueAt(rowIndex, c) != null)
+			{
+				return getValueAt(rowIndex, c).getClass();
+			}
+		}
+		return String.class;
 	}
 	
 	/*
@@ -87,4 +96,9 @@ public class OrderedProductsTableModel extends AbstractTableModel
     	orderedProducts.remove(selectedRow);
         fireTableRowsDeleted(selectedRow, selectedRow);
     }
+    
+	public ArrayList<Product> getOrderedProducts()
+	{
+		return orderedProducts;
+	}
 }
