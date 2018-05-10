@@ -11,6 +11,8 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+
+import java.awt.Dialog;
 import java.awt.Dimension;
 
 public class SelectProductFrame extends JDialog
@@ -19,6 +21,11 @@ public class SelectProductFrame extends JDialog
 	private Product selectedProduct;
 	
 	public SelectProductFrame(OrderedProductsTableModel optm) {
+		
+		//this blocks other windows unless this is closed.
+		//also it must be here and not the bottom for some reason
+		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+		
 
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
