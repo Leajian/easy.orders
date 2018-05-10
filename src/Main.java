@@ -1,14 +1,14 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
-import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
 
 public class Main 
 {
@@ -24,7 +24,7 @@ public class Main
 		db.connect();
 	
 		//new SellerMainFrame();
-				
+		
 		try
 		{	
 			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed\r\n" + 
@@ -49,6 +49,8 @@ public class Main
 				System.out.println(product.getId());
 		}
 		
+		
+		
 		String query = "SELECT DISTINCT MAX(lastEdit) FROM orders";
 		ResultSet rs = db.getStatement().executeQuery(query);
 		
@@ -56,13 +58,14 @@ public class Main
 		
 		String temp = rs.getString("MAX(lastEdit)");
 		
-		executorService.scheduleAtFixedRate(new Runnable()
-		{	
+		
+		
+		Timer timer = new Timer(100, new ActionListener()
+		{
 			String oldEdit = temp;
-			
 			@Override
-			public void run()
-			{	
+			public void actionPerformed(ActionEvent e)
+			{
 				try
 				{
 					int oldLength = orders.size();
@@ -112,6 +115,8 @@ public class Main
 					//ex.printStackTrace();
 				}
 			}
-		}, 0, 100, TimeUnit.MILLISECONDS);
+		});
+		
+		timer.start();
 	}
 }
