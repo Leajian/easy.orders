@@ -1,5 +1,5 @@
 import java.sql.ResultSet;
-
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -8,10 +8,13 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
+
 public class Main 
 {
-	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException
+	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, SQLException
 	{	
+		
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 		DBConnect db = new DBConnect();
@@ -20,14 +23,9 @@ public class Main
 
 		db.connect();
 	
-		new SellerMainFrame();
-		
-		
-		//executorService.scheduleAtFixedRate((new ProductRefresher(new ProductsTableModel(DataFetchingManagment.initializeProducts()))), 0, 10, TimeUnit.MILLISECONDS);
-		
-		
-		
-		/*try
+		//new SellerMainFrame();
+				
+		try
 		{	
 			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed\r\n" + 
 					"FROM orders\r\n" + 
@@ -36,15 +34,12 @@ public class Main
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
-				orders.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getString("closed")));
+				orders.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getInt("closed")));
 		}
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
 		}
-		
-		if(!orders.isEmpty())
-			orders.remove(orders.size() - 1);
 		
 		for(Order order: orders)
 		{
@@ -54,9 +49,16 @@ public class Main
 				System.out.println(product.getId());
 		}
 		
+		String query = "SELECT DISTINCT MAX(lastEdit) FROM orders";
+		ResultSet rs = db.getStatement().executeQuery(query);
+		
+		rs.next();
+		
+		String temp = rs.getString("MAX(lastEdit)");
+		
 		executorService.scheduleAtFixedRate(new Runnable()
-		{
-			String oldEdit = "";
+		{	
+			String oldEdit = temp;
 			
 			@Override
 			public void run()
@@ -79,13 +81,13 @@ public class Main
 							query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed\r\n" + 
 									"FROM orders\r\n" + 
 									"WHERE closed = '0'\r\n" + 
-									"AND lastEdit >= '" + lastEdit + "'\r\n" +
+									"AND lastEdit = '" + lastEdit + "'\r\n" +
 									"ORDER BY lastEdit";
 							
 							ResultSet rs1 = db.getStatement().executeQuery(query);
 							
 							while(rs1.next())
-								orders.add(new Order(rs1.getString("orders.lastEdit"), rs1.getString("clientId"), rs1.getString("employeeUsername"), rs1.getString("closed")));
+								orders.add(new Order(rs1.getString("lastEdit"), rs1.getString("clientId"), rs1.getString("employeeUsername"), rs1.getInt("closed")));
 						}
 						catch (Exception ex)
 						{
@@ -110,6 +112,6 @@ public class Main
 					//ex.printStackTrace();
 				}
 			}
-		}, 0, 10, TimeUnit.MILLISECONDS);*/
+		}, 0, 100, TimeUnit.MILLISECONDS);
 	}
 }
