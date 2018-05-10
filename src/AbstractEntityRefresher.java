@@ -55,8 +55,7 @@ public abstract class AbstractEntityRefresher
 			if(!getLastEditOf(entity).equals(lastUpdate))
 				populator();
 		}
-		else
-			System.out.println("NULL");
+		populator();
 			
 		
 		
