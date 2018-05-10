@@ -2,6 +2,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -28,45 +30,78 @@ import com.jgoodies.forms.layout.RowSpec;
 
 public class OrdersRefresher extends AbstractEntityRefresher
 {	
+	private int ordersCount = -1;
+	
 	public OrdersRefresher(JTabbedPane aTabbedPane)
 	{
 		super(aTabbedPane, "orders");
 		
 		System.out.println("Orders refresher instancieted");
 		
-		aTabbedPane.addChangeListener(new ChangeListener()
-	    {
-			@Override
-			public void stateChanged(ChangeEvent evt) 
-			{
-				JTabbedPane tabbedPane = (JTabbedPane)evt.getSource();
-
-	            if((tabbedPane.getSelectedIndex() != tabbedPane.indexOfTab("Νέα Παραγγελία")) & (tabbedPane.indexOfTab("Νέα Παραγγελία") != -1))
-	            {
-	            	String ObjButtons[] = {"Ναι", "Όχι"};			
-					int PromptResult = JOptionPane.showOptionDialog(null, "Η παραγγελία σας δεν έχει αποθηκευτεί, τα δεδομένα θα χαθούν. Είστε σίγουροι ότι θέλετε να αλλάξετε καρτέλα;", "Προσοχή!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
-				
-					if(PromptResult == JOptionPane.YES_OPTION)
-						aTabbedPane.removeTabAt(tabbedPane.indexOfTab("Νέα Παραγγελία"));
-					else
-						aTabbedPane.setSelectedIndex(tabbedPane.indexOfTab("Νέα Παραγγελία"));
-	            }
-			}
-	    });
+//		aTabbedPane.addChangeListener(new ChangeListener()
+//	    {
+//			@Override
+//			public void stateChanged(ChangeEvent evt) 
+//			{
+//				JTabbedPane tabbedPane = (JTabbedPane)evt.getSource();
+//
+//	            if((tabbedPane.getSelectedIndex() != tabbedPane.indexOfTab("Νέα Παραγγελία")) & (tabbedPane.indexOfTab("Νέα Παραγγελία") != -1) )
+//	            {
+//	            	String ObjButtons[] = {"Ναι", "Όχι"};			
+//					int PromptResult = JOptionPane.showOptionDialog(null, "Η παραγγελία σας δεν έχει αποθηκευτεί, τα δεδομένα θα χαθούν. Είστε σίγουροι ότι θέλετε να αλλάξετε καρτέλα;", "Προσοχή!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+//				
+//					if(PromptResult == JOptionPane.YES_OPTION)
+//						aTabbedPane.removeTabAt(tabbedPane.indexOfTab("Νέα Παραγγελία"));
+//					else
+//						aTabbedPane.setSelectedIndex(tabbedPane.indexOfTab("Νέα Παραγγελία"));
+//	            }
+//			}
+//	    });
+		
+		aTabbedPane.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0)
+				{
+					if((aTabbedPane.indexOfTab("Νέα Παραγγελία") != -1) )
+		            {
+		            	String ObjButtons[] = {"Ναι", "Όχι"};			
+						int PromptResult = JOptionPane.showOptionDialog(null, "Η παραγγελία σας δεν έχει αποθηκευτεί, τα δεδομένα θα χαθούν. Είστε σίγουροι ότι θέλετε να αλλάξετε καρτέλα;", "Προσοχή!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+					
+						if(PromptResult == JOptionPane.YES_OPTION)
+							aTabbedPane.removeTabAt(aTabbedPane.indexOfTab("Νέα Παραγγελία"));
+						else
+							aTabbedPane.setSelectedIndex(aTabbedPane.indexOfTab("Νέα Παραγγελία"));
+		            }
+				}
+			});
 	}
 
 	@Override
 	protected void populator()
 	{
-		removeAllOrderTabsFrom((JTabbedPane) obj);
+		//removeAllOrderTabsFrom((JTabbedPane) obj);
 		
-		ArrayList<Order> orders = DataFetcher.initalizeOrders();
+		ArrayList<Order> orders = DataFetcher.initializeOrders();
 		
-		if(!orders.isEmpty())
-			for (Order order: orders)
-				createNewTab((JTabbedPane) obj, order);
+		if ( (!orders.isEmpty()) )
+		{
+			if ( (ordersCount != orders.size()) )
+			{
+				((JTabbedPane) obj).removeAll();
+				
+				for (Order order: orders)
+					createNewTab((JTabbedPane) obj, order);
+				
+				ordersCount = orders.size();
+			}
+		}
 		else
-			createNewTab((JTabbedPane) obj, null);	
+		{
+			if((((JTabbedPane) obj).indexOfTab("Νέα Παραγγελία") == -1) )
+			{
+				createNewTab((JTabbedPane) obj, null);
+			}
+		}
 	}
 	
 	/**
@@ -301,15 +336,9 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		});
 	}
 	
-	private static void removeSelectedTabFrom(JTabbedPane aTabbedPane, int index)
-	{	
-		if (aTabbedPane.getTabCount() > 1) 
-			aTabbedPane.remove(index);
-	}
-	
-	private void removeAllOrderTabsFrom(JTabbedPane aTabbedPane)
-	{
-		for (int i =  0; i < aTabbedPane.getTabCount(); i++)
-			removeSelectedTabFrom(aTabbedPane, i);
-	}
+//	private void removeAllOrderTabsFrom(JTabbedPane aTabbedPane)
+//	{
+//		for (int i =  0; i < aTabbedPane.getTabCount(); i++)
+//			aTabbedPane.remove(i);
+//	}
 }
