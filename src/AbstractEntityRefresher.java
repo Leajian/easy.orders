@@ -5,15 +5,15 @@ import javax.swing.table.AbstractTableModel;
 
 public abstract class AbstractEntityRefresher
 {
-	protected String lastUpdate = "";
+	private String lastUpdate = "";
 	private String entity;
 	
 	private DBConnect db = new DBConnect();
-	private AbstractTableModel atm;
+	protected Object obj;
 	
-	public AbstractEntityRefresher(AbstractTableModel atm, String entity)
+	public AbstractEntityRefresher(Object obj, String entity)
 	{
-		this.atm = atm;
+		this.obj = obj;
 		this.entity = entity;
 	}
 	
@@ -43,7 +43,7 @@ public abstract class AbstractEntityRefresher
 		return null;
 	}
 	
-	protected abstract void populator(AbstractTableModel atm);
+	protected abstract void populator();
 	
 	protected void refreshTick()
 	{
@@ -52,7 +52,7 @@ public abstract class AbstractEntityRefresher
 		if (!getLastEditOf(entity).equals(lastUpdate))
 		{
 			//System.out.println("populator called");
-			populator(atm);
+			populator();
 		}
 		
 		lastUpdate = getLastEditOf(entity);

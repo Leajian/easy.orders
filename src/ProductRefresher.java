@@ -8,7 +8,7 @@ public class ProductRefresher extends AbstractEntityRefresher
 	}
 	
 	@Override
-	protected void populator(AbstractTableModel atm) {
-		((ProductsTableModel) atm).populate();
+	protected void populator() {
+		((ProductsTableModel) obj).populate();
 	}
 }

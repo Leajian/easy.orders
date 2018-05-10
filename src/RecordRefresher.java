@@ -8,8 +8,8 @@ public class RecordRefresher extends AbstractEntityRefresher
 	}
 
 	@Override
-	protected void populator(AbstractTableModel atm)
+	protected void populator()
 	{
-		((RecordTableModel) atm).populate();
+		((RecordTableModel) obj).populate();
 	}
 }

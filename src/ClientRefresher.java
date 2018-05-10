@@ -8,7 +8,7 @@ public class ClientRefresher extends AbstractEntityRefresher
 	}
 	
 	@Override
-	protected void populator(AbstractTableModel atm) {
-		((ClientsTableModel) atm).populate();
+	protected void populator() {
+		((ClientsTableModel) obj).populate();
 	}
 }
