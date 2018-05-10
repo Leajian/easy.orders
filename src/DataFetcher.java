@@ -61,7 +61,7 @@ public abstract class DataFetcher
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
-				ordersRecord.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getString("closed")));
+				ordersRecord.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getInt("closed")));
 		} 
 		catch (Exception ex)
 		{
@@ -84,7 +84,7 @@ public abstract class DataFetcher
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
-				liveOrders.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getString("closed")));
+				liveOrders.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getInt("closed")));
 		} 
 		catch (Exception ex)
 		{
