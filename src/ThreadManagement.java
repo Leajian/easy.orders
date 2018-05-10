@@ -1,6 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JTabbedPane;
 import javax.swing.Timer;
 import javax.swing.table.AbstractTableModel;
 
@@ -9,6 +10,7 @@ public class ThreadManagement {
 	private Timer timer;
 	private int interval;
 	
+	private OrdersRefresher or;
 	private ClientRefresher cl;
 	private ProductRefresher pr;
 	private RecordRefresher rr;
@@ -19,22 +21,32 @@ public class ThreadManagement {
 		this.timer = new Timer(interval, null);
 	}
 
-	public void ManageModelUpdateAtTab(int selectedTabIndex, AbstractTableModel atm)
+	public void ManageModelUpdateAtTab(int selectedTabIndex, Object obj) //AbstractTableModel atm)
 	{
-		//TODO: Create a thread pool and run one at a time
-		
 		switch (selectedTabIndex) {
 		
 		//Orders Tab
 		case 0:
-			
+			if (timer.isRunning())
+				timer.stop();
+			or = new OrdersRefresher((JTabbedPane) obj);
+			timer = new Timer(interval, new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					or.refreshTick();
+					
+				}
+			});
+			timer.setInitialDelay(0);
+			timer.start();
 			break;
 			
 		//Clients Tab
 		case 1:
 			if (timer.isRunning())
 				timer.stop();
-			cl = new ClientRefresher((ClientsTableModel) atm);
+			cl = new ClientRefresher((ClientsTableModel) obj);
 			timer = new Timer(interval, new ActionListener() {
 				
 				@Override
@@ -51,7 +63,7 @@ public class ThreadManagement {
 		case 2:
 			if (timer.isRunning())
 				timer.stop();
-			pr = new ProductRefresher((ProductsTableModel) atm);
+			pr = new ProductRefresher((ProductsTableModel) obj);
 			timer = new Timer(interval, new ActionListener() {
 				
 				@Override
@@ -68,7 +80,7 @@ public class ThreadManagement {
 		case 3:
 			if (timer.isRunning())
 				timer.stop();
-			rr = new RecordRefresher((RecordTableModel) atm);
+			rr = new RecordRefresher((RecordTableModel) obj);
 			timer = new Timer(interval, new ActionListener() {
 				
 				@Override
