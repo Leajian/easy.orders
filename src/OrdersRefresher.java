@@ -59,7 +59,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	@Override
 	protected void populator()
 	{
-		((JTabbedPane) obj).removeAll();
+		removeAllOrderTabsFrom((JTabbedPane) obj);
 		
 		ArrayList<Order> orders = DataFetcher.initalizeOrders();
 		
@@ -67,9 +67,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			for (Order order: orders)
 				createNewTab((JTabbedPane) obj, order);
 		else
-			createAddNewOrderTab((JTabbedPane)obj);
-		
-		
+			createNewTab((JTabbedPane) obj, null);	
 	}
 	
 	/**
@@ -289,49 +287,23 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				removeSelectedTabFrom(aTabbedPane);
 				//SQL query for deletion
 			}
 		});
 	}
 	
-	private static void removeSelectedTabFrom(JTabbedPane aTabbedPane)
-	{
-		if (aTabbedPane.getTabCount() > 2) 
-		{
-			//when a tab is removed, the next one is selected, but we want the previous one to be selected
-			//if we didn't take care of this, there is a case where a tab just before "+" tab is removed, causing the "+" itself
-			//to be selected again and create a new tab, while there are already other tabs, without user's intent
-			if (aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()) != 0)
-			{
-				//so we select the previous first
-				aTabbedPane.setSelectedIndex(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent())-1);
-				//and then we remove the next of the one we just selected, which is the desired one to remove
-				aTabbedPane.remove(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent())+1);
-			}
-			//otherwise, remove method, conveniently works for us and creates a new order tab, because there are no tabs
-			else
-				aTabbedPane.remove(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()));
-		}
-		else
-		{
-			aTabbedPane.removeAll();
-			//addPlusSignTabAtTheEndOf(aTabbedPane); //alternative method which triggers the stateChanged event of JTabbedPane
-			createNewTab(aTabbedPane, null);
-		}
+	private static void removeSelectedTabFrom(JTabbedPane aTabbedPane, int index)
+	{	
+		if (aTabbedPane.getTabCount() > 1) 
+			aTabbedPane.remove(index);
+
 	}
 	
-	private void addPlusSignTabAtTheEndOf(JTabbedPane aTabbedPane)
+	private void removeAllOrderTabsFrom(JTabbedPane aTabbedPane)
 	{
-		JPanel plusSignPanel = new JPanel();
-		
-		//puts the "+" sign tab last
-		aTabbedPane.insertTab(" + ",null,plusSignPanel,null, aTabbedPane.getTabCount());
-		JLabel plusSignlabel = new JLabel("+");
-	}
-	
-	private void createAddNewOrderTab(JTabbedPane aTabbedPane)
-	{
-		createNewTab(aTabbedPane, null);
+		for (int i =  0; i < aTabbedPane.getTabCount(); i++)
+		{
+			removeSelectedTabFrom(aTabbedPane, i);
+		}
 	}
 }
