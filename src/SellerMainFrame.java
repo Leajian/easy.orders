@@ -408,7 +408,7 @@ public class SellerMainFrame extends JFrame
 					{
 						threadManager.stopTicking();
 						ptm.setProductUneditable(selectedRow);
-						JDialog pif = new ProductInfoFrame(ptm.getProductAt(selectedRow));
+						ProductInfoFrame pif = new ProductInfoFrame(ptm.getProductAt(selectedRow));
 						while (!pif.isDisplayable()) break;
 						ptm.setProductEditable(selectedRow);
 						threadManager.startTicking();

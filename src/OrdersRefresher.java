@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -73,6 +74,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	public static void createNewTab(JTabbedPane aTabbedPane, Order order)
 	{		
 		JPanel newOrderPanel = new JPanel();
+		OrderedProductsTableModel optbm = new OrderedProductsTableModel(order);
 		
 		JTextField nameTextField;
 		FormLayout fl_newOrderPanel = new FormLayout(new ColumnSpec[] {
@@ -115,20 +117,22 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
+				//Product productToAdd = 
+				SelectProductFrame spf = new SelectProductFrame();
+
+//				while (!spf.isDisplayable())
+				while (!spf.isVisible())
+				{
+					System.out.println(spf.getSelectedProduct().getId());
+					break;
+				}
+
+				//optbm.addRow(spf.getSelectedProduct());
+				//spf.dispose();
 				
 			}
 		});
 		newOrderPanel.add(addProductButton, "3, 6, fill, fill");
-		
-		JButton removeProductButton = new JButton("-");
-		removeProductButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				
-			}
-		});
-		newOrderPanel.add(removeProductButton, "3, 8, fill, fill");
 
 		
 //		if (order != null)
@@ -147,7 +151,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		    //set each nameField to the owner's name 
 			nameTextField.setText(order.getClientName());
 			
-			ordersTable = new JTable(new OrderedProductsTableModel(order));
+			ordersTable = new JTable(optbm);
 			ordersTable.setBounds(117, 39, 568, 161);
 			
 			//this disallows reordering of columns
@@ -161,19 +165,36 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			//these make that so you can only select a single line on click
 			ordersTable.setSelectionModel(new ForcedListSelectionModel());
 			
+			//a selection model, which allows us to call it and get the selected row at any time
+			ListSelectionModel rowSM = ordersTable.getSelectionModel();
+			
 			ordersTable.addMouseListener(new MouseAdapter()
 			{
 				@Override
 				public void mouseClicked(MouseEvent e)
 				{
-					ListSelectionModel rowSM = ordersTable.getSelectionModel();
 					System.out.println("Row " + rowSM.getMinSelectionIndex() + " is now selected.");
 				}
 			});
 			
+			JButton removeProductButton = new JButton("-");
+			removeProductButton.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					int selectedProduct = rowSM.getMinSelectionIndex();
+					
+					if (selectedProduct != -1)
+						optbm.removeRow(selectedProduct);
+					else		
+						JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε το προϊόν προς διαγραφή.", "Προσοχή!", JOptionPane.WARNING_MESSAGE);
+					System.out.println("remove " + selectedProduct);
+				}
+			});
+			newOrderPanel.add(removeProductButton, "3, 8, fill, fill");			
 			
-			JScrollPane clientsTabScrollPane = new JScrollPane(ordersTable);
-			newOrderPanel.add(clientsTabScrollPane, "5, 4, 1, 11, fill, fill");
+			JScrollPane ordersTableScrollPane = new JScrollPane(ordersTable);
+			newOrderPanel.add(ordersTableScrollPane, "5, 4, 1, 11, fill, fill");
 			
 			JButton deleteOrderButton = new JButton("Διαγραφή Παραγγελίας");
 			deleteOrderButton.addActionListener(new ActionListener()

@@ -71,4 +71,20 @@ public class OrderedProductsTableModel extends AbstractTableModel
         //no matter where the cell appears onscreen.
     	return false;
     }
+    
+    //alternative way to add a row
+    public void addRow(Product product)
+    {
+    	int lastRowBeforeUpdate = this.getRowCount() - 1;
+    	orderedProducts.add(product);
+        int lastRowAfterUpdate = this.getRowCount() - 1;
+        fireTableRowsInserted(lastRowBeforeUpdate, lastRowAfterUpdate);
+    }
+    
+    //remove product from the list
+    public void removeRow(int selectedRow)
+    {
+    	orderedProducts.remove(selectedRow);
+        fireTableRowsDeleted(selectedRow, selectedRow);
+    }
 }

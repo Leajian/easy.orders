@@ -177,7 +177,7 @@ public class ProductsTableModel extends AbstractTableModel
     	}
 	}
         
-    //alternative way to add a row
+    //add product to the list
     public void addRow(Product product)
     {
     	int lastRowBeforeUpdate = this.getRowCount() - 1;
