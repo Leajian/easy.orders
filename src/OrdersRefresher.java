@@ -27,7 +27,7 @@ import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 
 public class OrdersRefresher extends AbstractEntityRefresher
-{
+{	
 	public OrdersRefresher(JTabbedPane aTabbedPane)
 	{
 		super(aTabbedPane, "orders");
@@ -53,7 +53,6 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	            }
 			}
 	    });
-		
 	}
 
 	@Override
@@ -74,7 +73,9 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	 * @wbp.parser.entryPoint
 	 */
 	public static void createNewTab(JTabbedPane aTabbedPane, Order order)
-	{		
+	{	
+		DBConnect db = new DBConnect();
+		
 		JPanel newOrderPanel = new JPanel();
 		
 		JTable ordersTable = null;
@@ -120,8 +121,6 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		
 		fl_newOrderPanel.setRowGroups(new int[][]{new int[]{6, 8}});
 		newOrderPanel.setLayout(fl_newOrderPanel);
-		
-
 		
 		newOrderPanel.add(nameLabel, "3, 2, right, fill");
 		newOrderPanel.add(productsLabel, "3, 4, right, fill");
@@ -287,7 +286,17 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				//SQL query for deletion
+				db.connect();
+				try
+				{
+					String query = "DELETE FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND clientId = '" + order.getClientId() + "'";
+					int rs = db.getStatement().executeUpdate(query);
+				} 
+				catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
+				db.closeConnection();
 			}
 		});
 	}
@@ -296,14 +305,11 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	{	
 		if (aTabbedPane.getTabCount() > 1) 
 			aTabbedPane.remove(index);
-
 	}
 	
 	private void removeAllOrderTabsFrom(JTabbedPane aTabbedPane)
 	{
 		for (int i =  0; i < aTabbedPane.getTabCount(); i++)
-		{
 			removeSelectedTabFrom(aTabbedPane, i);
-		}
 	}
 }
