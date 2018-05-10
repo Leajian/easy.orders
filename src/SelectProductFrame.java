@@ -18,7 +18,7 @@ public class SelectProductFrame extends JDialog
 	private JTable productsTable;
 	private Product selectedProduct;
 	
-	public SelectProductFrame() {
+	public SelectProductFrame(OrderedProductsTableModel optm) {
 
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -59,13 +59,16 @@ public class SelectProductFrame extends JDialog
 				if (e.getClickCount() == 2)
 				{
 					selectedProduct = ptm.getProductAt(selectedRow);
-					setVisible(false);
+					optm.addRow(selectedProduct);
+					dispose();
 				}
 			}
 		});	
 		
 		setName("selectProduct");
 		setSize(new Dimension(750, 752));
+		//open in the center?
+		setLocationRelativeTo(rootPane);
 		setVisible(true);
 		setTitle("Επιλέξτε προϊόν");
 		setResizable(false);
