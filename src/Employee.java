@@ -4,16 +4,22 @@ import java.security.NoSuchAlgorithmException;
 
 public class Employee
 {
-	private String username, password;
+	private String name, username, password;
 	private int privilege;
 	
-	public Employee(String username, String password, int privilege)
+	public Employee(String name, String username, String password, int privilege)
 	{
+		this.name = name;
 		this.username = username;
 		this.password = password;
 		this.privilege = privilege;
 	}
-
+	
+	public String getName()
+	{
+		return name;
+	}
+	
 	public String getUsername()
 	{
 		return username;
