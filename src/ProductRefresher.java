@@ -11,4 +11,9 @@ public class ProductRefresher extends AbstractEntityRefresher
 	protected void populator() {
 		((ProductsTableModel) obj).populate();
 	}
+	
+	@Override
+	protected int getObjSize(Object obj) {
+		return ((ProductsTableModel) obj).getRowCount();
+	}
 }

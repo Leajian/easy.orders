@@ -10,6 +10,7 @@ public abstract class AbstractEntityRefresher
 	
 	private DBConnect db = new DBConnect();
 	protected Object obj;
+	protected int lastUpdatedSize = -1;
 	
 	public AbstractEntityRefresher(Object obj, String entity)
 	{
@@ -45,21 +46,43 @@ public abstract class AbstractEntityRefresher
 	
 	protected abstract void populator();
 	
+	protected abstract int getObjSize(Object obj);
+	
 	protected void refreshTick()
 	{
 		System.out.println("tick");
 		String lastEdit = getLastEditOf(entity);
+		int lastSize = getObjSize(obj);
 		
+		System.out.println(lastSize);
+		
+		//if there is any entity at all
 		if(lastEdit != null)
 		{
-			if(!getLastEditOf(entity).equals(lastUpdate))
+			//if it is different from before regarding time
+			if(!lastEdit.equals(lastUpdate))
+			{
+				//populate it how ever you like
 				populator();
-		}
-		populator();
 			
-		
-		
-		
-		lastUpdate = lastEdit;
+				//now we update the lastUpdate time with the one we just refreshed with
+				lastUpdate = lastEdit;
+			}
+			
+			//if it is different from before regarding size
+			if(lastSize != lastUpdatedSize)
+			{
+				//now we update the lastUpdatedSize with the one we just refreshed with
+				lastUpdatedSize = lastSize;
+				
+				//populate it how ever you like
+				populator();
+
+				System.out.println("last size " + lastUpdatedSize);
+			}
+		}
+		else
+			//update once if there was no entity at all
+			populator();
 	}
 }

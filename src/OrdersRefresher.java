@@ -30,7 +30,7 @@ import com.jgoodies.forms.layout.RowSpec;
 
 public class OrdersRefresher extends AbstractEntityRefresher
 {	
-	private int ordersCount = -1;
+	ArrayList<Order> orders = DataFetcher.initializeOrders();
 	
 	public OrdersRefresher(JTabbedPane aTabbedPane)
 	{
@@ -76,29 +76,29 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			});
 	}
 
+	protected int getObjSize(Object obj) {
+		return orders.size();
+	}
+	
 	@Override
 	protected void populator()
 	{
 		//removeAllOrderTabsFrom((JTabbedPane) obj);
 		
-		ArrayList<Order> orders = DataFetcher.initializeOrders();
+		orders = DataFetcher.initializeOrders();
 		
-		if ( (!orders.isEmpty()) )
+		if (!orders.isEmpty())
 		{
-			if ( (ordersCount != orders.size()) )
-			{
-				((JTabbedPane) obj).removeAll();
-				
-				for (Order order: orders)
-					createNewTab((JTabbedPane) obj, order);
-				
-				ordersCount = orders.size();
-			}
+			((JTabbedPane) obj).removeAll();
+
+			for (Order order: orders)
+				createNewTab((JTabbedPane) obj, order);
 		}
 		else
 		{
-			if((((JTabbedPane) obj).indexOfTab("Νέα Παραγγελία") == -1) )
+			if (((JTabbedPane) obj).indexOfTab("Νέα Παραγγελία") == -1)
 			{
+				((JTabbedPane) obj).removeAll();
 				createNewTab((JTabbedPane) obj, null);
 			}
 		}

@@ -11,4 +11,9 @@ public class ClientRefresher extends AbstractEntityRefresher
 	protected void populator() {
 		((ClientsTableModel) obj).populate();
 	}
+
+	@Override
+	protected int getObjSize(Object obj) {
+		return ((ClientsTableModel) obj).getRowCount();
+	}
 }
