@@ -1,13 +1,11 @@
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowStateListener;
+
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -24,25 +22,20 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.DefaultTableModel;
 
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
-import com.sun.java.swing.plaf.windows.resources.windows;
 
 public class SellerMainFrame extends JFrame
 {
 	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 	
 	private JTabbedPane liveOrdersTabs = new JTabbedPane(JTabbedPane.LEFT);
-	
 
 	private JTable clientsTable;
 	private JTable productsTable;
@@ -54,6 +47,7 @@ public class SellerMainFrame extends JFrame
 	private JButton removeClientButton = new JButton("-");
 	private JButton addProductButton = new JButton("+");
 	private JButton removeProductButton = new JButton("-");
+	private JButton addNewOrderButton = new JButton("+");
 	
 	private JRadioButton clientNameRadioButton = new JRadioButton("Όνομα");
 	private JRadioButton clientIdRadioButton = new JRadioButton("ΑΦΜ");
@@ -62,10 +56,12 @@ public class SellerMainFrame extends JFrame
 	private JRadioButton producerNameRadioButton = new JRadioButton("Προμυθευτής");
 	
 	private JComboBox searchProductComboBox = new JComboBox();
+	private JComboBox ordersOfUserComboBox = new JComboBox();
 	
 	private JLabel clientsearchLabel = new JLabel("Αναζήτηση");
 	private JLabel productsearchLabel = new JLabel("Αναζήτηση");
 	private JLabel dateLabel = new JLabel("Ημερομηνία");
+	private JLabel ordersFromUserLabel = new JLabel("Παραγγελίες του χρήστη :");
 
 	private JPanel ordersTab = new JPanel();
 	private JPanel clientsTab = new JPanel();
@@ -73,21 +69,22 @@ public class SellerMainFrame extends JFrame
 	private JPanel recordTab = new JPanel();
 	
 	//we create table models so that we can manipulate tables' data
-	ClientsTableModel ctm = new ClientsTableModel(new ArrayList<>());
-	ProductsTableModel ptm = new ProductsTableModel(new ArrayList<>());
-	RecordTableModel rtm = new RecordTableModel(new ArrayList<>());
+	private ClientsTableModel ctm = new ClientsTableModel(new ArrayList<>());
+	private ProductsTableModel ptm = new ProductsTableModel(new ArrayList<>());
+	private RecordTableModel rtm = new RecordTableModel(new ArrayList<>());
 	
-	ThreadManagement threadManager = new ThreadManagement(1000);
-	private final JButton addNewOrderButton = new JButton("+");
-	private final JComboBox ordersOfUserComboBox = new JComboBox();
-	private final JLabel ordersFromUserLabel = new JLabel("Παραγγελίες του χρήστη :");
+	private ThreadManagement threadManager = new ThreadManagement(1000);
+
 	
-	public SellerMainFrame()
+	
+	
+	public SellerMainFrame(Employee user)
 	{
 		liveOrdersTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
 		
-		tabbedPane.addChangeListener(new ChangeListener() {
+		tabbedPane.addChangeListener(new ChangeListener()
+		{
 			public void stateChanged(ChangeEvent evt)
 			{
 				JTabbedPane tabbedPane = (JTabbedPane)evt.getSource();
@@ -121,7 +118,7 @@ public class SellerMainFrame extends JFrame
 				}
 			}
 		});
-		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
+		getContentPane().setLayout(new FormLayout(new ColumnSpec[]{
 				ColumnSpec.decode("1284px:grow"),},
 			new RowSpec[] {
 				RowSpec.decode("751px:grow"),}));
@@ -551,7 +548,7 @@ public class SellerMainFrame extends JFrame
 		
 		
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
-		this.setLocation(80, 50);
+		this.setLocation(0, 0);
 		this.setBounds(100, 100, 1300, 790);
 		this.setMinimumSize(new Dimension(1300, 800));
 		this.setVisible(true);
