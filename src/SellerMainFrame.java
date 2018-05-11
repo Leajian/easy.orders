@@ -5,7 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -15,6 +15,9 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -32,10 +35,21 @@ import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 
 public class SellerMainFrame extends JFrame
-{
-	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
+{	
+	private ArrayList<Employee> employees = new ArrayList<>();
 	
+	private Employee user;
+	
+	private DBConnect db = new DBConnect();
+	
+	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 	private JTabbedPane liveOrdersTabs = new JTabbedPane(JTabbedPane.LEFT);
+	
+	private JMenuItem logoutMenuItem = new JMenuItem("Αποσύνδεση");
+	
+	private JMenu optionsMenu = new JMenu("Επιλογές");
+	
+	private JMenuBar menuBar = new JMenuBar();
 
 	private JTable clientsTable;
 	private JTable productsTable;
@@ -56,7 +70,7 @@ public class SellerMainFrame extends JFrame
 	private JRadioButton producerNameRadioButton = new JRadioButton("Προμυθευτής");
 	
 	private JComboBox searchProductComboBox = new JComboBox();
-	private JComboBox ordersOfUserComboBox = new JComboBox();
+	private JComboBox<String> ordersOfUserComboBox = new JComboBox();
 	
 	private JLabel clientsearchLabel = new JLabel("Αναζήτηση");
 	private JLabel productsearchLabel = new JLabel("Αναζήτηση");
@@ -75,13 +89,18 @@ public class SellerMainFrame extends JFrame
 	
 	private ThreadManagement threadManager = new ThreadManagement(1000);
 
+
 	
 	
 	
 	public SellerMainFrame(Employee user)
 	{
-		liveOrdersTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		this.user = user;
 		
+		
+		
+		
+		liveOrdersTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
 		tabbedPane.addChangeListener(new ChangeListener()
 		{
@@ -118,6 +137,42 @@ public class SellerMainFrame extends JFrame
 				}
 			}
 		});
+		
+		//Fetch employees.
+		db.connect();
+		try
+		{
+			String query = "SELECT * FROM employee";
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			while(rs.next())
+				employees.add(new Employee(rs.getString("name"), rs.getString("username"), rs.getString("password"), rs.getInt("privilege")));
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		db.closeConnection();
+		
+		//Populate JComboBox.
+		for(Employee employee: employees)
+			ordersOfUserComboBox.addItem(employee.getName());
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[]{
 				ColumnSpec.decode("1284px:grow"),},
 			new RowSpec[] {
@@ -148,7 +203,9 @@ public class SellerMainFrame extends JFrame
 		});
 		ordersTab.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("51px"),
-				ColumnSpec.decode("884px:grow"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("641px:grow"),
+				FormSpecs.RELATED_GAP_COLSPEC,
 				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("196px"),
@@ -161,11 +218,10 @@ public class SellerMainFrame extends JFrame
 				FormSpecs.RELATED_GAP_ROWSPEC,}));
 		
 		ordersTab.add(addNewOrderButton, "1, 2, right, top");
+		ordersTab.add(ordersFromUserLabel, "5, 2, right, fill");
 		
-		ordersTab.add(ordersFromUserLabel, "3, 2, right, fill");
-		
-		ordersTab.add(ordersOfUserComboBox, "5, 2, fill, fill");
-		ordersTab.add(liveOrdersTabs, "1, 4, 5, 1, fill, fill");
+		ordersTab.add(ordersOfUserComboBox, "7, 2, fill, fill");
+		ordersTab.add(liveOrdersTabs, "1, 4, 7, 1, fill, fill");
 		
 //		createNewTab(liveOrdersTabs, null);
 //		liveOrdersTabs.addChangeListener(new ChangeListener()
@@ -544,16 +600,59 @@ public class SellerMainFrame extends JFrame
 		
 		
 		
+		logoutMenuItem.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				System.exit(0);
+			}
+		});
+		
+		optionsMenu.add(logoutMenuItem);
+		menuBar.add(optionsMenu);
 		
 		
+		
+		
+		
+		
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		this.setJMenuBar(menuBar);
 		
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(0, 0);
 		this.setBounds(100, 100, 1300, 790);
 		this.setMinimumSize(new Dimension(1300, 800));
+		this.setSize(1300, 800);
 		this.setVisible(true);
 		this.setTitle("Easy Orders 1.0");
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		
+		
 		
 		addWindowListener(new WindowAdapter()
 		{
