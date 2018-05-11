@@ -173,10 +173,10 @@ public class SellerMainFrame extends JFrame
 		
 		
 		
-		getContentPane().setLayout(new FormLayout(new ColumnSpec[]{
+		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("1284px:grow"),},
 			new RowSpec[] {
-				RowSpec.decode("751px:grow"),}));
+				RowSpec.decode("718px:grow"),}));
 		
 		this.getContentPane().add(tabbedPane, "1, 1, fill, fill");
 		
@@ -214,7 +214,7 @@ public class SellerMainFrame extends JFrame
 				FormSpecs.UNRELATED_GAP_ROWSPEC,
 				RowSpec.decode("23px"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("fill:677px:grow"),
+				RowSpec.decode("fill:200px:grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,}));
 		
 		ordersTab.add(addNewOrderButton, "1, 2, right, top");
@@ -646,7 +646,7 @@ public class SellerMainFrame extends JFrame
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(0, 0);
 		this.setBounds(100, 100, 1300, 790);
-		this.setMinimumSize(new Dimension(1300, 800));
+		this.setMinimumSize(new Dimension(1100, 700));
 		this.setSize(1300, 800);
 		this.setVisible(true);
 		this.setTitle("Easy Orders 1.0");
