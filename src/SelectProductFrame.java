@@ -11,6 +11,7 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -18,7 +19,7 @@ import java.awt.Dimension;
 public class SelectProductFrame extends JDialog
 {
 	private JTable productsTable;
-	private Product selectedProduct;
+	//private Product selectedProduct;
 	
 	public SelectProductFrame(OrderedProductsTableModel optm) {
 		
@@ -63,11 +64,19 @@ public class SelectProductFrame extends JDialog
 				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
 				
 				//show info on double click
-				if (e.getClickCount() == 2)
+				if (e.getClickCount() == 1)
 				{
-					selectedProduct = ptm.getProductAt(selectedRow);
-					optm.addRow(selectedProduct);
-					dispose();
+
+					
+					Product selectedProduct = ptm.getProductAt(selectedRow);
+					if (!optm.productExists(selectedProduct))
+					{
+						optm.addRow(selectedProduct);
+						dispose();
+					}
+					else
+						JOptionPane.showMessageDialog(null, "Το προϊόν υπάρχει ήδη στην παραγγελία.", "Προσοχή!", JOptionPane.WARNING_MESSAGE);
+
 				}
 			}
 		});	
@@ -80,9 +89,4 @@ public class SelectProductFrame extends JDialog
 		setTitle("Επιλέξτε προϊόν");
 		setResizable(false);
 	}
-
-	public Product getSelectedProduct() {
-		return selectedProduct;
-	}
-
 }

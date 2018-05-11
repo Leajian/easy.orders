@@ -101,4 +101,12 @@ public class OrderedProductsTableModel extends AbstractTableModel
 	{
 		return orderedProducts;
 	}
+	
+	public boolean productExists(Product product)
+	{
+		for (Product p : orderedProducts)
+			if (p.getId().equals(product.getId()))
+				return true;
+		return false;
+	}
 }
