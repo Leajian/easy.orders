@@ -126,14 +126,14 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		JButton addProductButton = new JButton("+");
 		JButton removeProductButton = new JButton("-");
 		JButton saveButton = new JButton("Αποθήκευση");
-		JButton deleteOrderButton = new JButton("Διαγραφή Παραγγελίας");
+		JButton deleteOrderButton = new JButton("Διαγραφή");
 		
 		JScrollPane ordersTableScrollPane;
 		
 		FormLayout fl_newOrderPanel = new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("1px"),
 				FormSpecs.UNRELATED_GAP_COLSPEC,
-				ColumnSpec.decode("155px"),
+				ColumnSpec.decode("93px"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(430dlu;min):grow"),
 				FormSpecs.UNRELATED_GAP_COLSPEC,},

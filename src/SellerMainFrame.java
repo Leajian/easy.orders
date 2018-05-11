@@ -174,9 +174,9 @@ public class SellerMainFrame extends JFrame
 		
 		
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("1284px:grow"),},
+				ColumnSpec.decode("830px:grow"),},
 			new RowSpec[] {
-				RowSpec.decode("718px:grow"),}));
+				RowSpec.decode("488px:grow"),}));
 		
 		this.getContentPane().add(tabbedPane, "1, 1, fill, fill");
 		
@@ -214,7 +214,7 @@ public class SellerMainFrame extends JFrame
 				FormSpecs.UNRELATED_GAP_ROWSPEC,
 				RowSpec.decode("23px"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("fill:200px:grow"),
+				RowSpec.decode("fill:534px:grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,}));
 		
 		ordersTab.add(addNewOrderButton, "1, 2, right, top");
@@ -260,13 +260,13 @@ public class SellerMainFrame extends JFrame
 		
 		FormLayout fl_clientsTab = new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("90px"),
+				ColumnSpec.decode("93px"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("781px:grow"),
+				ColumnSpec.decode("613px:grow"),
 				FormSpecs.UNRELATED_GAP_COLSPEC,
 				ColumnSpec.decode("109px:grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("89px:grow"),
+				ColumnSpec.decode("-23px:grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
@@ -276,7 +276,7 @@ public class SellerMainFrame extends JFrame
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(30dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("fill:543px:grow"),
+				RowSpec.decode("fill:397px:grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,});
 		fl_clientsTab.setRowGroups(new int[][]{new int[]{4, 6}});
 		fl_clientsTab.setColumnGroups(new int[][]{new int[]{6, 8}});
@@ -393,9 +393,9 @@ public class SellerMainFrame extends JFrame
 		
 		FormLayout fl_productsTab = new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("90px"),
+				ColumnSpec.decode("93px"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("842px:grow"),
+				ColumnSpec.decode("431px:grow"),
 				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("99px:grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -645,9 +645,9 @@ public class SellerMainFrame extends JFrame
 		
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(0, 0);
-		this.setBounds(100, 100, 1300, 790);
-		this.setMinimumSize(new Dimension(1100, 700));
-		this.setSize(1300, 800);
+		this.setBounds(100, 100, 1100, 700);
+		this.setMinimumSize(new Dimension(1200, 700));
+		this.setSize(1100, 700);
 		this.setVisible(true);
 		this.setTitle("Easy Orders 1.0");
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
