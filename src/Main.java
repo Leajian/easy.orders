@@ -23,8 +23,9 @@ public class Main
 
 		db.connect();
 	
-		//new SellerMainFrame();
+		new SellerMainFrame(null);
 		
+		/*
 		try
 		{	
 			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed\r\n" + 
@@ -118,5 +119,7 @@ public class Main
 		});
 		
 		timer.start();
+		
+		*/
 	}
 }
