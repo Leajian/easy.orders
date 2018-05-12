@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 public class ClientsTableModel extends AbstractTableModel
@@ -147,7 +148,9 @@ public class ClientsTableModel extends AbstractTableModel
 			} 
     		catch (Exception ex)
     		{
-				ex.printStackTrace();
+				//ex.printStackTrace();
+    			
+    			JOptionPane.showMessageDialog(null, "Ο πελάτης χρησιμοποιείται σε παραγγελία.", "Δεν επιτρέπεται διαγραφή.", JOptionPane.ERROR_MESSAGE);
 			}
     		db.closeConnection();
     	}
