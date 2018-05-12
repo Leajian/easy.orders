@@ -78,6 +78,8 @@ public class OrderedProductsTableModel extends AbstractTableModel
     {
         //Note that the products/cell address is constant,
         //no matter where the cell appears onscreen.
+    	if (col > 4)
+    		return true;
     	return false;
     }
     
