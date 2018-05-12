@@ -58,7 +58,8 @@ public class OrdersRefresher extends AbstractEntityRefresher
 //			}
 //	    });
 		
-		aTabbedPane.addMouseListener(new MouseAdapter() {
+		aTabbedPane.addMouseListener(new MouseAdapter()
+		{
 				@Override
 				public void mouseClicked(MouseEvent arg0)
 				{
@@ -76,7 +77,8 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			});
 	}
 
-	protected int getObjSize(Object obj) {
+	protected int getObjSize(Object obj)
+	{
 		return orders.size();
 	}
 	
@@ -104,9 +106,6 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		}
 	}
 	
-	/**
-	 * @wbp.parser.entryPoint
-	 */
 	public static void createNewTab(JTabbedPane aTabbedPane, Order order)
 	{	
 		DBConnect db = new DBConnect();
@@ -294,25 +293,29 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε το προϊόν προς διαγραφή.", "Προσοχή!", JOptionPane.WARNING_MESSAGE);
 				System.out.println("remove " + selectedProduct);
 			}
-		});
-			
+		});		
 		
 		saveButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
-			{
-				//make each tab distinct by name
-				//aTabbedPane.setTitleAt(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()), nameTextField.getText());
+			{	
+				String query = "INSERT INTO orders (lastEdit, productId, clientId, quantityWeight, price, employeeUsername, closed) VALUES ";
 				
-				//set each label name to the desired name 
-				//tabTitleLabel.setText(nameTextField.getText());
+				for(Product product: optm.getOrderedProducts())
+					query += "(CURRENT_TIMESTAMP, " + "'" + product.getId() + "', " + "'" + nameTextField.getText() + "', '12', '21', 'admin', '0'),";
 				
-				//SQL query for name with nameTextField.getText() or get/set it from search bar automatically. To be added.
+				db.connect();
+				try
+				{
+					query = query.substring(0, query.length() - 1);
+					int rs = db.getStatement().executeUpdate(query);
+				} 
+				catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
+				db.closeConnection();
 				
-				//add label to tab, replacing/overriding the title of it
-				//aTabbedPane.setTabComponentAt(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()), tabTitleLabel);
-				
-				//the delete button now has purpose
 				deleteOrderButton.setVisible(true);
 			}
 		});
@@ -335,10 +338,4 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			}
 		});
 	}
-	
-//	private void removeAllOrderTabsFrom(JTabbedPane aTabbedPane)
-//	{
-//		for (int i =  0; i < aTabbedPane.getTabCount(); i++)
-//			aTabbedPane.remove(i);
-//	}
 }
