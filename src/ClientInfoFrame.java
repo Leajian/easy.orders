@@ -25,6 +25,7 @@ import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import java.awt.Font;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 
@@ -62,7 +63,7 @@ public class ClientInfoFrame extends JDialog
 	
 	private JScrollPane notesFieldScrollPane = new JScrollPane();
 	
-	public ClientInfoFrame(Client client)
+	public ClientInfoFrame(Client client, JTabbedPane aTabbedPane, RecordTableModel rtm, ThreadManagement threadManager)
 	{
 		//this blocks other windows unless this is closed.
 		//also it must be here and not the bottom for some reason
@@ -168,7 +169,17 @@ public class ClientInfoFrame extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				//select record tab
+				aTabbedPane.setSelectedIndex(3);
 				
+				//stop auto refresh
+				threadManager.stopTicking();
+				
+				//lock on target client
+				rtm.lockOnClient(client);
+				
+				//close window
+				dispose();
 			}
 		});
 		

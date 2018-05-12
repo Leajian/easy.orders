@@ -76,4 +76,10 @@ public class RecordTableModel extends AbstractTableModel
 		this.ordersRecord = DataFetcher.initializeRecord();
 		fireTableDataChanged();
 	}
+	
+	public void lockOnClient(Client client)
+	{
+		this.ordersRecord = DataFetcher.RecordOfClient(client);
+		fireTableDataChanged();
+	}
 }
