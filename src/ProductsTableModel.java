@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 
@@ -171,7 +172,8 @@ public class ProductsTableModel extends AbstractTableModel
     		}
         	catch (Exception ex)
         	{
-    			ex.printStackTrace();
+        		JOptionPane.showMessageDialog(null, "Το προϊόν χρησιμοποιείται σε παραγγελία.", "Δεν επιτρέπεται διαγραφή.", JOptionPane.ERROR_MESSAGE);
+    			//ex.printStackTrace();
     		}
         	db.closeConnection();
     	}
