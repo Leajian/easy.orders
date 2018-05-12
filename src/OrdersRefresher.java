@@ -6,6 +6,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -30,7 +31,9 @@ import com.jgoodies.forms.layout.RowSpec;
 
 public class OrdersRefresher extends AbstractEntityRefresher
 {	
-	ArrayList<Order> orders = DataFetcher.initializeOrders();
+	private ArrayList<Order> orders = DataFetcher.initializeOrders();
+	
+	private DBConnect db = new DBConnect();
 	
 	public OrdersRefresher(JTabbedPane aTabbedPane)
 	{
@@ -79,7 +82,23 @@ public class OrdersRefresher extends AbstractEntityRefresher
 
 	protected int getObjSize(Object obj)
 	{
-		return DataFetcher.initializeOrders().size();
+		db.connect();
+		try
+		{
+			String query = "SELECT COUNT(DISTINCT lastEdit, clientId) AS ordersCount FROM orders";
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			rs.next();
+			
+			return rs.getInt("ordersCount");
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		db.closeConnection();
+		//return DataFetcher.initializeOrders().size();
+		return 0;
 	}
 	
 	@Override
