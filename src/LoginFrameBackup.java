@@ -24,12 +24,12 @@ import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import java.awt.Window.Type;
 
-public class LoginFrame extends JFrame{
+public class LoginFrameBackup extends JFrame{
 
 	private JPasswordField passwordField;
 	DBConnect db = new DBConnect();
 
-	public LoginFrame() {
+	public LoginFrameBackup() {
 		setType(Type.UTILITY);
 		setResizable(false);
 		
@@ -58,7 +58,7 @@ public class LoginFrame extends JFrame{
 		JLabel loginImage = new JLabel();
 		loginImage.setHorizontalAlignment(SwingConstants.CENTER);
 		loginImage.setFont(new Font("Tahoma", Font.PLAIN, 93));
-		loginImage.setIcon(new ImageIcon(LoginFrame.class.getResource("/images/user-symbol.png")));
+		loginImage.setIcon(new ImageIcon(LoginFrameBackup.class.getResource("/images/user-symbol.png")));
 		this.getContentPane().add(loginImage, "2, 2, 5, 1, fill, center");
 		
 		JTextField usernameField = new JTextField();
