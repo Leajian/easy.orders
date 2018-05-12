@@ -30,10 +30,12 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	
 	private DBConnect db = new DBConnect();
 	
-	public OrdersRefresher(JTabbedPane aTabbedPane)
+	private static Employee user;
+	
+	public OrdersRefresher(JTabbedPane aTabbedPane, Employee user)
 	{
 		super(aTabbedPane, "orders");
-		
+		this.user = user;
 		System.out.println("Orders refresher instancieted");
 		
 //		aTabbedPane.addChangeListener(new ChangeListener()
@@ -347,15 +349,25 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			public void actionPerformed(ActionEvent arg0)
 			{
 				db.connect();
-				try
-				{
-					String query = "UPDATE orders SET closed = 1 WHERE lastEdit = '" + order.getLastEdit() + "' " + "AND clientId = '" + order.getClientId() + "'";
-					int rs = db.getStatement().executeUpdate(query);
+				
+				switch (user.getPrivilege()) {
+				case 1:
+					try
+					{
+						String query = "UPDATE orders SET closed = 1 WHERE lastEdit = '" + order.getLastEdit() + "' " + "AND clientId = '" + order.getClientId() + "'";
+						int rs = db.getStatement().executeUpdate(query);
+					}
+					catch (Exception ex)
+					{
+						ex.printStackTrace();
+					}
+					break;
+					
+				default:
+					break;
 				}
-				catch (Exception ex)
-				{
-					ex.printStackTrace();
-				}
+				
+				
 				
 				closeOrderButton.setEnabled(false);
 			}

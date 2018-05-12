@@ -14,11 +14,13 @@ public class ThreadManagement {
 	private ClientRefresher cl;
 	private ProductRefresher pr;
 	private RecordRefresher rr;
+	private Employee user;
 	
-	public ThreadManagement(int interval)
+	public ThreadManagement(int interval, Employee user)
 	{
 		this.interval = interval;
 		this.timer = new Timer(interval, null);
+		this.user = user;
 	}
 
 	public void ManageModelUpdateAtTab(int selectedTabIndex, Object obj) //AbstractTableModel atm)
@@ -29,7 +31,7 @@ public class ThreadManagement {
 		case 0:
 			if (timer.isRunning())
 				timer.stop();
-			or = new OrdersRefresher((JTabbedPane) obj);
+			or = new OrdersRefresher((JTabbedPane) obj, user);
 			timer = new Timer(interval, new ActionListener() {
 				
 				@Override

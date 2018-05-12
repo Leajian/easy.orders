@@ -38,7 +38,7 @@ public class SellerMainFrame extends JFrame
 {	
 	private ArrayList<Employee> employees = new ArrayList<>();
 	
-	private Employee user;
+	private final Employee user;
 	
 	private DBConnect db = new DBConnect();
 	
@@ -88,7 +88,7 @@ public class SellerMainFrame extends JFrame
 	private ProductsTableModel ptm = new ProductsTableModel(new ArrayList<>());
 	private RecordTableModel rtm = new RecordTableModel(new ArrayList<>());
 	
-	private ThreadManagement threadManager = new ThreadManagement(1000);
+	private ThreadManagement threadManager;
 
 
 
@@ -98,7 +98,7 @@ public class SellerMainFrame extends JFrame
 	public SellerMainFrame(Employee user)
 	{
 		this.user = user;
-		
+		threadManager = new ThreadManagement(1000, user);
 		
 		
 		
