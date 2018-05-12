@@ -79,30 +79,36 @@ public class OrdersRefresher extends AbstractEntityRefresher
 
 	protected int getObjSize(Object obj)
 	{
-		return orders.size();
+		return DataFetcher.initializeOrders().size();
 	}
 	
 	@Override
 	protected void populator()
-	{
-		//removeAllOrderTabsFrom((JTabbedPane) obj);
-		
+	{	
+		//recreate orders array on demand
 		orders = DataFetcher.initializeOrders();
 		
+		//if there orders available
 		if (!orders.isEmpty())
 		{
+			//delete the local copies
 			((JTabbedPane) obj).removeAll();
-
+			
+			//add each new one as a tab
 			for (Order order: orders)
 				createNewTab((JTabbedPane) obj, order);
 		}
-		else
-		{
-			if (((JTabbedPane) obj).indexOfTab("Νέα Παραγγελία") == -1)
+		else //if there no orders
+		{	
+			//add the new order tab if it doesn't exist already and empty the tabbed pane once, if there are leftovers
+			if ( ( ((JTabbedPane) obj).indexOfTab("Νέα Παραγγελία") == -1 ) & ( ((JTabbedPane) obj).getTabCount() > 0 ) )
 			{
 				((JTabbedPane) obj).removeAll();
 				createNewTab((JTabbedPane) obj, null);
 			}
+			
+			if (((JTabbedPane) obj).indexOfTab("Νέα Παραγγελία") == -1 )
+				createNewTab((JTabbedPane) obj, null);
 		}
 	}
 	
