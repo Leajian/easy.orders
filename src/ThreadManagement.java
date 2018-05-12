@@ -107,4 +107,11 @@ public class ThreadManagement {
 	{
 		timer.start();
 	}
+	
+	public boolean isTimerTicking()
+	{
+		if (timer.isRunning())
+			return true;
+		return false;
+	}
 }
