@@ -131,6 +131,9 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		}
 	}
 	
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public static void createNewTab(JTabbedPane aTabbedPane, Order order)
 	{	
 		DBConnect db = new DBConnect();
@@ -151,6 +154,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		JButton removeProductButton = new JButton("-");
 		JButton saveOrderButton = new JButton("Αποθήκευση");
 		JButton deleteOrderButton = new JButton("Διαγραφή");
+		JButton closeOrderButton = new JButton("Τιμολόγηση");
 		
 		JScrollPane ordersTableScrollPane;
 		
@@ -171,7 +175,9 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("fill:223px:grow"),
+				RowSpec.decode("fill:105px:grow"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("30dlu"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("30dlu"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
@@ -189,8 +195,10 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		newOrderPanel.add(addProductButton, "3, 6, fill, fill");
 		newOrderPanel.add(removeProductButton, "3, 8, fill, fill");
 		
-		newOrderPanel.add(saveOrderButton, "3, 14, fill, fill");
-		newOrderPanel.add(deleteOrderButton, "3, 12, fill, fill");
+		newOrderPanel.add(closeOrderButton, "3, 12, fill, fill");
+		
+		newOrderPanel.add(saveOrderButton, "3, 16, fill, fill");
+		newOrderPanel.add(deleteOrderButton, "3, 14, fill, fill");
 
 		removeProductButton.setVisible(false);
 		deleteOrderButton.setVisible(false);
@@ -202,7 +210,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		
 		ordersTableScrollPane = new JScrollPane(ordersTable);
 		//ordersTableScrollPane.setVisible(false);
-		newOrderPanel.add(ordersTableScrollPane, "5, 4, 1, 11, fill, fill");
+		newOrderPanel.add(ordersTableScrollPane, "5, 4, 1, 13, fill, fill");
 		
 		//this disallows reordering of columns
 		ordersTable.getTableHeader().setReorderingAllowed(false);
@@ -337,6 +345,14 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε το προϊόν προς διαγραφή.", "Προσοχή!", JOptionPane.WARNING_MESSAGE);
 			}
 		});		
+		
+		closeOrderButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				
+			}
+		});
 		
 		saveOrderButton.addActionListener(new ActionListener()
 		{
