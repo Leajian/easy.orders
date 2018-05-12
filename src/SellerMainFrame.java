@@ -62,6 +62,7 @@ public class SellerMainFrame extends JFrame
 	private JButton addProductButton = new JButton("+");
 	private JButton removeProductButton = new JButton("-");
 	private JButton addNewOrderButton = new JButton("+");
+	private JButton clearButton = new JButton("X");
 	
 	private JRadioButton clientNameRadioButton = new JRadioButton("Όνομα");
 	private JRadioButton clientIdRadioButton = new JRadioButton("ΑΦΜ");
@@ -88,6 +89,7 @@ public class SellerMainFrame extends JFrame
 	private RecordTableModel rtm = new RecordTableModel(new ArrayList<>());
 	
 	private ThreadManagement threadManager = new ThreadManagement(1000);
+
 
 
 	
@@ -304,6 +306,7 @@ public class SellerMainFrame extends JFrame
 		clientsTable.setCellSelectionEnabled(false);
 		clientsTable.setColumnSelectionAllowed(false);		
 		clientsTable.setRowSelectionAllowed(true);
+		clientsTable.getTableHeader().setResizingAllowed(false);
 		
 		//these make that so you can only select a single line on click
 		clientsTable.setSelectionModel(new ForcedListSelectionModel());
@@ -322,12 +325,12 @@ public class SellerMainFrame extends JFrame
 					//threadManager.stopModelUpdates();
 					if (ctm.isClientEditable(selectedRow))
 					{
-						threadManager.stopTicking();
+						//threadManager.stopTicking();
 						ctm.setClientUneditable(selectedRow);
-						JDialog cif = new ClientInfoFrame(ctm.getClientAt(selectedRow));
+						JDialog cif = new ClientInfoFrame(ctm.getClientAt(selectedRow), tabbedPane, rtm, threadManager);
 						while (!cif.isDisplayable()) break;
 						ctm.setClientEditable(selectedRow);
-						threadManager.startTicking();
+						//threadManager.startTicking();
 					}
 				}
 			}
@@ -442,6 +445,7 @@ public class SellerMainFrame extends JFrame
 		productsTable.setCellSelectionEnabled(false);
 		productsTable.setColumnSelectionAllowed(false);		
 		productsTable.setRowSelectionAllowed(true);
+		productsTable.getTableHeader().setResizingAllowed(false);
 		
 		//these make that so you can only select a single line on click
 		productsTable.setSelectionModel(new ForcedListSelectionModel());
@@ -548,7 +552,7 @@ public class SellerMainFrame extends JFrame
 				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("817px:grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("99px:grow"),
+				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
@@ -563,6 +567,7 @@ public class SellerMainFrame extends JFrame
 		
 		//this disallows reordering of columns
 		recordTable.getTableHeader().setReorderingAllowed(false);
+		recordTable.getTableHeader().setResizingAllowed(false);
 		
 		//these make that so you can only select a whole lines on click
 		recordTable.setCellSelectionEnabled(false);
@@ -588,6 +593,18 @@ public class SellerMainFrame extends JFrame
 		recordTable.getColumnModel().getColumn(1).setPreferredWidth(104);
 		recordTable.getColumnModel().getColumn(2).setPreferredWidth(143);
 		recordTable.getColumnModel().getColumn(3).setPreferredWidth(145);
+		
+		
+		clearButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				//clearButton.setVisible(false);
+				threadManager.startTicking();		
+			}
+		});
+		
+		recordTab.add(clearButton, "6, 2, fill, default");
 		
 		recordTab.add(new JScrollPane(recordTable), "2, 4, 5, 1, fill, fill");
 		

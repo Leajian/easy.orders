@@ -206,6 +206,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		
 		//this disallows reordering of columns
 		ordersTable.getTableHeader().setReorderingAllowed(false);
+		ordersTable.getTableHeader().setResizingAllowed(false);
 		
 		//these make that so you can only select a whole lines on click
 		ordersTable.setCellSelectionEnabled(false);
