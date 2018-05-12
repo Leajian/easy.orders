@@ -49,29 +49,6 @@ public abstract class DataFetcher
 		return products;
 	}
 	
-	public static ArrayList<Order> initializeRecord()
-	{
-		ArrayList<Order> ordersRecord = new ArrayList<>();
-		DBConnect db = new DBConnect();
-		
-		db.connect();		
-		try
-		{
-			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed FROM orders WHERE closed = 1 ORDER BY lastEdit";
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			while(rs.next())
-				ordersRecord.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getInt("closed")));
-		} 
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		db.closeConnection();
-		
-		return ordersRecord;
-	}
-	
 	public static ArrayList<Order> RecordOfClient(Client client)
 	{
 		ArrayList<Order> ordersRecord = new ArrayList<>();
@@ -80,11 +57,11 @@ public abstract class DataFetcher
 		db.connect();		
 		try
 		{
-			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed FROM orders WHERE closed = 1 AND clientId = '" + client.getId() + "' ORDER BY lastEdit";
+			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, state FROM orders WHERE state = 2 AND clientId = '" + client.getId() + "' ORDER BY lastEdit";
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
-				ordersRecord.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getInt("closed")));
+				ordersRecord.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getInt("state")));
 		} 
 		catch (Exception ex)
 		{
@@ -95,7 +72,7 @@ public abstract class DataFetcher
 		return ordersRecord;
 	}
 	
-	public static ArrayList<Order> initializeOrders()
+	//public static ArrayList<Order> initializeOrders(int state)
 	{
 		ArrayList<Order> liveOrders = new ArrayList<>();
 		DBConnect db = new DBConnect();
@@ -103,11 +80,11 @@ public abstract class DataFetcher
 		db.connect();
 		try
 		{
-			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed FROM orders WHERE closed = 0 ORDER BY lastEdit";
+			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, state FROM orders WHERE state = " + state + " ORDER BY lastEdit";
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
-				liveOrders.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getInt("closed")));
+				liveOrders.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getInt("state")));
 		} 
 		catch (Exception ex)
 		{

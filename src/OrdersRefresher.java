@@ -26,7 +26,7 @@ import com.jgoodies.forms.layout.RowSpec;
 
 public class OrdersRefresher extends AbstractEntityRefresher
 {	
-	private ArrayList<Order> orders = DataFetcher.initializeOrders();
+	private ArrayList<Order> orders = DataFetcher.initializeOrders(0);
 	
 	private DBConnect db = new DBConnect();
 	
@@ -60,21 +60,21 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		
 		aTabbedPane.addMouseListener(new MouseAdapter()
 		{
-				@Override
-				public void mouseClicked(MouseEvent arg0)
-				{
-					if((aTabbedPane.indexOfTab("Νέα Παραγγελία") != -1) )
-		            {
-		            	String ObjButtons[] = {"Ναι", "Όχι"};			
-						int PromptResult = JOptionPane.showOptionDialog(null, "Η παραγγελία σας δεν έχει αποθηκευτεί, τα δεδομένα θα χαθούν. Είστε σίγουροι ότι θέλετε να αλλάξετε καρτέλα;", "Προσοχή!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+			@Override
+			public void mouseClicked(MouseEvent arg0)
+			{
+				if((aTabbedPane.indexOfTab("Νέα Παραγγελία") != -1) )
+		        {
+		            String ObjButtons[] = {"Ναι", "Όχι"};			
+					int PromptResult = JOptionPane.showOptionDialog(null, "Η παραγγελία σας δεν έχει αποθηκευτεί, τα δεδομένα θα χαθούν. Είστε σίγουροι ότι θέλετε να αλλάξετε καρτέλα;", "Προσοχή!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 					
-						if(PromptResult == JOptionPane.YES_OPTION)
-							aTabbedPane.removeTabAt(aTabbedPane.indexOfTab("Νέα Παραγγελία"));
-						else
-							aTabbedPane.setSelectedIndex(aTabbedPane.indexOfTab("Νέα Παραγγελία"));
-		            }
-				}
-			});
+					if(PromptResult == JOptionPane.YES_OPTION)
+						aTabbedPane.removeTabAt(aTabbedPane.indexOfTab("Νέα Παραγγελία"));
+					else
+						aTabbedPane.setSelectedIndex(aTabbedPane.indexOfTab("Νέα Παραγγελία"));
+		        }
+			}
+		});
 	}
 
 	protected int getObjSize(Object obj)
@@ -102,7 +102,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	protected void populator()
 	{	
 		//recreate orders array on demand
-		orders = DataFetcher.initializeOrders();
+		orders = DataFetcher.initializeOrders(0);
 		
 		//if there orders available
 		if (!orders.isEmpty())
@@ -123,14 +123,11 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				createNewTab((JTabbedPane) obj, null);
 			}
 			
-			if (((JTabbedPane) obj).indexOfTab("Νέα Παραγγελία") == -1 )
+			if (((JTabbedPane) obj).indexOfTab("Νέα Παραγγελία") == -1)
 				createNewTab((JTabbedPane) obj, null);
 		}
 	}
 	
-	/**
-	 * @wbp.parser.entryPoint
-	 */
 	public static void createNewTab(JTabbedPane aTabbedPane, Order order)
 	{	
 		DBConnect db = new DBConnect();
@@ -283,7 +280,6 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			
 		    //add a fixed-size label on each tab as title
 		    aTabbedPane.setTabComponentAt(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()), tabTitleLabel);
-		    
 		}
 		
 		//FOR DEBUG
@@ -330,7 +326,6 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			public void actionPerformed(ActionEvent e)
 			{
 				int selectedProduct = rowSM.getMinSelectionIndex();
-				int lastSize = optm.getOrderedProducts().size();
 				
 				if(selectedProduct != -1)
 				{
@@ -348,26 +343,17 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				db.connect();
-				
-				switch (user.getPrivilege()) {
-				case 1:
-					try
-					{
-						String query = "UPDATE orders SET closed = 1 WHERE lastEdit = '" + order.getLastEdit() + "' " + "AND clientId = '" + order.getClientId() + "'";
-						int rs = db.getStatement().executeUpdate(query);
-					}
-					catch (Exception ex)
-					{
-						ex.printStackTrace();
-					}
-					break;
-					
-				default:
-					break;
+				db.connect();				
+				try
+				{
+					String query = "UPDATE orders SET state = 1 WHERE lastEdit = '" + order.getLastEdit() + "' " + "AND clientId = '" + order.getClientId() + "'";
+					int rs = db.getStatement().executeUpdate(query);
 				}
-				
-				
+				catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
+				db.closeConnection();
 				
 				closeOrderButton.setEnabled(false);
 			}
@@ -377,7 +363,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{	
-				String query = "INSERT INTO orders (lastEdit, productId, clientId, quantityWeight, price, employeeUsername, closed) VALUES ";
+				String query = "INSERT INTO orders (lastEdit, productId, clientId, quantityWeight, price, employeeUsername, state) VALUES ";
 				
 				for(Product product: optm.getOrderedProducts())
 					query += "(CURRENT_TIMESTAMP, " + "'" + product.getId() + "', " + "'" + nameTextField.getText() + "', '12', '21', 'admin', '0'),";

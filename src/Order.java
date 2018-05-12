@@ -5,16 +5,16 @@ public class Order
 {
 	private ArrayList<Product> products = new ArrayList<Product>();
 	private String lastEdit, clientId, employeeUsername, clientName;
-	private int closed;
+	private int state;
 	
 	private DBConnect db = new DBConnect();
 	
-	public Order(String lastEdit, String clientId, String employeeUsername, int closed)
+	public Order(String lastEdit, String clientId, String employeeUsername, int state)
 	{	
 		this.lastEdit = lastEdit;
 		this.clientId = clientId;
 		this.employeeUsername = employeeUsername;
-		this.closed = closed;
+		this.state = state;
 		
 		db.connect();
 		try
@@ -76,8 +76,8 @@ public class Order
 		return employeeUsername;
 	}
 
-	public int isClosed()
+	public int getState()
 	{
-		return closed;
+		return state;
 	}
 }
