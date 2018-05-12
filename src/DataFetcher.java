@@ -72,6 +72,29 @@ public abstract class DataFetcher
 		return ordersRecord;
 	}
 	
+	public static ArrayList<Order> RecordOfClient(Client client)
+	{
+		ArrayList<Order> ordersRecord = new ArrayList<>();
+		DBConnect db = new DBConnect();
+		
+		db.connect();		
+		try
+		{
+			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed FROM orders WHERE closed = 1 AND clientId = '" + client.getId() + "' ORDER BY lastEdit";
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			while(rs.next())
+				ordersRecord.add(new Order(rs.getString("lastEdit"), rs.getString("clientId"), rs.getString("employeeUsername"), rs.getInt("closed")));
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		db.closeConnection();
+		
+		return ordersRecord;
+	}
+	
 	public static ArrayList<Order> initializeOrders()
 	{
 		ArrayList<Order> liveOrders = new ArrayList<>();
