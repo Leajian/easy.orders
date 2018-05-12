@@ -72,12 +72,12 @@ public abstract class AbstractEntityRefresher
 			//if it is different from before regarding size
 			if(lastSize != lastUpdatedSize)
 			{
-				//now we update the lastUpdatedSize with the one we just refreshed with
-				lastUpdatedSize = lastSize;
-				
 				//populate it how ever you like
 				populator();
 
+				//now we update the lastUpdatedSize with the one we just refreshed with
+				lastUpdatedSize = lastSize;
+				
 				System.out.println("last size " + lastUpdatedSize);
 			}
 		}
