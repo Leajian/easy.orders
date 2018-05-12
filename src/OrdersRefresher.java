@@ -149,7 +149,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		
 		JButton addProductButton = new JButton("+");
 		JButton removeProductButton = new JButton("-");
-		JButton saveButton = new JButton("Αποθήκευση");
+		JButton saveOrderButton = new JButton("Αποθήκευση");
 		JButton deleteOrderButton = new JButton("Διαγραφή");
 		
 		JScrollPane ordersTableScrollPane;
@@ -189,7 +189,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		newOrderPanel.add(addProductButton, "3, 6, fill, fill");
 		newOrderPanel.add(removeProductButton, "3, 8, fill, fill");
 		
-		newOrderPanel.add(saveButton, "3, 14, fill, fill");
+		newOrderPanel.add(saveOrderButton, "3, 14, fill, fill");
 		newOrderPanel.add(deleteOrderButton, "3, 12, fill, fill");
 
 		removeProductButton.setVisible(false);
@@ -234,6 +234,8 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			nameTextField.setText(order.getClientName());
 			nameTextField.setEditable(false);
 			
+			saveOrderButton.setEnabled(false);
+			
 			removeProductButton.setVisible(true);
 			deleteOrderButton.setVisible(true);
 			
@@ -263,6 +265,8 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			noOrderLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			noOrderLabel.setFont(new Font("Tahoma", Font.PLAIN, 23));
 			noOrderLabel.setBounds(117, 39, 568, 161);
+			
+			saveOrderButton.setEnabled(false);
 			//newOrderPanel.add(noOrderLabel, "5, 4, 1, 11, fill, fill");
 			
 			//addPlusSignTabAtTheEndOf(aTabbedPane);
@@ -274,7 +278,6 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		    aTabbedPane.setTabComponentAt(aTabbedPane.indexOfComponent(aTabbedPane.getSelectedComponent()), tabTitleLabel);
 		    
 		}
-		
 		
 		//FOR DEBUG
 		ordersTable.addMouseListener(new MouseAdapter()
@@ -291,9 +294,18 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
+				int lastSize = optm.getOrderedProducts().size();
+				
 				SelectProductFrame spf = new SelectProductFrame(optm);
 	
-				while (!spf.isDisplayable()) break;
+				while(!spf.isDisplayable()) break;
+				
+				if(lastSize != optm.getOrderedProducts().size())
+				{
+					saveOrderButton.setEnabled(true);
+					removeProductButton.setVisible(true);
+				}
+					
 				
 //				if (!optm.getOrderedProducts().isEmpty())
 //				{
@@ -301,7 +313,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 //					ordersTableScrollPane.setVisible(true);
 //				}
 				
-				removeProductButton.setVisible(true);
+				
 //				ordersTableScrollPane.setVisible(true);
 			}
 		});
@@ -311,16 +323,21 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			public void actionPerformed(ActionEvent e)
 			{
 				int selectedProduct = rowSM.getMinSelectionIndex();
+				int lastSize = optm.getOrderedProducts().size();
 				
-				if (selectedProduct != -1)
+				if(selectedProduct != -1)
+				{
 					optm.removeRow(selectedProduct);
+					saveOrderButton.setEnabled(true);
+					removeProductButton.setVisible(true);
+				}
+					
 				else		
 					JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε το προϊόν προς διαγραφή.", "Προσοχή!", JOptionPane.WARNING_MESSAGE);
-				System.out.println("remove " + selectedProduct);
 			}
 		});		
 		
-		saveButton.addActionListener(new ActionListener()
+		saveOrderButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{	
@@ -342,6 +359,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				db.closeConnection();
 				
 				deleteOrderButton.setVisible(true);
+				saveOrderButton.setEnabled(false);
 			}
 		});
 		
