@@ -276,6 +276,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			noOrderLabel.setBounds(117, 39, 568, 161);
 			
 			saveOrderButton.setEnabled(false);
+			closeOrderButton.setVisible(false);
 			//newOrderPanel.add(noOrderLabel, "5, 4, 1, 11, fill, fill");
 			
 			//addPlusSignTabAtTheEndOf(aTabbedPane);
@@ -351,6 +352,8 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			public void actionPerformed(ActionEvent arg0)
 			{
 				
+				
+				closeOrderButton.setEnabled(false);
 			}
 		});
 		
