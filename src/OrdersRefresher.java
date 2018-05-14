@@ -394,9 +394,29 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
+				
+				
 				db.connect();				
 				try
 				{
+					int state;
+					switch (user.getPrivilege())
+					{
+					//Biller level
+					case 1:
+						//closed state
+						state = 2;
+						break;
+						
+					//Seller level	
+					case 2:
+						//billing state
+						state = 1;
+						break;
+
+					default:
+						break;
+					}
 					String query = "UPDATE orders SET state = 1 WHERE lastEdit = '" + order.getLastEdit() + "' " + "AND clientId = '" + order.getClientId() + "'";
 					int rs = db.getStatement().executeUpdate(query);
 				}
@@ -433,6 +453,8 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				
 				deleteOrderButton.setVisible(true);
 				saveOrderButton.setEnabled(false);
+				
+				//aTabbedPane.setSelectedIndex(aTabbedPane.indexOfTab(((Client) nameComboBox.getSelectedItem()).getId() + "CURRENT_TIMESTAMP"));
 			}
 		});
 		
