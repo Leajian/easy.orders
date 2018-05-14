@@ -191,6 +191,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		JButton saveOrderButton = new JButton("Αποθήκευση");
 		JButton deleteOrderButton = new JButton("Διαγραφή");
 		JButton changeStateOfOrderButton = new JButton();
+		
 		int state;
 		switch (user.getPrivilege())
 		{
@@ -337,8 +338,8 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			ArrayList<Client> clients = new ArrayList<>();
 			//Fetch clients.
 
-
-			nameComboBox.addMouseListener(new MouseAdapter() {
+			nameComboBox.addMouseListener(new MouseAdapter()
+			{
 				@Override
 				public void mouseClicked(MouseEvent arg0)
 				{
@@ -476,14 +477,30 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{	
-				String query = "INSERT INTO orders (lastEdit, productId, clientId, quantityWeight, price, employeeUsername, state) VALUES ";
-				
-				for(Product product: optm.getOrderedProducts())
-					query += "(CURRENT_TIMESTAMP, " + "'" + product.getId() + "', " + "'" + ((Client) nameComboBox.getSelectedItem()).getId() + "', '" + product.getQuantityWeight() + "', '" + product.getPrice() + "', '" + user.getUsername() + "', '0'),";
+				String CURRENT_TIMESTAMP = null;
 				
 				db.connect();
 				try
 				{
+					String query = "SELECT CURRENT_TIMESTAMP AS curr_time";
+					ResultSet rs = db.getStatement().executeQuery(query);
+					
+					rs.next();
+					
+					CURRENT_TIMESTAMP = rs.getString("curr_time");
+				} 
+				catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
+				
+				try
+				{
+					String query = "INSERT INTO orders (lastEdit, productId, clientId, quantityWeight, price, employeeUsername, state) VALUES ";
+					
+					for(Product product: optm.getOrderedProducts())
+						query += "(CURRENT_TIMESTAMP, " + "'" + product.getId() + "', " + "'" + ((Client) nameComboBox.getSelectedItem()).getId() + "', '" + product.getQuantityWeight() + "', '" + product.getPrice() + "', '" + user.getUsername() + "', '0'),";
+					
 					query = query.substring(0, query.length() - 1);
 					int rs = db.getStatement().executeUpdate(query);
 				} 
@@ -496,7 +513,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				deleteOrderButton.setVisible(true);
 				saveOrderButton.setEnabled(false);
 				
-				//aTabbedPane.setSelectedIndex(aTabbedPane.indexOfTab(((Client) nameComboBox.getSelectedItem()).getId() + "CURRENT_TIMESTAMP"));
+				//aTabbedPane.setSelectedIndex(aTabbedPane.indexOfTab(((Client) nameComboBox.getSelectedItem()).getId() + CURRENT_TIMESTAMP));
 			}
 		});
 		
