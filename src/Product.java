@@ -35,6 +35,18 @@ public class Product
 		db.closeConnection();
 	}
 
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+	public void setStock(String stock) {
+		this.stock = stock;
+	}
+
+	public void setQuantityWeight(String quantityWeight) {
+		this.quantityWeight = quantityWeight;
+	}
+
 	public Product(String id)
 	{
 		this.id = id;

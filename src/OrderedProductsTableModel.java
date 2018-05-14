@@ -14,7 +14,7 @@ public class OrderedProductsTableModel extends AbstractTableModel
 	}
 	
 	public int getColumnCount()
-	{
+	{ 
 		return 7;
 	}
 	
@@ -48,6 +48,19 @@ public class OrderedProductsTableModel extends AbstractTableModel
 			return orderedProducts.get(row).getPrice();
 		default:
 			return "ERROR";
+		}
+    }
+	
+	public void setValueAt(Object value, int row, int col)
+    {
+    	switch (col)
+    	{
+		case 5:
+			orderedProducts.get(row).setQuantityWeight((String)value);
+		case 6:
+			orderedProducts.get(row).setPrice((String)value);
+		default:
+			;;
 		}
     }
 	
