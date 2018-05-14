@@ -51,7 +51,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		//Seller level	
 		case 2:
 			//billing state
-			states = "1";
+			states = "0";
 			break;
 
 		default:
