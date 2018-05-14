@@ -135,25 +135,42 @@ public class SellerMainFrame extends JFrame
 			}
 		});
 		
-		//Fetch employees.
-		db.connect();
-		try
-		{
-			String query = "SELECT * FROM employee";
-			ResultSet rs = db.getStatement().executeQuery(query);
-			
-			while(rs.next())
-				employees.add(new Employee(rs.getString("username")));
-		} 
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		db.closeConnection();
+		//set the user name in the combobox
+		ordersOfUserComboBox.addItem(user.getName());
 		
-		//Populate JComboBox.
-		for(Employee employee: employees)
-			ordersOfUserComboBox.addItem(employee.getName());
+		//Fetch employees.
+		ordersOfUserComboBox.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(MouseEvent arg0)
+			{
+				employees.clear();
+				ordersOfUserComboBox.removeAllItems();
+				
+				db.connect();
+				try
+				{
+					String query = "SELECT * FROM employee";
+					ResultSet rs = db.getStatement().executeQuery(query);
+					
+					while(rs.next())
+						employees.add(new Employee(rs.getString("username")));
+				} 
+				catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
+				db.closeConnection();
+				
+				//Populate JComboBox.
+				for(Employee employee : employees)
+					//disallow viewing from admin level accounts, unless you are admin
+					//P | (!P & Q)
+					//if (employee.getPrivilege() != 1 & !employee.getUsername().equals(user.getUsername()))
+					if (employee.getPrivilege() >= user.getPrivilege())
+						ordersOfUserComboBox.addItem(employee.getName());
+			}
+		});
 		
 		
 		
