@@ -372,10 +372,17 @@ public class SellerMainFrame extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				int selectedRow = clientsTable.getSelectionModel().getMinSelectionIndex();
-				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
-				if (selectedRow != -1)
-					ctm.removeSelectedClient(selectedRow);
+				String ObjButtons[] = {"Ναι", "Όχι"};			
+				int PromptResult = JOptionPane.showOptionDialog(null, "Διαγραφή;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+					
+				if(PromptResult == JOptionPane.YES_OPTION)
+				{
+					int selectedRow = clientsTable.getSelectionModel().getMinSelectionIndex();
+					System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
+					if (selectedRow != -1)
+						ctm.removeSelectedClient(selectedRow);
+					
+				}
 			}
 		});
 		
@@ -516,18 +523,17 @@ public class SellerMainFrame extends JFrame
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				int selectedRow = productsTable.getSelectionModel().getMinSelectionIndex();
-				System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
-				if (!productsTable.getSelectionModel().isSelectionEmpty())
+				String ObjButtons[] = {"Ναι", "Όχι"};			
+				int PromptResult = JOptionPane.showOptionDialog(null, "Διαγραφή;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+					
+				if(PromptResult == JOptionPane.YES_OPTION)
 				{
-					removeProductButton.setEnabled(true);
-					if (ptm.isProductEditable(selectedRow))
+					int selectedRow = productsTable.getSelectionModel().getMinSelectionIndex();
+					System.out.println("Row " + selectedRow + " is now selected."); //DEBUG
+					if (selectedRow != -1)
 						ptm.removeSelectedProduct(selectedRow);
 					
-					productsTable.getSelectionModel().clearSelection();
 				}
-				
-				
 			}
 		});
 		

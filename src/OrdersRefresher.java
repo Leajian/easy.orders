@@ -25,6 +25,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 
 public class OrdersRefresher extends AbstractEntityRefresher
 {	
@@ -501,7 +502,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				} 
 				catch (Exception ex)
 				{
-					ex.printStackTrace();
+					//ex.printStackTrace();
 				}
 				
 				try
@@ -531,17 +532,23 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				db.connect();
-				try
+				String ObjButtons[] = {"Ναι", "Όχι"};			
+				int PromptResult = JOptionPane.showOptionDialog(null, "Διαγραφή;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+					
+				if(PromptResult == JOptionPane.YES_OPTION)
 				{
-					String query = "DELETE FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND clientId = '" + order.getClientId() + "'";
-					int rs = db.getStatement().executeUpdate(query);
-				} 
-				catch (Exception ex)
-				{
-					ex.printStackTrace();
+					db.connect();
+					try
+					{
+						String query = "DELETE FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND clientId = '" + order.getClientId() + "'";
+						int rs = db.getStatement().executeUpdate(query);
+					} 
+					catch (Exception ex)
+					{
+						ex.printStackTrace();
+					}
+					db.closeConnection();
 				}
-				db.closeConnection();
 			}
 		});
 	}
