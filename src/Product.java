@@ -6,7 +6,7 @@ public class Product
 
 	private DBConnect db = new DBConnect();
 	
-	public Product(String id, String price, String quantityWeight)
+	public Product(String id, String quantityWeight, String price)
 	{	
 		this.id = id;
 		this.quantityWeight = quantityWeight;
@@ -35,15 +35,18 @@ public class Product
 		db.closeConnection();
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(String price)
+	{
 		this.price = price;
 	}
 
-	public void setStock(String stock) {
+	public void setStock(String stock)
+	{
 		this.stock = stock;
 	}
 
-	public void setQuantityWeight(String quantityWeight) {
+	public void setQuantityWeight(String quantityWeight)
+	{
 		this.quantityWeight = quantityWeight;
 	}
 
