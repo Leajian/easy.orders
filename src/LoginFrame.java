@@ -63,25 +63,18 @@ public class LoginFrame extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				String username = usernameField.getText();
-				String password = md5(passwordField.getText());
+				String password = md5(new String(passwordField.getPassword()));
 	
 				try
 				{
+					//not safe
 					String query = "SELECT * FROM employee WHERE username = " + "'" + username + "'" + " AND password = " + "'" + password + "'";
 					ResultSet rs = db.getStatement().executeQuery(query);
 					
 					rs.next();
 				    
-					int privilege = rs.getInt("privilege");
-					
-					if(privilege == 1)
-					{
-						//new SellerMainFrame(user);
-						dispose();
-					}
-						
-					else
-						JOptionPane.showMessageDialog(null, "You are User.");
+					new SellerMainFrame(new Employee(username));
+					dispose();
 				}
 				catch (Exception ex)
 				{
