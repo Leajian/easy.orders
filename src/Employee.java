@@ -1,18 +1,34 @@
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.ResultSet;
 
 public class Employee
 {
+	private DBConnect db = new DBConnect();
+	
 	private String name, username, password;
 	private int privilege;
 	
-	public Employee(String name, String username, String password, int privilege)
+	public Employee(String username)
 	{
-		this.name = name;
 		this.username = username;
-		this.password = password;
-		this.privilege = privilege;
+		
+		db.connect();
+		try
+		{
+			String query = "SELECT password, name, privilege WHERE username = '" + username + "'";
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			this.name = rs.getString("name");
+			this.password = rs.getString("password");
+			this.privilege = rs.getInt("privilege");
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		db.closeConnection();
 	}
 	
 	public String getName()
