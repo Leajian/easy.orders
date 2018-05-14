@@ -22,8 +22,9 @@ public class Main
 		ArrayList<Order> orders = new ArrayList<Order>();
 
 		db.connect();
-	
-		new SellerMainFrame(null);
+		
+		Employee admin = new Employee("admin", "admin", "admin", 1);
+		new SellerMainFrame(admin);
 		
 		/*
 		try
