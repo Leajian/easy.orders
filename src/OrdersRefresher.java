@@ -28,16 +28,36 @@ import javax.swing.JComboBox;
 
 public class OrdersRefresher extends AbstractEntityRefresher
 {	
-	private ArrayList<Order> orders = DataFetcher.initializeOrders(0);
+	private ArrayList<Order> orders;
 	
 	private DBConnect db = new DBConnect();
 	
 	private static Employee user;
+	private String states;
 	
 	public OrdersRefresher(JTabbedPane aTabbedPane, Employee user)
 	{
 		super(aTabbedPane, "orders");
 		this.user = user;
+		
+		switch (user.getPrivilege())
+		{
+		//Biller level
+		case 1:
+			//open and billing states
+			states = "0, 1";
+			break;
+			
+		//Seller level	
+		case 2:
+			//billing state
+			states = "1";
+			break;
+
+		default:
+			break;
+		}
+
 		System.out.println("Orders refresher instancieted");
 		
 //		aTabbedPane.addChangeListener(new ChangeListener()
@@ -84,19 +104,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		db.connect();
 		try
 		{
-			String query = null;
-			switch (user.getPrivilege())
-			{
-			case 1:
-				query = "SELECT COUNT(DISTINCT lastEdit, clientId) AS ordersCount FROM orders WHERE employeeUsername = '" + user.getUsername() + "' AND state = '1'";
-				break;
-			case 2:
-				query = "SELECT COUNT(DISTINCT lastEdit, clientId) AS ordersCount FROM orders WHERE employeeUsername = '" + user.getUsername() + "' AND state = '0'";
-				break;
-			default:
-				break;
-			}
-			//String query = "SELECT COUNT(DISTINCT lastEdit, clientId) AS ordersCount FROM orders WHERE employeeUsername = '" + user.getUsername() + "' AND state = '" +  + "'";
+			String query = "SELECT COUNT(DISTINCT lastEdit, clientId) AS ordersCount FROM orders WHERE employeeUsername = '" + user.getUsername() + "' AND state IN (" + states + ")";
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
@@ -108,15 +116,33 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			ex.printStackTrace();
 		}
 		db.closeConnection();
-		//return DataFetcher.initializeOrders().size();
+
 		return 0;
 	}
 	
 	@Override
 	protected void populator()
 	{	
-		//recreate orders array on demand
-		orders = DataFetcher.initializeOrders(0);
+		//recreate orders array on demand	
+
+		
+		switch (user.getPrivilege())
+		{
+		//Biller level
+		case 1:
+			//open and billing state
+			orders = DataFetcher.initializeOrders(states);
+			break;
+			
+		//Seller level	
+		case 2:
+			//billing state
+			orders = DataFetcher.initializeOrders(states);
+			break;
+
+		default:
+			break;
+		}
 		
 		//if there orders available
 		if (!orders.isEmpty())
@@ -164,14 +190,32 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		JButton removeProductButton = new JButton("-");
 		JButton saveOrderButton = new JButton("Αποθήκευση");
 		JButton deleteOrderButton = new JButton("Διαγραφή");
-		JButton closeOrderButton = new JButton("Τιμολόγηση");
+		JButton changeStateOfOrderButton = new JButton();
+		int state;
+		switch (user.getPrivilege())
+		{
+		//Biller level
+		case 1:
+			//closed state
+			changeStateOfOrderButton.setText("Τιμολογήθηκε");
+			break;
+			
+		//Seller level	
+		case 2:
+			//billing state
+			changeStateOfOrderButton.setText("Τιμολόγηση");
+			break;
+
+		default:
+			break;
+		}
 		
 		JScrollPane ordersTableScrollPane;
 		
 		FormLayout fl_newOrderPanel = new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("1px"),
 				FormSpecs.UNRELATED_GAP_COLSPEC,
-				ColumnSpec.decode("93px"),
+				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(430dlu;min):grow"),
 				FormSpecs.UNRELATED_GAP_COLSPEC,},
@@ -205,7 +249,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		newOrderPanel.add(addProductButton, "3, 6, fill, fill");
 		newOrderPanel.add(removeProductButton, "3, 8, fill, fill");
 		
-		newOrderPanel.add(closeOrderButton, "3, 12, fill, fill");
+		newOrderPanel.add(changeStateOfOrderButton, "3, 12, fill, fill");
 		
 		newOrderPanel.add(saveOrderButton, "3, 16, fill, fill");
 		newOrderPanel.add(deleteOrderButton, "3, 14, fill, fill");
@@ -288,7 +332,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			noOrderLabel.setBounds(117, 39, 568, 161);
 			
 			saveOrderButton.setEnabled(false);
-			closeOrderButton.setVisible(false);
+			changeStateOfOrderButton.setVisible(false);
 
 			ArrayList<Client> clients = new ArrayList<>();
 			//Fetch clients.
@@ -390,12 +434,10 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			}
 		});		
 		
-		closeOrderButton.addActionListener(new ActionListener()
+		changeStateOfOrderButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				
-				
 				db.connect();				
 				try
 				{
@@ -426,7 +468,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				}
 				db.closeConnection();
 				
-				closeOrderButton.setEnabled(false);
+				changeStateOfOrderButton.setEnabled(false);
 			}
 		});
 		
