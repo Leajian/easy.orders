@@ -57,10 +57,12 @@ public class OrderedProductsTableModel extends AbstractTableModel
     	{
 		case 5:
 			orderedProducts.get(row).setQuantityWeight((String)value);
+			break;
 		case 6:
 			orderedProducts.get(row).setPrice((String)value);
+			break;
 		default:
-			;;
+			break;
 		}
     }
 	
