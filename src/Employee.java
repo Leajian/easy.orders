@@ -7,7 +7,7 @@ public class Employee
 {
 	private DBConnect db = new DBConnect();
 	
-	private String name, username, password;
+	private String name, username;
 	private int privilege;
 	
 	public Employee(String username)
@@ -17,11 +17,12 @@ public class Employee
 		db.connect();
 		try
 		{
-			String query = "SELECT password, name, privilege WHERE username = '" + username + "'";
+			String query = "SELECT password, name, privilege FROM employee WHERE username = '" + username + "'";
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
+			rs.next();
+			
 			this.name = rs.getString("name");
-			this.password = rs.getString("password");
 			this.privilege = rs.getInt("privilege");
 		} 
 		catch (Exception ex)
@@ -39,11 +40,6 @@ public class Employee
 	public String getUsername()
 	{
 		return username;
-	}
-
-	public String getPassword()
-	{
-		return password;
 	}
 
 	public int getPrivilege()
