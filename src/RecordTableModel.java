@@ -73,7 +73,7 @@ public class RecordTableModel extends AbstractTableModel
 	
 	public void populate()
 	{
-		this.ordersRecord = DataFetcher.initializeOrders(2);
+		this.ordersRecord = DataFetcher.initializeOrders("2");
 		fireTableDataChanged();
 	}
 	

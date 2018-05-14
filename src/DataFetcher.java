@@ -1,6 +1,8 @@
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+
 public abstract class DataFetcher
 {	
 	public static ArrayList<Client> initializeClients()
@@ -72,7 +74,7 @@ public abstract class DataFetcher
 		return ordersRecord;
 	}
 	
-	public static ArrayList<Order> initializeOrders(int state)
+	public static ArrayList<Order> initializeOrders(String states)
 	{
 		ArrayList<Order> liveOrders = new ArrayList<>();
 		DBConnect db = new DBConnect();
@@ -80,7 +82,7 @@ public abstract class DataFetcher
 		db.connect();
 		try
 		{
-			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, state FROM orders WHERE state = " + state + " ORDER BY lastEdit";
+			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, state FROM orders WHERE state IN (" + states + ") ORDER BY lastEdit";
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
