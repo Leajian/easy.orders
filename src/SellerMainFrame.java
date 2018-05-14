@@ -61,8 +61,8 @@ public class SellerMainFrame extends JFrame
 	private JButton removeClientButton = new JButton("-");
 	private JButton addProductButton = new JButton("+");
 	private JButton removeProductButton = new JButton("-");
-	private JButton addNewOrderButton = new JButton("+");
-	private JButton clearButton = new JButton("X");
+	private JButton addNewOrderButton = new JButton("Νέα Παραγγελία");
+	private JButton clearButton = new JButton("Έξοδος");
 	
 	private JRadioButton clientNameRadioButton = new JRadioButton("Όνομα");
 	private JRadioButton clientIdRadioButton = new JRadioButton("ΑΦΜ");
@@ -90,11 +90,6 @@ public class SellerMainFrame extends JFrame
 	
 	private ThreadManagement threadManager;
 
-
-
-	
-	
-	
 	public SellerMainFrame(Employee user)
 	{
 		this.user = user;
@@ -148,7 +143,7 @@ public class SellerMainFrame extends JFrame
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
-				employees.add(new Employee(rs.getString("name"), rs.getString("username"), rs.getString("password"), rs.getInt("privilege")));
+				employees.add(new Employee(rs.getString("username")));
 		} 
 		catch (Exception ex)
 		{
@@ -204,7 +199,7 @@ public class SellerMainFrame extends JFrame
 			}
 		});
 		ordersTab.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("51px"),
+				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("641px:grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -213,13 +208,13 @@ public class SellerMainFrame extends JFrame
 				ColumnSpec.decode("196px"),
 				FormSpecs.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
-				FormSpecs.UNRELATED_GAP_ROWSPEC,
-				RowSpec.decode("23px"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:534px:grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,}));
 		
-		ordersTab.add(addNewOrderButton, "1, 2, right, top");
+		ordersTab.add(addNewOrderButton, "1, 2, right, fill");
 		ordersTab.add(ordersFromUserLabel, "5, 2, right, fill");
 		
 		ordersTab.add(ordersOfUserComboBox, "7, 2, fill, fill");
@@ -604,7 +599,7 @@ public class SellerMainFrame extends JFrame
 			}
 		});
 		
-		recordTab.add(clearButton, "6, 2, fill, default");
+		recordTab.add(clearButton, "6, 2");
 		
 		recordTab.add(new JScrollPane(recordTable), "2, 4, 5, 1, fill, fill");
 		
@@ -635,24 +630,7 @@ public class SellerMainFrame extends JFrame
 		
 		
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		
 		
 		
@@ -668,8 +646,6 @@ public class SellerMainFrame extends JFrame
 		this.setVisible(true);
 		this.setTitle("Easy Orders 1.0");
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		
-		
 		
 		addWindowListener(new WindowAdapter()
 		{

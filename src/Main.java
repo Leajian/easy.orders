@@ -1,12 +1,8 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -14,20 +10,18 @@ public class Main
 {
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, SQLException
 	{	
-		
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 		DBConnect db = new DBConnect();
 		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 		ArrayList<Order> orders = new ArrayList<Order>();
 
-		db.connect();
-		
-		Employee admin = new Employee("admin", "admin", "admin", 1);
+		//db.connect();
+	
+		Employee admin = new Employee("admin");
 		new SellerMainFrame(admin);
 		
-		/*
-		try
+		/*try
 		{	
 			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed\r\n" + 
 					"FROM orders\r\n" + 
@@ -119,8 +113,6 @@ public class Main
 			}
 		});
 		
-		timer.start();
-		
-		*/
+		timer.start();*/
 	}
 }
