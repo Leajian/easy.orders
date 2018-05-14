@@ -442,7 +442,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				db.connect();				
 				try
 				{
-					int state;
+					int state = 0;
 					switch (user.getPrivilege())
 					{
 					//Biller level
@@ -460,7 +460,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					default:
 						break;
 					}
-					String query = "UPDATE orders SET state = 1 WHERE lastEdit = '" + order.getLastEdit() + "' " + "AND clientId = '" + order.getClientId() + "'";
+					String query = "UPDATE orders SET state = " + state + " WHERE lastEdit = '" + order.getLastEdit() + "' " + "AND clientId = '" + order.getClientId() + "'";
 					int rs = db.getStatement().executeUpdate(query);
 				}
 				catch (Exception ex)
