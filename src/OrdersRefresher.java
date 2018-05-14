@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -23,6 +24,7 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
+import javax.swing.JComboBox;
 
 public class OrdersRefresher extends AbstractEntityRefresher
 {	
@@ -82,7 +84,19 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		db.connect();
 		try
 		{
-			String query = "SELECT COUNT(DISTINCT lastEdit, clientId) AS ordersCount FROM orders";
+			String query = null;
+			switch (user.getPrivilege())
+			{
+			case 1:
+				query = "SELECT COUNT(DISTINCT lastEdit, clientId) AS ordersCount FROM orders WHERE employeeUsername = '" + user.getUsername() + "' AND state = '1'";
+				break;
+			case 2:
+				query = "SELECT COUNT(DISTINCT lastEdit, clientId) AS ordersCount FROM orders WHERE employeeUsername = '" + user.getUsername() + "' AND state = '0'";
+				break;
+			default:
+				break;
+			}
+			//String query = "SELECT COUNT(DISTINCT lastEdit, clientId) AS ordersCount FROM orders WHERE employeeUsername = '" + user.getUsername() + "' AND state = '" +  + "'";
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
@@ -128,6 +142,9 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		}
 	}
 	
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public static void createNewTab(JTabbedPane aTabbedPane, Order order)
 	{	
 		DBConnect db = new DBConnect();
@@ -141,9 +158,8 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		JLabel nameLabel = new JLabel("Ονοματεπώνυμο");
 		JLabel productsLabel = new JLabel("Προϊόντα");
 		
-		JTextField nameTextField = new JTextField();
-		nameTextField.setColumns(10);
-		
+		JComboBox<Client> nameComboBox = new JComboBox<Client>();
+	
 		JButton addProductButton = new JButton("+");
 		JButton removeProductButton = new JButton("-");
 		JButton saveOrderButton = new JButton("Αποθήκευση");
@@ -184,7 +200,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		newOrderPanel.add(nameLabel, "3, 2, right, fill");
 		newOrderPanel.add(productsLabel, "3, 4, right, fill");
 		
-		newOrderPanel.add(nameTextField, "5, 2, fill, fill");
+		newOrderPanel.add(nameComboBox, "5, 2, fill, fill");
 		
 		newOrderPanel.add(addProductButton, "3, 6, fill, fill");
 		newOrderPanel.add(removeProductButton, "3, 8, fill, fill");
@@ -211,7 +227,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		ordersTable.getTableHeader().setResizingAllowed(false);
 		
 		//these make that so you can only select a whole lines on click
-		ordersTable.setCellSelectionEnabled(false);
+		ordersTable.setCellSelectionEnabled(true);
 		ordersTable.setColumnSelectionAllowed(false);		
 		ordersTable.setRowSelectionAllowed(true);
 		
@@ -234,14 +250,16 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		    aTabbedPane.setTabComponentAt(aTabbedPane.indexOfTab(tabKey), tabTitleLabel);
 		    
 		    //set each nameField to the owner's name 
-			nameTextField.setText(order.getClientName());
-			nameTextField.setEditable(false);
+			//nameComboBox.setText(order.getClientName());
+			nameComboBox.addItem(new Client(order.getClientId()));
+			nameComboBox.setEnabled(false);
 			
 			saveOrderButton.setEnabled(false);
 			
 			removeProductButton.setVisible(true);
 			deleteOrderButton.setVisible(true);
 			
+			nameComboBox.setRenderer(new ClientComboBoxRenderer());
 			//ordersTableScrollPane.setVisible(true);
 		}
 		else
@@ -271,9 +289,41 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			
 			saveOrderButton.setEnabled(false);
 			closeOrderButton.setVisible(false);
-			//newOrderPanel.add(noOrderLabel, "5, 4, 1, 11, fill, fill");
+
+			ArrayList<Client> clients = new ArrayList<>();
+			//Fetch clients.
+
+
+			nameComboBox.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0)
+				{
+					clients.clear();
+					nameComboBox.removeAllItems();
+					
+					db.connect();
+					try
+					{
+						String query = "SELECT id FROM client";
+						ResultSet rs = db.getStatement().executeQuery(query);
+						
+						while(rs.next())
+							clients.add(new Client(rs.getString("id")));
+					} 
+					catch (Exception ex)
+					{
+						ex.printStackTrace();
+					}
+					db.closeConnection();
+					
+					//Populate JComboBox.
+					for(Client client : clients)
+						nameComboBox.addItem(client);
+				}
+			});
+
+			nameComboBox.setRenderer(new ClientComboBoxRenderer());
 			
-			//addPlusSignTabAtTheEndOf(aTabbedPane);
 			
 			//the pre-last index is the New Order tab (index starts from 0)
 			aTabbedPane.setSelectedIndex(aTabbedPane.getTabCount() - 1);
@@ -318,6 +368,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				
 				
 //				ordersTableScrollPane.setVisible(true);
+				
 			}
 		});
 		
@@ -366,7 +417,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				String query = "INSERT INTO orders (lastEdit, productId, clientId, quantityWeight, price, employeeUsername, state) VALUES ";
 				
 				for(Product product: optm.getOrderedProducts())
-					query += "(CURRENT_TIMESTAMP, " + "'" + product.getId() + "', " + "'" + nameTextField.getText() + "', '12', '21', 'admin', '0'),";
+					query += "(CURRENT_TIMESTAMP, " + "'" + product.getId() + "', " + "'" + ((Client) nameComboBox.getSelectedItem()).getId() + "', '" + product.getQuantityWeight() + "', '" + product.getPrice() + "', '" + user.getUsername() + "', '0'),";
 				
 				db.connect();
 				try
