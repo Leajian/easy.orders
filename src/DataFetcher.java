@@ -72,7 +72,7 @@ public abstract class DataFetcher
 		return ordersRecord;
 	}
 	
-	//public static ArrayList<Order> initializeOrders(int state)
+	public static ArrayList<Order> initializeOrders(int state)
 	{
 		ArrayList<Order> liveOrders = new ArrayList<>();
 		DBConnect db = new DBConnect();

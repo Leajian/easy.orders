@@ -6,6 +6,10 @@ public class Order
 	private ArrayList<Product> products = new ArrayList<Product>();
 	private String lastEdit, clientId, employeeUsername, clientName;
 	private int state;
+	//States
+	//0 - open
+	//1 - billing
+	//2 - closed
 	
 	private DBConnect db = new DBConnect();
 	
