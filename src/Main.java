@@ -17,10 +17,10 @@ public class Main
 		ArrayList<Order> orders = new ArrayList<Order>();
 
 		//db.connect();
+		System.out.println("hsdahj");
 	
 		Employee admin = new Employee("admin");
 		new SellerMainFrame(admin);
-		
 		/*try
 		{	
 			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, closed\r\n" + 
