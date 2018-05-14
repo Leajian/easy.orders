@@ -494,6 +494,16 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					ex.printStackTrace();
 				}
 				
+				try 
+				{
+					String query = "DELETE FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND clientId = '" + order.getClientId() + "'";
+					int rs = db.getStatement().executeUpdate(query);
+				} 
+				catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
+				
 				try
 				{
 					String query = "INSERT INTO orders (lastEdit, productId, clientId, quantityWeight, price, employeeUsername, state) VALUES ";
