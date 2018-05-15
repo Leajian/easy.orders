@@ -71,21 +71,24 @@ public class LoginFrame extends JFrame
 					String query = "SELECT * FROM employee WHERE username = " + "'" + username + "'" + " AND password = " + "'" + password + "'";
 					ResultSet rs = db.getStatement().executeQuery(query);
 					
-					rs.next();
-				    
-					new SellerMainFrame(new Employee(username));
-					dispose();
+					if(rs.next())
+					{
+						new SellerMainFrame(new Employee(username));
+						dispose();
+					}
+					else
+						JOptionPane.showMessageDialog(null, "Λάθος όνομα χρήστη ή κωδικός.", "Easy Orders 1.0", JOptionPane.ERROR_MESSAGE);
+					
 				}
 				catch (Exception ex)
 				{
 					ex.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Λάθος όνομα χρήστη ή κωδικός.");
 				}
 			}
 		});
 		
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
-		this.setLocation(650, 300);		
+		this.setLocation(600, 300);		
 		this.setSize(257, 128);
 		this.setResizable(false);
 		this.setTitle("Είσοδος Χρήστη");
