@@ -1,12 +1,9 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.math.BigInteger;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import java.sql.ResultSet;
 
 import javax.swing.ImageIcon;
@@ -18,7 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
-import javax.swing.SwingConstants;
+
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
 
 public class LoginFrame extends JFrame
 {	
@@ -35,25 +36,29 @@ public class LoginFrame extends JFrame
 	private DBConnect db = new DBConnect();
 	
 	public LoginFrame()
-	{	
-		usernameField.setBounds(101, 5, 113, 20);
-		usernameField.setPreferredSize(new Dimension(100, 20));
-		passwordField.setBounds(101, 33, 113, 20);
-		passwordField.setPreferredSize(new Dimension(100, 20));
-		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel.setLayout(null);
-		usernameLabel.setBounds(10, 8, 125, 14);
-		
-		panel.add(usernameLabel);
-		panel.add(usernameField);
-		passwordLabel.setBounds(10, 39, 125, 14);
-		panel.add(passwordLabel);
-		panel.add(passwordField);
+	{
+		usernameField.setPreferredSize(new Dimension(110, 20));
+		passwordField.setPreferredSize(new Dimension(110, 20));
 		loginButton.setAlignmentY(0.0f);
-		loginButton.setBounds(84, 62, 81, 27);
-		panel.add(loginButton);
+		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
 		this.setContentPane(panel);
+		panel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				ColumnSpec.decode("193px:grow"),
+				FormSpecs.UNRELATED_GAP_COLSPEC,},
+			new RowSpec[] {
+				FormSpecs.LINE_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormSpecs.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("27px"),}));
+		panel.add(usernameLabel, "2, 2, fill, center");
+		panel.add(usernameField, "2, 2, right, top");
+		panel.add(passwordLabel, "2, 4, fill, fill");
+		panel.add(passwordField, "2, 4, right, top");
+		panel.add(loginButton, "2, 6, center, fill");
 		
 		db.connect();
 		
@@ -78,7 +83,6 @@ public class LoginFrame extends JFrame
 					}
 					else
 						JOptionPane.showMessageDialog(null, "Λάθος όνομα χρήστη ή κωδικός.", "Easy Orders 1.0", JOptionPane.ERROR_MESSAGE);
-					
 				}
 				catch (Exception ex)
 				{
