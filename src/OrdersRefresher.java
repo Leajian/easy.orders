@@ -110,7 +110,11 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			
 			rs.next();
 			
-			return rs.getInt("ordersCount");
+			int count = rs.getInt("ordersCount");
+			
+			db.closeConnection();
+			
+			return count;
 		} 
 		catch (Exception ex)
 		{
