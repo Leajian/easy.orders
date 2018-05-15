@@ -1,6 +1,8 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -71,7 +73,7 @@ public class SellerMainFrame extends JFrame
 	private JRadioButton producerNameRadioButton = new JRadioButton("Προμυθευτής");
 	
 	private JComboBox searchProductComboBox = new JComboBox();
-	private JComboBox<String> ordersOfUserComboBox = new JComboBox();
+	private JComboBox<Employee> ordersOfUserComboBox = new JComboBox();
 	
 	private JLabel clientsearchLabel = new JLabel("Αναζήτηση");
 	private JLabel productsearchLabel = new JLabel("Αναζήτηση");
@@ -135,8 +137,20 @@ public class SellerMainFrame extends JFrame
 			}
 		});
 		
+		//visiting another userspace
+		ordersOfUserComboBox.addItemListener(new ItemListener() {
+	        public void itemStateChanged(ItemEvent event) {
+	        	if (event.getStateChange() == ItemEvent.SELECTED) {         
+	        		threadManager.stopTicking();
+					Employee selectedUser = (Employee) event.getItem();
+					threadManager = new ThreadManagement(1000, selectedUser);
+					threadManager.ManageModelUpdateAtTab(0, liveOrdersTabs);
+	        	}
+	        }
+	    });
+		
 		//set the user name in the combobox
-		ordersOfUserComboBox.addItem(user.getName());
+		ordersOfUserComboBox.addItem(user);
 		
 		//Fetch employees.
 		ordersOfUserComboBox.addMouseListener(new MouseAdapter()
@@ -165,12 +179,12 @@ public class SellerMainFrame extends JFrame
 				//Populate JComboBox.
 				for(Employee employee : employees)
 					//disallow viewing from admin level accounts, unless you are admin
-					//P | (!P & Q)
-					//if (employee.getPrivilege() != 1 & !employee.getUsername().equals(user.getUsername()))
 					if (employee.getPrivilege() >= user.getPrivilege())
-						ordersOfUserComboBox.addItem(employee.getName());
+						ordersOfUserComboBox.addItem(employee);
 			}
 		});
+		
+		ordersOfUserComboBox.setRenderer(new EmployeeComboBoxRenderer());
 		
 		
 		
@@ -216,6 +230,7 @@ public class SellerMainFrame extends JFrame
 			}
 		});
 		ordersTab.setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.RELATED_GAP_COLSPEC,
 				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("641px:grow"),
@@ -231,11 +246,11 @@ public class SellerMainFrame extends JFrame
 				RowSpec.decode("fill:534px:grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,}));
 		
-		ordersTab.add(addNewOrderButton, "1, 2, right, fill");
-		ordersTab.add(ordersFromUserLabel, "5, 2, right, fill");
+		ordersTab.add(addNewOrderButton, "2, 2, right, fill");
+		ordersTab.add(ordersFromUserLabel, "6, 2, right, fill");
 		
-		ordersTab.add(ordersOfUserComboBox, "7, 2, fill, fill");
-		ordersTab.add(liveOrdersTabs, "1, 4, 7, 1, fill, fill");
+		ordersTab.add(ordersOfUserComboBox, "8, 2, fill, fill");
+		ordersTab.add(liveOrdersTabs, "2, 4, 7, 1, fill, fill");
 		
 //		createNewTab(liveOrdersTabs, null);
 //		liveOrdersTabs.addChangeListener(new ChangeListener()
@@ -640,7 +655,10 @@ public class SellerMainFrame extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				System.exit(0);
+				new LoginFrame();
+				threadManager.stopTicking();
+				dispose();
+				//System.exit(0);
 			}
 		});
 		
