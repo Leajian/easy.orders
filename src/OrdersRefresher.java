@@ -454,6 +454,48 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					case 1:
 						//closed state
 						state = 2;
+						
+						String prodIds = "";
+						
+						for(int i = 0; i < optm.getRowCount(); i++)
+							prodIds += optm.getOrderedProducts().get(i).getId() + ",";
+						
+						prodIds = prodIds.substring(0, prodIds.length() - 1);
+						prodIds = "(" + prodIds + ")";
+						//System.out.println(prodId);
+						
+						ArrayList<Integer> stockOfProducts = new ArrayList<>();
+						
+						try
+						{
+							String query = "SELECT stock FROM product WHERE id IN " + prodIds;
+							ResultSet rs = db.getStatement().executeQuery(query);
+							
+							while(rs.next())
+								stockOfProducts.add(rs.getInt("stock"));
+						} 
+						catch (Exception ex)
+						{
+							ex.printStackTrace();
+						}
+						
+						for(int i = 0; i < optm.getRowCount(); i++)
+						{
+							int newStock = stockOfProducts.get(i) - Integer.parseInt(optm.getOrderedProducts().get(i).getQuantityWeight());
+							
+							try
+							{
+								String query = "UPDATE product SET stock = '" + newStock + "' WHERE id = '" + optm.getOrderedProducts().get(i).getId() + "'";
+								int rs1 = db.getStatement().executeUpdate(query);
+							}
+							catch (Exception ex)
+							{
+								ex.printStackTrace();
+							}
+						}
+						
+						
+						
 						break;
 						
 					//Seller level	
@@ -525,7 +567,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					ex.printStackTrace();
 				}
 				
-				String prodIds = "";
+				/*String prodIds = "";
 				
 				for(int i = 0; i < optm.getRowCount(); i++)
 					prodIds += optm.getOrderedProducts().get(i).getId() + ",";
@@ -562,7 +604,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					{
 						ex.printStackTrace();
 					}
-				}
+				}*/
 				db.closeConnection();
 				
 				deleteOrderButton.setVisible(true);
