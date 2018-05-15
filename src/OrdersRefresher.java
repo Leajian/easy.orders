@@ -25,6 +25,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 
 public class OrdersRefresher extends AbstractEntityRefresher
 {	
@@ -494,22 +495,23 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					ex.printStackTrace();
 				}
 				
-				try 
+				try
 				{
 					String query = "DELETE FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND clientId = '" + order.getClientId() + "'";
 					int rs = db.getStatement().executeUpdate(query);
 				} 
 				catch (Exception ex)
 				{
-					ex.printStackTrace();
+					//ex.printStackTrace();
 				}
 				
 				try
 				{
 					String query = "INSERT INTO orders (lastEdit, productId, clientId, quantityWeight, price, employeeUsername, state) VALUES ";
 					
-					for(Product product: optm.getOrderedProducts())
-						query += "(CURRENT_TIMESTAMP, " + "'" + product.getId() + "', " + "'" + ((Client) nameComboBox.getSelectedItem()).getId() + "', '" + product.getQuantityWeight() + "', '" + product.getPrice() + "', '" + user.getUsername() + "', '0'),";
+					for(int i = 0; i < optm.getRowCount(); i++)
+						query += "(CURRENT_TIMESTAMP, " + "'" + optm.getOrderedProducts().get(i).getId() + "', " + "'" + ((Client) nameComboBox.getSelectedItem()).getId() + "', '" + optm.getOrderedProducts().get(i).getQuantityWeight() + "', '" + optm.getOrderedProducts().get(i).getPrice() + "', '" + user.getUsername() + "', '0'),";
+					
 					
 					query = query.substring(0, query.length() - 1);
 					int rs = db.getStatement().executeUpdate(query);
@@ -517,6 +519,45 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				catch (Exception ex)
 				{
 					ex.printStackTrace();
+				}
+				
+				String prodIds = "";
+				
+				for(int i = 0; i < optm.getRowCount(); i++)
+					prodIds += optm.getOrderedProducts().get(i).getId() + ",";
+				
+				prodIds = prodIds.substring(0, prodIds.length() - 1);
+				prodIds = "(" + prodIds + ")";
+				//System.out.println(prodId);
+				
+				ArrayList<Integer> stockOfProducts = new ArrayList<>();
+				
+				try
+				{
+					String query = "SELECT stock FROM product WHERE id IN " + prodIds;
+					ResultSet rs = db.getStatement().executeQuery(query);
+					
+					while(rs.next())
+						stockOfProducts.add(rs.getInt("stock"));
+				} 
+				catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
+				
+				for(int i = 0; i < optm.getRowCount(); i++)
+				{
+					int newStock = stockOfProducts.get(i) - Integer.parseInt(optm.getOrderedProducts().get(i).getQuantityWeight());
+					
+					try
+					{
+						String query = "UPDATE product SET stock = '" + newStock + "' WHERE id = '" + optm.getOrderedProducts().get(i).getId() + "'";
+						int rs1 = db.getStatement().executeUpdate(query);
+					}
+					catch (Exception ex)
+					{
+						ex.printStackTrace();
+					}
 				}
 				db.closeConnection();
 				
@@ -531,17 +572,23 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				db.connect();
-				try
+				String ObjButtons[] = {"Ναι", "Όχι"};			
+				int PromptResult = JOptionPane.showOptionDialog(null, "Διαγραφή;", "Easy Orders 1.0", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+					
+				if(PromptResult == JOptionPane.YES_OPTION)
 				{
-					String query = "DELETE FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND clientId = '" + order.getClientId() + "'";
-					int rs = db.getStatement().executeUpdate(query);
-				} 
-				catch (Exception ex)
-				{
-					ex.printStackTrace();
+					db.connect();
+					try
+					{
+						String query = "DELETE FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND clientId = '" + order.getClientId() + "'";
+						int rs = db.getStatement().executeUpdate(query);
+					} 
+					catch (Exception ex)
+					{
+						ex.printStackTrace();
+					}
+					db.closeConnection();
 				}
-				db.closeConnection();
 			}
 		});
 	}
