@@ -60,8 +60,6 @@ public class LoginFrame extends JFrame
 		panel.add(passwordField, "2, 4, right, top");
 		panel.add(loginButton, "2, 6, center, fill");
 		
-		db.connect();
-		
 		loginButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -70,6 +68,7 @@ public class LoginFrame extends JFrame
 				String username = usernameField.getText();
 				String password = md5(new String(passwordField.getPassword()));
 	
+				db.connect();
 				try
 				{
 					//not safe
@@ -88,6 +87,7 @@ public class LoginFrame extends JFrame
 				{
 					ex.printStackTrace();
 				}
+				db.closeConnection();
 			}
 		});
 		
