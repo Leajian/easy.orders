@@ -28,8 +28,10 @@ public class DBConnect
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			//conn = DriverManager.getConnection("jdbc:mysql://" + localIPAddress + ":3306/easyorders_db?useSSL=false", "root", "poytiolas1997");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/easyorders_db?useSSL=false", "root", "kalispera");
-			//conn = DriverManager.getConnection("jdbc:mysql://192.168.1.14:3306/easyorders_db?useSSL=false", "root", "poytiolas1997");
+			//conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/easyorders_db?useSSL=false", "root", "kalispera");
+			conn = DriverManager.getConnection("jdbc:mysql://192.168.1.14:3306/easyorders_db?useSSL=false", "root", "poytiolas1997");
+			//conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/easyorders_db?useSSL=false", "root", "ROBERTdoisneau1950");
+
 			//?useSSL=false
 			stmt = conn.createStatement();
 //			StackTraceElement[] st = Thread.currentThread().getStackTrace();
