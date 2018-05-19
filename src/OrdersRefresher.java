@@ -99,10 +99,23 @@ public class OrdersRefresher extends AbstractEntityRefresher
 
 	protected int getObjSize(Object obj)
 	{
+		String query = "";
+		
 		db.connect();
 		try
 		{
-			String query = "SELECT COUNT(DISTINCT lastEdit, clientId) AS ordersCount FROM orders WHERE employeeUsername = '" + user.getUsername() + "' AND state IN (" + states + ")";
+			switch(user.getPrivilege())
+			{
+			case 1:
+				query = "SELECT COUNT(DISTINCT lastEdit, clientId) AS ordersCount FROM orders WHERE state = 1 OR (employeeUsername = '" + user.getUsername() + "' AND state = 0)";
+				break;
+			case 2:
+				query = "SELECT COUNT(DISTINCT lastEdit, clientId) AS ordersCount FROM orders WHERE employeeUsername = '" + user.getUsername() + "' AND state = 0";
+				break;
+			default:
+				break;
+			}
+			
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			rs.next();
@@ -126,25 +139,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	protected void populator()
 	{	
 		//recreate orders array on demand	
-
-		
-		switch (user.getPrivilege())
-		{
-		//Biller level
-		case 1:
-			//open and billing state
-			orders = DataFetcher.initializeOrders(states);
-			break;
-			
-		//Seller level	
-		case 2:
-			//billing state
-			orders = DataFetcher.initializeOrders(states);
-			break;
-
-		default:
-			break;
-		}
+		orders = DataFetcher.initializeOrders(user);
 		
 		//if there orders available
 		if (!orders.isEmpty())
@@ -159,7 +154,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		else //if there no orders
 		{	
 			//add the new order tab if it doesn't exist already and empty the tabbed pane once, if there are leftovers
-			if ( ( ((JTabbedPane) obj).indexOfTab("Νέα Παραγγελία") == -1 ) & ( ((JTabbedPane) obj).getTabCount() > 0 ) )
+			if ((((JTabbedPane) obj).indexOfTab("Νέα Παραγγελία") == -1 ) & (((JTabbedPane) obj).getTabCount() > 0 ))
 			{
 				((JTabbedPane) obj).removeAll();
 				createNewTab((JTabbedPane) obj, null);
@@ -170,9 +165,6 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		}
 	}
 	
-	/**
-	 * @wbp.parser.entryPoint
-	 */
 	public static void createNewTab(JTabbedPane aTabbedPane, Order order)
 	{	
 		DBConnect db = new DBConnect();
@@ -199,13 +191,17 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		deleteOrderButton.setVisible(false);
 		sendBackToSellerButton.setVisible(false);
 		
-		switch (user.getPrivilege())
+		switch(user.getPrivilege())
 		{
 		//Biller level
 		case 1:
 			//closed state
 			changeStateOfOrderButton.setText("Τιμολογήθηκε");
-			sendBackToSellerButton.setVisible(true);
+			
+			if(order != null)
+				if(!order.getEmployeeUsername().equals(user.getUsername()))
+					sendBackToSellerButton.setVisible(true);
+			
 			break;
 			
 		//Seller level	
@@ -644,6 +640,17 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
+				db.connect();
+				try
+				{
+					String query = "UPDATE orders SET state = 0 WHERE lastEdit = '" + order.getLastEdit() + "' " + "AND clientId = '" + order.getClientId() + "'";
+					int rs = db.getStatement().executeUpdate(query);
+				}
+				catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
+				db.connect();
 				
 				sendBackToSellerButton.setEnabled(false);
 			}
