@@ -18,7 +18,7 @@ public abstract class AbstractEntityRefresher
 		this.entity = entity;
 	}
 	
-	protected String getLastEditOf(String entity)
+	protected String getLastEditOf()
 	{
 		db.connect();
 		try
@@ -51,7 +51,7 @@ public abstract class AbstractEntityRefresher
 	protected void refreshTick()
 	{
 		System.out.println("tick");
-		String lastEdit = getLastEditOf(entity);
+		String lastEdit = getLastEditOf();
 		int lastSize = getObjSize(obj);
 		
 		System.out.println(lastSize);
