@@ -74,7 +74,7 @@ public abstract class DataFetcher
 		return ordersRecord;
 	}
 	
-	public static ArrayList<Order> initializeOrders(String states)
+	public static ArrayList<Order> initializeOrders(Employee user)
 	{
 		ArrayList<Order> liveOrders = new ArrayList<>();
 		DBConnect db = new DBConnect();
@@ -82,7 +82,23 @@ public abstract class DataFetcher
 		db.connect();
 		try
 		{
-			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, state FROM orders WHERE state IN (" + states + ") ORDER BY lastEdit";
+			String query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, state FROM orders WHERE state = 2 ORDER BY lastEdit";
+			
+			if(user != null)
+			{
+				switch(user.getPrivilege())
+				{
+				case 1:
+					query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, state FROM orders WHERE state = 1 OR (employeeUsername = '" + user.getUsername() + "' AND state = 0) ORDER BY lastEdit";
+					break;
+				case 2:
+					query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, state FROM orders WHERE state = 0 AND employeeUsername = '" + user.getUsername() + "' ORDER BY lastEdit";
+					break;
+				default:
+					break;
+				}
+			}
+
 			ResultSet rs = db.getStatement().executeQuery(query);
 			
 			while(rs.next())
