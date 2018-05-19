@@ -77,7 +77,7 @@ public class LoginFrame extends JFrame
 					
 					if(rs.next())
 					{
-						new SellerMainFrame(new Employee(username));
+						new MainFrame(new Employee(username));
 						dispose();
 					}
 					else

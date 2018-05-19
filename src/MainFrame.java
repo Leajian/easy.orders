@@ -36,7 +36,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 
-public class SellerMainFrame extends JFrame
+public class MainFrame extends JFrame
 {	
 	private ArrayList<Employee> employees = new ArrayList<>();
 	
@@ -92,7 +92,7 @@ public class SellerMainFrame extends JFrame
 	
 	private ThreadManagement threadManager;
 
-	public SellerMainFrame(Employee user)
+	public MainFrame(Employee user)
 	{
 		this.user = user;
 		threadManager = new ThreadManagement(1000, user);

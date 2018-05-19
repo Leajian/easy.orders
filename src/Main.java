@@ -19,7 +19,8 @@ public class Main
 		//db.connect();
 	
 		Employee admin = new Employee("admin");
-		new SellerMainFrame(admin);
+		new MainFrame(admin);
+		//new LoginFrame();
 		
 		/*try
 		{	

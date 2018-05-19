@@ -332,7 +332,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			
 			aTabbedPane.insertTab("Νέα Παραγγελία", null, newOrderPanel, null, aTabbedPane.getTabCount());
 					
-			noOrderLabel.setIcon(new ImageIcon(SellerMainFrame.class.getResource("/images/contract.png")));
+			noOrderLabel.setIcon(new ImageIcon(MainFrame.class.getResource("/images/contract.png")));
 			noOrderLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			noOrderLabel.setFont(new Font("Tahoma", Font.PLAIN, 23));
 			noOrderLabel.setBounds(117, 39, 568, 161);
