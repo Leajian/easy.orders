@@ -35,7 +35,7 @@ public class Client
 		db.closeConnection();
 	}
 	
-	public String lastEdit()
+	public String getLastEdit()
 	{
 		return lastEdit;
 	}
