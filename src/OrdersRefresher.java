@@ -7,16 +7,15 @@ import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
@@ -24,8 +23,6 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
 
 public class OrdersRefresher extends AbstractEntityRefresher
 {	
@@ -343,6 +340,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			
 			saveOrderButton.setEnabled(false);
 			changeStateOfOrderButton.setVisible(false);
+			sendBackToSellerButton.setVisible(false);
 
 			ArrayList<Client> clients = new ArrayList<>();
 			//Fetch clients.
@@ -647,6 +645,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			public void actionPerformed(ActionEvent arg0)
 			{
 				
+				sendBackToSellerButton.setEnabled(false);
 			}
 		});
 	}
