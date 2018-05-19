@@ -195,20 +195,15 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		JButton removeProductButton = new JButton("-");
 		JButton saveOrderButton = new JButton("Αποθήκευση");
 		JButton deleteOrderButton = new JButton("Διαγραφή");
-		JButton sendBackToSellerButton = new JButton("<html>" + "Επιστροφή" + "<br>" + "στον πωλητή" + "</html>");
 		JButton changeStateOfOrderButton = new JButton();
 		
-		removeProductButton.setVisible(false);
-		deleteOrderButton.setVisible(false);
-		sendBackToSellerButton.setVisible(false);
-		
+		int state;
 		switch (user.getPrivilege())
 		{
 		//Biller level
 		case 1:
 			//closed state
 			changeStateOfOrderButton.setText("Τιμολογήθηκε");
-			sendBackToSellerButton.setVisible(true);
 			break;
 			
 		//Seller level	
@@ -247,8 +242,6 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				RowSpec.decode("30dlu"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("30dlu"),
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("30dlu"),
 				FormSpecs.UNRELATED_GAP_ROWSPEC,});
 		
 		fl_newOrderPanel.setRowGroups(new int[][]{new int[]{6, 8}});
@@ -262,19 +255,22 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		newOrderPanel.add(addProductButton, "3, 6, fill, fill");
 		newOrderPanel.add(removeProductButton, "3, 8, fill, fill");
 		
-		newOrderPanel.add(sendBackToSellerButton, "3, 12, fill, fill");
+		newOrderPanel.add(changeStateOfOrderButton, "3, 12, fill, fill");
 		
-		newOrderPanel.add(changeStateOfOrderButton, "3, 14, fill, fill");
+		newOrderPanel.add(saveOrderButton, "3, 16, fill, fill");
+		newOrderPanel.add(deleteOrderButton, "3, 14, fill, fill");
+
+		removeProductButton.setVisible(false);
+		deleteOrderButton.setVisible(false);
 		
-		newOrderPanel.add(saveOrderButton, "3, 18, fill, fill");
-		newOrderPanel.add(deleteOrderButton, "3, 16, fill, fill");
+
 		
 		ordersTable = new JTable(optm);
 		ordersTable.setBounds(117, 39, 568, 161);
 		
 		ordersTableScrollPane = new JScrollPane(ordersTable);
 		//ordersTableScrollPane.setVisible(false);
-		newOrderPanel.add(ordersTableScrollPane, "5, 4, 1, 15, fill, fill");
+		newOrderPanel.add(ordersTableScrollPane, "5, 4, 1, 13, fill, fill");
 		
 		//this disallows reordering of columns
 		ordersTable.getTableHeader().setReorderingAllowed(false);
@@ -639,14 +635,6 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					}
 					db.closeConnection();
 				}
-			}
-		});
-		
-		sendBackToSellerButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent arg0)
-			{
-				
 			}
 		});
 	}
