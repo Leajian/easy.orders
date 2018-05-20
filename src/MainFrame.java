@@ -113,22 +113,22 @@ public class MainFrame extends JFrame
 				
 				//Orders Tab
 				case 0:
-					threadManager.ManageModelUpdateAtTab(selectedTabIndex, liveOrdersTabs);
+					threadManager.manageUpdatesAtTab(selectedTabIndex, liveOrdersTabs);
 					break;
 					
 				//Clients Tab
 				case 1:
-					threadManager.ManageModelUpdateAtTab(selectedTabIndex, ctm);
+					threadManager.manageUpdatesAtTab(selectedTabIndex, ctm);
 					break;
 					
 				//Products Tab
 				case 2:
-					threadManager.ManageModelUpdateAtTab(selectedTabIndex, ptm);
+					threadManager.manageUpdatesAtTab(selectedTabIndex, ptm);
 					break;
 					
 				//Record Tab
 				case 3:
-					threadManager.ManageModelUpdateAtTab(selectedTabIndex, rtm);
+					threadManager.manageUpdatesAtTab(selectedTabIndex, rtm);
 					break;
 					
 				default:
@@ -144,7 +144,7 @@ public class MainFrame extends JFrame
 	        		threadManager.stopTicking();
 					Employee selectedUser = (Employee) event.getItem();
 					threadManager = new ThreadManagement(1000, selectedUser);
-					threadManager.ManageModelUpdateAtTab(0, liveOrdersTabs);
+					threadManager.manageUpdatesAtTab(0, liveOrdersTabs);
 	        	}
 	        }
 	    });

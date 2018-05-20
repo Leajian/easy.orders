@@ -23,7 +23,7 @@ public class ThreadManagement {
 		this.user = user;
 	}
 
-	public void ManageModelUpdateAtTab(int selectedTabIndex, Object obj)
+	public void manageUpdatesAtTab(int selectedTabIndex, Object obj)
 	{
 		switch (selectedTabIndex) {
 		
