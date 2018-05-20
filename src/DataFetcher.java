@@ -89,7 +89,8 @@ public abstract class DataFetcher
 				switch(user.getPrivilege())
 				{
 				case 1:
-					query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, state FROM orders WHERE state = 1 OR (employeeUsername = '" + user.getUsername() + "' AND state = 0) ORDER BY lastEdit";
+					//query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, state FROM orders WHERE state = 1 OR (employeeUsername = '" + user.getUsername() + "' AND state = 0) ORDER BY lastEdit";
+					query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, state FROM orders WHERE state = 1 OR employeeUsername = '" + user.getUsername() + "' ORDER BY lastEdit";
 					break;
 				case 2:
 					query = "SELECT DISTINCT lastEdit, clientId, employeeUsername, state FROM orders WHERE state = 0 AND employeeUsername = '" + user.getUsername() + "' ORDER BY lastEdit";

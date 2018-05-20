@@ -551,10 +551,15 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				
 				try
 				{
+					int state = 0;
+					
+					if(user.getPrivilege() == 1)
+						state = 1;
+					
 					String query = "INSERT INTO orders (lastEdit, productId, clientId, quantityWeight, price, employeeUsername, state) VALUES ";
 					
 					for(int i = 0; i < optm.getRowCount(); i++)
-						query += "(CURRENT_TIMESTAMP, " + "'" + optm.getOrderedProducts().get(i).getId() + "', " + "'" + ((Client) nameComboBox.getSelectedItem()).getId() + "', '" + optm.getOrderedProducts().get(i).getQuantityWeight() + "', '" + optm.getOrderedProducts().get(i).getPrice() + "', '" + user.getUsername() + "', '0'),";
+						query += "(CURRENT_TIMESTAMP, " + "'" + optm.getOrderedProducts().get(i).getId() + "', " + "'" + ((Client) nameComboBox.getSelectedItem()).getId() + "', '" + optm.getOrderedProducts().get(i).getQuantityWeight() + "', '" + optm.getOrderedProducts().get(i).getPrice() + "', '" + user.getUsername() + "', " + state + "),";
 					
 					
 					query = query.substring(0, query.length() - 1);
