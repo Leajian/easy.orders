@@ -3,12 +3,15 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.JDialog;
+import javax.swing.JFrame;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -21,7 +24,8 @@ public class SelectProductFrame extends JDialog
 	private JTable productsTable;
 	//private Product selectedProduct;
 	
-	public SelectProductFrame(OrderedProductsTableModel optm) {
+	public SelectProductFrame(OrderedProductsTableModel optm)
+	{
 		
 		//this blocks other windows unless this is closed.
 		//also it must be here and not the bottom for some reason
@@ -79,14 +83,13 @@ public class SelectProductFrame extends JDialog
 
 				}
 			}
-		});	
+		});
 		
-		setName("selectProduct");
-		setSize(new Dimension(750, 752));
-		//open in the center?
-		setLocationRelativeTo(rootPane);
-		setVisible(true);
-		setTitle("Επιλέξτε προϊόν");
-		setResizable(false);
+		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
+		this.setSize(new Dimension(750, 752));
+		this.setLocationRelativeTo(rootPane);		
+		this.setTitle("Επιλέξτε προϊόν");
+		this.setResizable(false);
+		this.setVisible(true);
 	}
 }
