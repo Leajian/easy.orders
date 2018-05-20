@@ -100,7 +100,7 @@ public class LoginFrame extends JFrame
 		this.setVisible(true);
 	}
 	
-	static String md5(String password)
+	private static String md5(String password)
 	{
 		try
 		{
