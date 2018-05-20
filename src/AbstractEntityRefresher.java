@@ -46,13 +46,13 @@ public abstract class AbstractEntityRefresher
 	
 	protected abstract void populator();
 	
-	protected abstract int getObjSize(Object obj);
+	protected abstract int getObjSize();
 	
 	protected void refreshTick()
 	{
 		System.out.println("tick");
 		String lastEdit = getLastEditOf();
-		int lastSize = getObjSize(obj);
+		int lastSize = getObjSize();
 		
 		System.out.println(lastSize);
 		

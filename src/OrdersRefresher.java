@@ -36,7 +36,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	public OrdersRefresher(JTabbedPane aTabbedPane, Employee user)
 	{
 		super(aTabbedPane, "orders");
-		this.user = user;
+		OrdersRefresher.user = user;
 		
 		switch (user.getPrivilege())
 		{
@@ -97,7 +97,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		});
 	}
 
-	protected int getObjSize(Object obj)
+	protected int getObjSize()
 	{
 		String query = "";
 		

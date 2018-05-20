@@ -13,7 +13,7 @@ public class ProductRefresher extends AbstractEntityRefresher
 	}
 	
 	@Override
-	protected int getObjSize(Object obj) {
+	protected int getObjSize() {
 		return ((ProductsTableModel) obj).getRowCount();
 	}
 }

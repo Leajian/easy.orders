@@ -14,7 +14,7 @@ public class RecordRefresher extends AbstractEntityRefresher
 	}
 	
 	@Override
-	protected int getObjSize(Object obj) {
+	protected int getObjSize() {
 		return ((RecordTableModel) obj).getRowCount();
 	}
 }
