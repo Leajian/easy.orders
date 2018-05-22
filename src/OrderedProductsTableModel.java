@@ -98,7 +98,6 @@ public class OrderedProductsTableModel extends AbstractTableModel
     	return false;
     }
     
-    //alternative way to add a row
     public void addRow(Product product)
     {
     	int lastRowBeforeUpdate = this.getRowCount() - 1;

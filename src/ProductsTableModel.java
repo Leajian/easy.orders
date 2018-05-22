@@ -142,18 +142,6 @@ public class ProductsTableModel extends AbstractTableModel
     	return false;
     }
         
-    public void removeProductByID(String id)
-    {
-    	if (!products.isEmpty())
-    		for (Product product: products)
-    			if(product.getId().equals(id))
-    				products.remove(product);
-    	
-    	//INSERT DELETION FROM DATABASE CODE HERE		
-		//not sure if array list adds the item last
-		fireTableDataChanged(); //to be changed, not efficient
-	}
-        
     public void removeSelectedProduct(int row)
     {
     	DBConnect db = new DBConnect();    	
@@ -178,15 +166,6 @@ public class ProductsTableModel extends AbstractTableModel
         	db.closeConnection();
     	}
 	}
-        
-    //add product to the list
-    public void addRow(Product product)
-    {
-    	int lastRowBeforeUpdate = this.getRowCount() - 1;
-        products.add(product);
-        int lastRowAfterUpdate = this.getRowCount() - 1;
-        fireTableRowsInserted(lastRowBeforeUpdate, lastRowAfterUpdate);
-    }
         
     //re-fetch data and refresh table
     public void populate()

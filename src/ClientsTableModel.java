@@ -61,11 +61,6 @@ public class ClientsTableModel extends AbstractTableModel
     	return clients.get(row);
     }
 	
-	public void getClientInfo(int row)
-    {
-    	//new ClientInfoFrame(clients.get(row).getId(), this, row);
-    }
-	
 	public boolean isClientEditable(int row)
 	{
 		return clients.get(row).isEditable();
@@ -123,15 +118,15 @@ public class ClientsTableModel extends AbstractTableModel
     	return false;
     }
 	
-	public void removeClientByID(String id)
-    {
-    	for (Client client: clients)
-    		if (client.getId().equals(id))
-    			clients.remove(client);
-					
-		//not sure if array list adds the item last
-		fireTableDataChanged(); //to be changed, not efficient
-	}
+//	public void removeClientByID(String id)
+//    {
+//    	for (Client client: clients)
+//    		if (client.getId().equals(id))
+//    			clients.remove(client);
+//					
+//		//not sure if array list adds the item last
+//		fireTableDataChanged(); //to be changed, not efficient
+//	}
 	
 	public void removeSelectedClient(int row)
     {	
@@ -157,13 +152,13 @@ public class ClientsTableModel extends AbstractTableModel
 	}
 	
 	//alternative way to add a row
-    public void addRow(Client client)
-    {
-    	int lastRowBeforeUpdate = this.getRowCount() - 1;
-    	clients.add(client);
-    	int lastRowAfterUpdate = this.getRowCount() - 1;
-    	fireTableRowsInserted(lastRowBeforeUpdate, lastRowAfterUpdate);
-    }
+//    public void addRow(Client client)
+//    {
+//    	int lastRowBeforeUpdate = this.getRowCount() - 1;
+//    	clients.add(client);
+//    	int lastRowAfterUpdate = this.getRowCount() - 1;
+//    	fireTableRowsInserted(lastRowBeforeUpdate, lastRowAfterUpdate);
+//    }
     
     //re-fetch data and refresh table
 	public void populate()

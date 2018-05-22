@@ -377,7 +377,7 @@ public class MainFrame extends JFrame
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				new NewClientFrame(ctm);
+				new NewClientFrame();
 			}
 		});
 
