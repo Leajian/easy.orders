@@ -6,7 +6,7 @@ public class OrderedProductsTableModel extends AbstractTableModel
 {
 	private String[] orderdedProductColumnNames = {"Προιόν", "Προέλευση", "Προμυθευτής", "Ποιότητα", "Συσκευασία", "Ποσότητα/Βάρος", "Τιμή"};
 	private ArrayList<Product> orderedProducts = new ArrayList<>();
-	private boolean OrderSpecificCellsLock = false; //model is used for orders by default
+	private boolean allowOrderSpecificCellEdit = true; //model is used for orders by default
 	
 	public OrderedProductsTableModel(Order order)
 	{
@@ -94,7 +94,7 @@ public class OrderedProductsTableModel extends AbstractTableModel
     {
         //Note that the products/cell address is constant,
         //no matter where the cell appears onscreen.
-    	if (OrderSpecificCellsLock)
+    	if (allowOrderSpecificCellEdit)
     		if (col > 4)
     			return true;
     	return false;
@@ -130,7 +130,7 @@ public class OrderedProductsTableModel extends AbstractTableModel
 	
 	public void allowOrderSpecificCellsEdit(boolean b)
 	{
-		OrderSpecificCellsLock = b;
+		allowOrderSpecificCellEdit = b;
 	}
 	
 	public boolean hasProducts()
