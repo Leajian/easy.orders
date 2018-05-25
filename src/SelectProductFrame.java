@@ -59,6 +59,15 @@ public class SelectProductFrame extends JDialog
 		productsTable = new JTable(ptm);
 		productsScrollPane.setViewportView(productsTable);
 		
+		//this disallows reordering of columns
+		productsTable.getTableHeader().setReorderingAllowed(false);
+		
+		//these make that so you can only select a whole lines on click
+		productsTable.setCellSelectionEnabled(false);
+		productsTable.setColumnSelectionAllowed(false);		
+		productsTable.setRowSelectionAllowed(true);
+		productsTable.getTableHeader().setResizingAllowed(false);
+		
 		productsTable.addMouseListener(new MouseAdapter()
 		{
 			@Override

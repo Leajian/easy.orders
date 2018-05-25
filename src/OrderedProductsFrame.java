@@ -19,6 +19,8 @@ public class OrderedProductsFrame extends JFrame
 	public OrderedProductsFrame(Order order)
 	{
 		OrderedProductsTableModel optm = new OrderedProductsTableModel(order);
+		optm.allowOrderSpecificCellsEdit(false);
+		
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("452px:grow"),},
 			new RowSpec[] {
@@ -36,6 +38,7 @@ public class OrderedProductsFrame extends JFrame
 		orderedProductsTable.setCellSelectionEnabled(false);
 		orderedProductsTable.setColumnSelectionAllowed(false);		
 		orderedProductsTable.setRowSelectionAllowed(true);
+		orderedProductsTable.getTableHeader().setResizingAllowed(false);
 		
 		orderedProductsTable.setSelectionModel(new ForcedListSelectionModel());
 		
