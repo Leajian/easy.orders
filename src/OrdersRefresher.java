@@ -165,6 +165,9 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		}
 	}
 	
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public static void createNewTab(JTabbedPane aTabbedPane, Order order)
 	{	
 		DBConnect db = new DBConnect();
@@ -406,6 +409,10 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					saveOrderButton.setEnabled(true);
 					removeProductButton.setVisible(true);
 				}
+				else
+				{
+					saveOrderButton.setEnabled(false);
+				}
 					
 				
 //				if (!optm.getOrderedProducts().isEmpty())
@@ -522,98 +529,104 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{	
-				String CURRENT_TIMESTAMP = null;
-				
-				db.connect();
-				try
+				if (optm.hasProducts())
 				{
-					String query = "SELECT CURRENT_TIMESTAMP AS curr_time";
-					ResultSet rs = db.getStatement().executeQuery(query);
 					
-					rs.next();
+					String CURRENT_TIMESTAMP = null;
 					
-					CURRENT_TIMESTAMP = rs.getString("curr_time");
-				} 
-				catch (Exception ex)
-				{
-					ex.printStackTrace();
-				}
-				
-				try
-				{
-					String query = "DELETE FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND clientId = '" + order.getClientId() + "'";
-					int rs = db.getStatement().executeUpdate(query);
-				} 
-				catch (Exception ex)
-				{
-					//ex.printStackTrace();
-				}
-				
-				try
-				{
-					int state = 0;
-					
-					if(user.getPrivilege() == 1)
-						state = 1;
-					
-					String query = "INSERT INTO orders (lastEdit, productId, clientId, quantityWeight, price, employeeUsername, state) VALUES ";
-					
-					for(int i = 0; i < optm.getRowCount(); i++)
-						query += "(CURRENT_TIMESTAMP, " + "'" + optm.getOrderedProducts().get(i).getId() + "', " + "'" + ((Client) nameComboBox.getSelectedItem()).getId() + "', '" + optm.getOrderedProducts().get(i).getQuantityWeight() + "', '" + optm.getOrderedProducts().get(i).getPrice() + "', '" + user.getUsername() + "', " + state + "),";
-					
-					
-					query = query.substring(0, query.length() - 1);
-					int rs = db.getStatement().executeUpdate(query);
-				} 
-				catch (Exception ex)
-				{
-					ex.printStackTrace();
-				}
-				
-				/*String prodIds = "";
-				
-				for(int i = 0; i < optm.getRowCount(); i++)
-					prodIds += optm.getOrderedProducts().get(i).getId() + ",";
-				
-				prodIds = prodIds.substring(0, prodIds.length() - 1);
-				prodIds = "(" + prodIds + ")";
-				//System.out.println(prodId);
-				
-				ArrayList<Integer> stockOfProducts = new ArrayList<>();
-				
-				try
-				{
-					String query = "SELECT stock FROM product WHERE id IN " + prodIds;
-					ResultSet rs = db.getStatement().executeQuery(query);
-					
-					while(rs.next())
-						stockOfProducts.add(rs.getInt("stock"));
-				} 
-				catch (Exception ex)
-				{
-					ex.printStackTrace();
-				}
-				
-				for(int i = 0; i < optm.getRowCount(); i++)
-				{
-					int newStock = stockOfProducts.get(i) - Integer.parseInt(optm.getOrderedProducts().get(i).getQuantityWeight());
-					
+					db.connect();
 					try
 					{
-						String query = "UPDATE product SET stock = '" + newStock + "' WHERE id = '" + optm.getOrderedProducts().get(i).getId() + "'";
-						int rs1 = db.getStatement().executeUpdate(query);
-					}
+						String query = "SELECT CURRENT_TIMESTAMP AS curr_time";
+						ResultSet rs = db.getStatement().executeQuery(query);
+						
+						rs.next();
+						
+						CURRENT_TIMESTAMP = rs.getString("curr_time");
+					} 
 					catch (Exception ex)
 					{
 						ex.printStackTrace();
 					}
-				}*/
-				db.closeConnection();
-				
-				deleteOrderButton.setVisible(true);
-				saveOrderButton.setEnabled(false);
-				
-				//aTabbedPane.setSelectedIndex(aTabbedPane.indexOfTab(((Client) nameComboBox.getSelectedItem()).getId() + CURRENT_TIMESTAMP));
+					
+					try
+					{
+						String query = "DELETE FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND clientId = '" + order.getClientId() + "'";
+						int rs = db.getStatement().executeUpdate(query);
+					} 
+					catch (Exception ex)
+					{
+						//ex.printStackTrace();
+					}
+					
+					try
+					{
+						int state = 0;
+						
+						if(user.getPrivilege() == 1)
+							state = 1;
+						
+						String query = "INSERT INTO orders (lastEdit, productId, clientId, quantityWeight, price, employeeUsername, state) VALUES ";
+						
+						for(int i = 0; i < optm.getRowCount(); i++)
+							query += "(CURRENT_TIMESTAMP, " + "'" + optm.getOrderedProducts().get(i).getId() + "', " + "'" + ((Client) nameComboBox.getSelectedItem()).getId() + "', '" + optm.getOrderedProducts().get(i).getQuantityWeight() + "', '" + optm.getOrderedProducts().get(i).getPrice() + "', '" + user.getUsername() + "', " + state + "),";
+						
+						
+						query = query.substring(0, query.length() - 1);
+						int rs = db.getStatement().executeUpdate(query);
+					} 
+					catch (Exception ex)
+					{
+						ex.printStackTrace();
+					}
+					
+					/*String prodIds = "";
+					
+					for(int i = 0; i < optm.getRowCount(); i++)
+						prodIds += optm.getOrderedProducts().get(i).getId() + ",";
+					
+					prodIds = prodIds.substring(0, prodIds.length() - 1);
+					prodIds = "(" + prodIds + ")";
+					//System.out.println(prodId);
+					
+					ArrayList<Integer> stockOfProducts = new ArrayList<>();
+					
+					try
+					{
+						String query = "SELECT stock FROM product WHERE id IN " + prodIds;
+						ResultSet rs = db.getStatement().executeQuery(query);
+						
+						while(rs.next())
+							stockOfProducts.add(rs.getInt("stock"));
+					} 
+					catch (Exception ex)
+					{
+						ex.printStackTrace();
+					}
+					
+					for(int i = 0; i < optm.getRowCount(); i++)
+					{
+						int newStock = stockOfProducts.get(i) - Integer.parseInt(optm.getOrderedProducts().get(i).getQuantityWeight());
+						
+						try
+						{
+							String query = "UPDATE product SET stock = '" + newStock + "' WHERE id = '" + optm.getOrderedProducts().get(i).getId() + "'";
+							int rs1 = db.getStatement().executeUpdate(query);
+						}
+						catch (Exception ex)
+						{
+							ex.printStackTrace();
+						}
+					}*/
+					db.closeConnection();
+					
+					deleteOrderButton.setVisible(true);
+					saveOrderButton.setEnabled(false);
+					
+					//aTabbedPane.setSelectedIndex(aTabbedPane.indexOfTab(((Client) nameComboBox.getSelectedItem()).getId() + CURRENT_TIMESTAMP));
+				}
+				else
+					JOptionPane.showMessageDialog(null, "Παρακαλώ προσθέστε προϊόντα στην παραγγελία πριν την αποθηκεύσετε.", "Κενή παραγγελία", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		
