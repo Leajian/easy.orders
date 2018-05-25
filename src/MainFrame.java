@@ -570,10 +570,10 @@ public class MainFrame extends JFrame
 		
 		
 		//Record
-		tabbedPane.addTab("Ιστορικό Παρραγγελιών", null, recordTab, null);
+		tabbedPane.addTab("Ιστορικό Παραγγελιών", null, recordTab, null);
 
 		//add a fixed-size label as title
-		JLabel tabRecordLabel = new JLabel("Ιστορικό Παρραγγελιών");
+		JLabel tabRecordLabel = new JLabel("Ιστορικό Παραγγελιών");
 		tabRecordLabel.setPreferredSize(new Dimension(125, 35));
 		tabRecordLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		tabRecordLabel.setVerticalAlignment(SwingConstants.CENTER);
