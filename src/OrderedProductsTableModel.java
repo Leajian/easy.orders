@@ -58,9 +58,11 @@ public class OrderedProductsTableModel extends AbstractTableModel
     	{
 		case 5:
 			orderedProducts.get(row).setQuantityWeight((String)value);
+			fireTableCellUpdated(row, col);
 			break;
 		case 6:
 			orderedProducts.get(row).setPrice((String)value);
+			fireTableCellUpdated(row, col);
 			break;
 		default:
 			break;
