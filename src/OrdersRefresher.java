@@ -496,23 +496,18 @@ public class OrdersRefresher extends AbstractEntityRefresher
 								JOptionPane.showMessageDialog(null, "Το απόθεμα δεν επαρκεί.", "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
 								break;
 							}
-									
-								
-							try
+							else
 							{
-								String query = "UPDATE product SET stock = '" + newStock + "' WHERE id = '" + optm.getOrderedProducts().get(i).getId() + "'";
-								int rs1 = db.getStatement().executeUpdate(query);
+								try
+								{
+									String query = "UPDATE product SET stock = '" + newStock + "' WHERE id = '" + optm.getOrderedProducts().get(i).getId() + "'";
+									int rs1 = db.getStatement().executeUpdate(query);
+								}
+								catch (Exception ex)
+								{
+									ex.printStackTrace();
+								}
 							}
-							catch (Exception ex)
-							{
-								ex.printStackTrace();
-							}
-								
-							
-							
-								
-								
-							
 						}
 						
 						if(forClose)
@@ -521,7 +516,6 @@ public class OrdersRefresher extends AbstractEntityRefresher
 							int rs = db.getStatement().executeUpdate(query);
 							changeStateOfOrderButton.setEnabled(false);
 						}
-						
 						
 						break;
 						
@@ -541,8 +535,6 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					ex.printStackTrace();
 				}
 				db.closeConnection();
-				
-				
 			}
 		});
 		
