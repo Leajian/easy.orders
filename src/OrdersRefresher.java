@@ -18,11 +18,15 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
 
 public class OrdersRefresher extends AbstractEntityRefresher
 {	
@@ -32,6 +36,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	
 	private static Employee user;
 	private String states;
+	private static JTable ordersTable;
 	
 	public OrdersRefresher(JTabbedPane aTabbedPane, Employee user)
 	{
@@ -286,6 +291,9 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		
 		//a selection model, which allows us to call it and get the selected row at any time
 		ListSelectionModel rowSM = ordersTable.getSelectionModel();
+		
+		//auto save editable cells
+		ordersTable.putClientProperty("terminateEditOnFocusLost", true);
 		
 		if(order != null)
 		{
@@ -684,6 +692,14 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				db.connect();
 				
 				sendBackToSellerButton.setEnabled(false);
+			}
+		});
+		
+		optm.addTableModelListener(new TableModelListener() {
+
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				saveOrderButton.setEnabled(true);
 			}
 		});
 	}
