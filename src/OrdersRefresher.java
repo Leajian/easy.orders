@@ -484,10 +484,20 @@ public class OrdersRefresher extends AbstractEntityRefresher
 							ex.printStackTrace();
 						}
 						
+						boolean forClose = true;
+						
 						for(int i = 0; i < optm.getRowCount(); i++)
 						{
 							int newStock = stockOfProducts.get(i) - Integer.parseInt(optm.getOrderedProducts().get(i).getQuantityWeight());
-							
+								
+							if(newStock < 0)
+							{
+								forClose = false;
+								JOptionPane.showMessageDialog(null, "Το απόθεμα δεν επαρκεί.", "Easy Orders 1.0", JOptionPane.WARNING_MESSAGE);
+								break;
+							}
+									
+								
 							try
 							{
 								String query = "UPDATE product SET stock = '" + newStock + "' WHERE id = '" + optm.getOrderedProducts().get(i).getId() + "'";
@@ -497,8 +507,20 @@ public class OrdersRefresher extends AbstractEntityRefresher
 							{
 								ex.printStackTrace();
 							}
+								
+							
+							
+								
+								
+							
 						}
 						
+						if(forClose)
+						{
+							String query = "UPDATE orders SET state = " + state + " WHERE lastEdit = '" + order.getLastEdit() + "' " + "AND clientId = '" + order.getClientId() + "'";
+							int rs = db.getStatement().executeUpdate(query);
+							changeStateOfOrderButton.setEnabled(false);
+						}
 						
 						
 						break;
@@ -512,8 +534,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					default:
 						break;
 					}
-					String query = "UPDATE orders SET state = " + state + " WHERE lastEdit = '" + order.getLastEdit() + "' " + "AND clientId = '" + order.getClientId() + "'";
-					int rs = db.getStatement().executeUpdate(query);
+					
 				}
 				catch (Exception ex)
 				{
@@ -521,7 +542,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				}
 				db.closeConnection();
 				
-				changeStateOfOrderButton.setEnabled(false);
+				
 			}
 		});
 		
