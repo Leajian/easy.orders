@@ -149,7 +149,7 @@ public class NewProductFrame extends JDialog
 				
 				if(!(name.trim().equals("")))
 				{
-					if((id.length() <= 5) & (name.length() <= 30) & (quality.length() <= 2) & (location.length() <= 30) & (producer.length() <= 30) & (packaging.length() <= 2) & (price.length() <= 10) & (stock <= 99999))
+					if((id.length() <= 5) & (name.length() <= 30) & (quality.length() <= 2) & (location.length() <= 30) & (producer.length() <= 30) & (packaging.length() <= 2) & (price.length() <= 10) & ((stock <= 99999) & (stock >= 0)))
 					{
 						db.connect();
 						try

@@ -32,7 +32,7 @@ public class ProductInfoFrame extends JDialog
 	private JTextField packagingField = new JTextField();
 	private JTextField priceField = new JTextField();
 	
-	private final JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
+	private JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
 	private JLabel idLab = new JLabel("Κωδικός");
 	private JLabel nameLab = new JLabel("Όνομα");
 	private JLabel qualityLab = new JLabel("Ποιότητα");
@@ -69,7 +69,7 @@ public class ProductInfoFrame extends JDialog
 		priceField.setText(product.getPrice());
 		stockSpinner.setValue(Integer.parseInt(product.getStock()));
 			
-		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel.setBorder(null);
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				FormSpecs.DEFAULT_COLSPEC,
@@ -79,9 +79,8 @@ public class ProductInfoFrame extends JDialog
 				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(60dlu;default):grow"),
-				FormSpecs.RELATED_GAP_COLSPEC,},
+				FormSpecs.UNRELATED_GAP_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("fill:168px:grow"),
 				FormSpecs.UNRELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:23px"),
 				FormSpecs.LINE_GAP_ROWSPEC,
@@ -93,43 +92,43 @@ public class ProductInfoFrame extends JDialog
 				FormSpecs.UNRELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("fill:max(15dlu;default):grow"),
+				RowSpec.decode("fill:max(19dlu;default):grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,}));
 		
-		panel.add(ProductDetailsLabel, "2, 1, 7, 1, center, center");
-		panel.add(idLab, "2, 3, left, fill");
+		//panel.add(ProductDetailsLabel, "2, 1, 7, 1, center, center");
+		panel.add(idLab, "2, 2, left, fill");
 		
 		idField.setEditable(false);
-		panel.add(idField, "4, 3, fill, fill");
+		panel.add(idField, "4, 2, fill, fill");
 
 		qualityField.setEditable(false);
-		panel.add(qualityField, "8, 3, fill, fill");
-		panel.add(nameLab, "2, 5, left, fill");
-		panel.add(qualityLab, "6, 3, left, center");
+		panel.add(qualityField, "8, 2, fill, fill");
+		panel.add(nameLab, "2, 4, left, fill");
+		panel.add(qualityLab, "6, 2, left, center");
 
 		nameField.setEditable(false);
-		panel.add(nameField, "4, 5, fill, fill");
+		panel.add(nameField, "4, 4, fill, fill");
 
 		packagingField.setEditable(false);
-		panel.add(packagingField, "8, 5, fill, fill");
-		panel.add(locationLab, "2, 7, fill, fill");
+		panel.add(packagingField, "8, 4, fill, fill");
+		panel.add(locationLab, "2, 6, fill, fill");
 
 		locationField.setEditable(false);
-		panel.add(locationField, "4, 7, fill, fill");
+		panel.add(locationField, "4, 6, fill, fill");
 
 		stockSpinner.setEnabled(false);
-		panel.add(stockSpinner, "8, 7, fill, fill");
-		panel.add(producerLab, "2, 9, left, center");
-		panel.add(packagingLab, "6, 5, left, center");
+		panel.add(stockSpinner, "8, 6, fill, fill");
+		panel.add(producerLab, "2, 8, left, center");
+		panel.add(packagingLab, "6, 4, left, center");
 
 		producerField.setEditable(false);
-		panel.add(producerField, "4, 9, fill, fill");
-		panel.add(priceLab, "6, 9, left, center");
-		panel.add(stockLab, "6, 7, left, center");
+		panel.add(producerField, "4, 8, fill, fill");
+		panel.add(priceLab, "6, 8, left, center");
+		panel.add(stockLab, "6, 6, left, center");
 
 		priceField.setEditable(false);
-		panel.add(priceField, "8, 9, fill, fill");
-		panel.add(editCheckBox, "6, 11, 3, 1, right, fill");
+		panel.add(priceField, "8, 8, fill, fill");
+		panel.add(editCheckBox, "6, 10, 3, 1, right, fill");
 		
 		editCheckBox.addActionListener(new ActionListener()
 		{
@@ -165,7 +164,7 @@ public class ProductInfoFrame extends JDialog
 
 		this.setContentPane(panel);
 		saveButton.setEnabled(false);
-		panel.add(saveButton, "6, 13, 3, 1, fill, fill");
+		panel.add(saveButton, "6, 12, 3, 1, right, fill");
 		
 		saveButton.addActionListener(new ActionListener()
 		{	
@@ -183,7 +182,7 @@ public class ProductInfoFrame extends JDialog
 				
 				if(!(name.trim().equals("")))
 				{
-					if((id.length() <= 5) & (name.length() <= 30) & (quality.length() <= 2) & (location.length() <= 30) & (producer.length() <= 30) & (packaging.length() <= 2) & (price.length() <= 10) & (stock <= 99999))
+					if((id.length() <= 5) & (name.length() <= 30) & (quality.length() <= 2) & (location.length() <= 30) & (producer.length() <= 30) & (packaging.length() <= 2) & (price.length() <= 10) & ((stock <= 99999) & (stock >= 0)))
 					{
 						db.connect();
 						try
@@ -242,7 +241,7 @@ public class ProductInfoFrame extends JDialog
 
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(480, 120);
-		this.setSize(496, 428);
+		this.setSize(496, 225);
 		this.setResizable(false);
 		this.setTitle("Στοιχεία Προιόντος");
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
