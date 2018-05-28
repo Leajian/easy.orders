@@ -519,6 +519,11 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					case 2:
 						//billing state
 						state = 1;
+						
+						String query = "UPDATE orders SET state = " + state + " WHERE lastEdit = '" + order.getLastEdit() + "' " + "AND clientId = '" + order.getClientId() + "'";
+						int rs = db.getStatement().executeUpdate(query);
+						changeStateOfOrderButton.setEnabled(false);
+						
 						break;
 
 					default:
@@ -566,7 +571,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					}
 					catch (NullPointerException npe)
 					{
-						JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε τον πελάτη της παραγγελίας πριν την αποθηκεύσετε.", "Άγνωστος πελάτης", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε τον πελάτη της παραγγελίας πριν την αποθηκεύσετε.", "Άγνωστος πελάτης", JOptionPane.WARNING_MESSAGE);
 					}
 					
 					if (client != null)
@@ -652,7 +657,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 					}
 				}
 				else
-					JOptionPane.showMessageDialog(null, "Παρακαλώ προσθέστε προϊόντα στην παραγγελία πριν την αποθηκεύσετε.", "Κενή παραγγελία", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Παρακαλώ προσθέστε προϊόντα στην παραγγελία πριν την αποθηκεύσετε.", "Κενή παραγγελία", JOptionPane.WARNING_MESSAGE);
 			}
 		});
 		
