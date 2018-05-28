@@ -38,6 +38,9 @@ public class OrdersRefresher extends AbstractEntityRefresher
 	private String states;
 	private static JTable ordersTable;
 	
+	private static ArrayList<Client> clients = new ArrayList<>();
+	private static Client client;
+	
 	public OrdersRefresher(JTabbedPane aTabbedPane, Employee user)
 	{
 		super(aTabbedPane, "orders");
@@ -194,6 +197,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		JButton deleteOrderButton = new JButton("Διαγραφή");
 		JButton sendBackToSellerButton = new JButton("<html>" + "Επιστροφή" + "<br>" + "στον πωλητή" + "</html>");
 		JButton changeStateOfOrderButton = new JButton();
+		JButton clientsListRefreshButton = new JButton("Ανανέωση πελατών");
 		
 		removeProductButton.setVisible(false);
 		deleteOrderButton.setVisible(false);
@@ -229,7 +233,9 @@ public class OrdersRefresher extends AbstractEntityRefresher
 				FormSpecs.UNRELATED_GAP_COLSPEC,
 				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(430dlu;min):grow"),
+				ColumnSpec.decode("max(331dlu;min)"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),
 				FormSpecs.UNRELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormSpecs.UNRELATED_GAP_ROWSPEC,
@@ -256,6 +262,8 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		newOrderPanel.setLayout(fl_newOrderPanel);
 		
 		newOrderPanel.add(nameLabel, "3, 2, right, fill");
+
+		newOrderPanel.add(clientsListRefreshButton, "7, 2, left, fill");
 		newOrderPanel.add(productsLabel, "3, 4, right, fill");
 		
 		newOrderPanel.add(nameComboBox, "5, 2, fill, fill");
@@ -275,7 +283,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		
 		ordersTableScrollPane = new JScrollPane(ordersTable);
 		//ordersTableScrollPane.setVisible(false);
-		newOrderPanel.add(ordersTableScrollPane, "5, 4, 1, 15, fill, fill");
+		newOrderPanel.add(ordersTableScrollPane, "5, 4, 3, 15, fill, fill");
 		
 		//this disallows reordering of columns
 		ordersTable.getTableHeader().setReorderingAllowed(false);
@@ -311,6 +319,7 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			//nameComboBox.setText(order.getClientName());
 			nameComboBox.addItem(new Client(order.getClientId()));
 			nameComboBox.setEnabled(false);
+			clientsListRefreshButton.setVisible(false);
 			
 			saveOrderButton.setEnabled(false);
 			
@@ -333,6 +342,8 @@ public class OrdersRefresher extends AbstractEntityRefresher
 //			if (aTabbedPane.indexOfTab(" + ") != -1) //exists
 //				aTabbedPane.remove(aTabbedPane.indexOfTab(" + "));
 
+			ordersTableScrollPane.setVisible(false);
+			
 			JLabel tabTitleLabel = new JLabel("Νέα Παραγγελία");
 			tabTitleLabel.setPreferredSize(new Dimension(200, 30));
 			
@@ -344,46 +355,23 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			noOrderLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			noOrderLabel.setFont(new Font("Tahoma", Font.PLAIN, 23));
 			noOrderLabel.setBounds(117, 39, 568, 161);
+			newOrderPanel.add(noOrderLabel, "5, 4, 3, 15, fill, fill");
 			
 			saveOrderButton.setEnabled(false);
 			changeStateOfOrderButton.setVisible(false);
 			sendBackToSellerButton.setVisible(false);
 
-			ArrayList<Client> clients = new ArrayList<>();
-			//Fetch clients.
-
-			nameComboBox.addMouseListener(new MouseAdapter()
-			{
-				@Override
-				public void mouseClicked(MouseEvent arg0)
-				{
-					clients.clear();
-					nameComboBox.removeAllItems();
-					
-					db.connect();
-					try
-					{
-						String query = "SELECT id FROM client";
-						ResultSet rs = db.getStatement().executeQuery(query);
-						
-						while(rs.next())
-							clients.add(new Client(rs.getString("id")));
-					} 
-					catch (Exception ex)
-					{
-						ex.printStackTrace();
-					}
-					db.closeConnection();
-					
-					//Populate JComboBox.
-					for(Client client : clients)
-						nameComboBox.addItem(client);
-				}
-			});
+			
+			//Initialize clients for the combo box
+			clients = DataFetcher.initializeClients();
+			
+			//Populate JComboBox.
+			for(Client client : clients)
+				nameComboBox.addItem(client);
+			nameComboBox.setSelectedIndex(-1);
 
 			nameComboBox.setRenderer(new ClientComboBoxRenderer());
-			
-			
+		
 			//the pre-last index is the New Order tab (index starts from 0)
 			aTabbedPane.setSelectedIndex(aTabbedPane.getTabCount() - 1);
 			
@@ -549,12 +537,12 @@ public class OrdersRefresher extends AbstractEntityRefresher
 		saveOrderButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
-			{	
+			{				
 				if (optm.hasProducts())
-				{
-					
+				{	
 					String CURRENT_TIMESTAMP = null;
 					
+					//Currently unnecessary, to be used in the future
 					db.connect();
 					try
 					{
@@ -570,81 +558,98 @@ public class OrdersRefresher extends AbstractEntityRefresher
 						ex.printStackTrace();
 					}
 					
+					//Checking whether the user successfully selected a client from the combo box
 					try
 					{
-						String query = "DELETE FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND clientId = '" + order.getClientId() + "'";
-						int rs = db.getStatement().executeUpdate(query);
-					} 
-					catch (Exception ex)
+						client = ((Client) nameComboBox.getSelectedItem());
+						System.out.println(client.getName());
+					}
+					catch (NullPointerException npe)
 					{
-						//ex.printStackTrace();
+						JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε τον πελάτη της παραγγελίας πριν την αποθηκεύσετε.", "Άγνωστος πελάτης", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
-					try
+					if (client != null)
 					{
-						int state = 0;
 						
-						if(user.getPrivilege() == 1)
-							state = 1;
-						
-						String query = "INSERT INTO orders (lastEdit, productId, clientId, quantityWeight, price, employeeUsername, state) VALUES ";
-						
-						for(int i = 0; i < optm.getRowCount(); i++)
-							query += "(CURRENT_TIMESTAMP, " + "'" + optm.getOrderedProducts().get(i).getId() + "', " + "'" + ((Client) nameComboBox.getSelectedItem()).getId() + "', '" + optm.getOrderedProducts().get(i).getQuantityWeight() + "', '" + optm.getOrderedProducts().get(i).getPrice() + "', '" + user.getUsername() + "', " + state + "),";
-						
-						
-						query = query.substring(0, query.length() - 1);
-						int rs = db.getStatement().executeUpdate(query);
-					} 
-					catch (Exception ex)
-					{
-						ex.printStackTrace();
-					}
-					
-					/*String prodIds = "";
-					
-					for(int i = 0; i < optm.getRowCount(); i++)
-						prodIds += optm.getOrderedProducts().get(i).getId() + ",";
-					
-					prodIds = prodIds.substring(0, prodIds.length() - 1);
-					prodIds = "(" + prodIds + ")";
-					//System.out.println(prodId);
-					
-					ArrayList<Integer> stockOfProducts = new ArrayList<>();
-					
-					try
-					{
-						String query = "SELECT stock FROM product WHERE id IN " + prodIds;
-						ResultSet rs = db.getStatement().executeQuery(query);
-						
-						while(rs.next())
-							stockOfProducts.add(rs.getInt("stock"));
-					} 
-					catch (Exception ex)
-					{
-						ex.printStackTrace();
-					}
-					
-					for(int i = 0; i < optm.getRowCount(); i++)
-					{
-						int newStock = stockOfProducts.get(i) - Integer.parseInt(optm.getOrderedProducts().get(i).getQuantityWeight());
-						
+						//Deleting the previous entry of the order
 						try
 						{
-							String query = "UPDATE product SET stock = '" + newStock + "' WHERE id = '" + optm.getOrderedProducts().get(i).getId() + "'";
-							int rs1 = db.getStatement().executeUpdate(query);
+							String query = "DELETE FROM orders WHERE lastEdit = '" + order.getLastEdit() + "'" + "AND clientId = '" + client.getId() + "'";
+							int rs = db.getStatement().executeUpdate(query);
+						} 
+						catch (Exception ex)
+						{
+							//We currently don't care if the entry exists or not with the current saving-refreshing implementation
 						}
+						
+						//Inserting the new entry of that order
+						try
+						{
+							int state = 0;
+							
+							if(user.getPrivilege() == 1)
+								state = 1;
+							
+							String query = "INSERT INTO orders (lastEdit, productId, clientId, quantityWeight, price, employeeUsername, state) VALUES ";
+							
+							for(int i = 0; i < optm.getRowCount(); i++)
+								query += "(CURRENT_TIMESTAMP, " + "'" + optm.getOrderedProducts().get(i).getId() + "', " + "'" + client.getId() + "', '" + optm.getOrderedProducts().get(i).getQuantityWeight() + "', '" + optm.getOrderedProducts().get(i).getPrice() + "', '" + user.getUsername() + "', " + state + "),";
+							
+							
+							query = query.substring(0, query.length() - 1);
+							int rs = db.getStatement().executeUpdate(query);
+						} 
 						catch (Exception ex)
 						{
 							ex.printStackTrace();
 						}
-					}*/
-					db.closeConnection();
-					
-					deleteOrderButton.setVisible(true);
-					saveOrderButton.setEnabled(false);
-					
-					//aTabbedPane.setSelectedIndex(aTabbedPane.indexOfTab(((Client) nameComboBox.getSelectedItem()).getId() + CURRENT_TIMESTAMP));
+						
+						/*String prodIds = "";
+						
+						for(int i = 0; i < optm.getRowCount(); i++)
+							prodIds += optm.getOrderedProducts().get(i).getId() + ",";
+						
+						prodIds = prodIds.substring(0, prodIds.length() - 1);
+						prodIds = "(" + prodIds + ")";
+						//System.out.println(prodId);
+						
+						ArrayList<Integer> stockOfProducts = new ArrayList<>();
+						
+						try
+						{
+							String query = "SELECT stock FROM product WHERE id IN " + prodIds;
+							ResultSet rs = db.getStatement().executeQuery(query);
+							
+							while(rs.next())
+								stockOfProducts.add(rs.getInt("stock"));
+						} 
+						catch (Exception ex)
+						{
+							ex.printStackTrace();
+						}
+						
+						for(int i = 0; i < optm.getRowCount(); i++)
+						{
+							int newStock = stockOfProducts.get(i) - Integer.parseInt(optm.getOrderedProducts().get(i).getQuantityWeight());
+							
+							try
+							{
+								String query = "UPDATE product SET stock = '" + newStock + "' WHERE id = '" + optm.getOrderedProducts().get(i).getId() + "'";
+								int rs1 = db.getStatement().executeUpdate(query);
+							}
+							catch (Exception ex)
+							{
+								ex.printStackTrace();
+							}
+						}*/
+						db.closeConnection();
+						
+						deleteOrderButton.setVisible(true);
+						saveOrderButton.setEnabled(false);
+						
+						//aTabbedPane.setSelectedIndex(aTabbedPane.indexOfTab(((Client) nameComboBox.getSelectedItem()).getId() + CURRENT_TIMESTAMP));
+					}
 				}
 				else
 					JOptionPane.showMessageDialog(null, "Παρακαλώ προσθέστε προϊόντα στην παραγγελία πριν την αποθηκεύσετε.", "Κενή παραγγελία", JOptionPane.INFORMATION_MESSAGE);
@@ -695,11 +700,29 @@ public class OrdersRefresher extends AbstractEntityRefresher
 			}
 		});
 		
-		optm.addTableModelListener(new TableModelListener() {
+		optm.addTableModelListener(new TableModelListener()
+		{
 
 			@Override
-			public void tableChanged(TableModelEvent e) {
+			public void tableChanged(TableModelEvent e)
+			{
+				ordersTableScrollPane.setVisible(true);
 				saveOrderButton.setEnabled(true);
+			}
+		});
+		
+		clientsListRefreshButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				clients.clear();
+				nameComboBox.removeAllItems();
+				
+				clients = DataFetcher.initializeClients();
+				
+				//Populate JComboBox.
+				for(Client client : clients)
+					nameComboBox.addItem(client);
 			}
 		});
 	}
