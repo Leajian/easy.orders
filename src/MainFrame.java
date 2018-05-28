@@ -91,6 +91,7 @@ public class MainFrame extends JFrame
 	private RecordTableModel rtm = new RecordTableModel(new ArrayList<>());
 	
 	private ThreadManagement threadManager;
+	private final JButton employeesListRefreshButton = new JButton("Ανανέωση χρηστών");
 
 	public MainFrame(Employee user)
 	{
@@ -150,42 +151,17 @@ public class MainFrame extends JFrame
 	    });
 		
 		//set the user name in the combobox
-		ordersOfUserComboBox.addItem(user);
 		
-		//Fetch employees.
-		ordersOfUserComboBox.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mouseClicked(MouseEvent arg0)
-			{
-				employees.clear();
-				ordersOfUserComboBox.removeAllItems();
-				
-				db.connect();
-				try
-				{
-					String query = "SELECT * FROM employee";
-					ResultSet rs = db.getStatement().executeQuery(query);
-					
-					while(rs.next())
-						employees.add(new Employee(rs.getString("username")));
-				} 
-				catch (Exception ex)
-				{
-					ex.printStackTrace();
-				}
-				db.closeConnection();
-				
-				//Populate JComboBox.
-				for(Employee employee : employees)
-					//disallow viewing from admin level accounts, unless you are admin
-					if (employee.getPrivilege() >= user.getPrivilege())
-						ordersOfUserComboBox.addItem(employee);
-			}
-		});
+		employees = DataFetcher.initializeEmployees();
+		
+		//Populate JComboBox.
+		for(Employee employee : employees)
+			//disallow viewing from admin level accounts, unless you are admin
+			if (employee.getPrivilege() >= user.getPrivilege())
+				ordersOfUserComboBox.addItem(employee);
+		ordersOfUserComboBox.setSelectedItem(user);
 		
 		ordersOfUserComboBox.setRenderer(new EmployeeComboBoxRenderer());
-		
 		
 		
 		
@@ -233,11 +209,13 @@ public class MainFrame extends JFrame
 				FormSpecs.RELATED_GAP_COLSPEC,
 				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("641px:grow"),
+				ColumnSpec.decode("97px:grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("196px"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
@@ -250,7 +228,27 @@ public class MainFrame extends JFrame
 		ordersTab.add(ordersFromUserLabel, "6, 2, right, fill");
 		
 		ordersTab.add(ordersOfUserComboBox, "8, 2, fill, fill");
-		ordersTab.add(liveOrdersTabs, "2, 4, 7, 1, fill, fill");
+		employeesListRefreshButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				Employee lastSelectedEmployee = (Employee) ordersOfUserComboBox.getSelectedItem();
+				employees.clear();
+				ordersOfUserComboBox.removeAllItems();
+				
+				employees = DataFetcher.initializeEmployees();
+				
+				//Populate JComboBox.
+				for(Employee employee : employees)
+					//disallow viewing from admin level accounts, unless you are admin
+					if (employee.getPrivilege() >= user.getPrivilege())
+						ordersOfUserComboBox.addItem(employee);
+				ordersOfUserComboBox.setSelectedItem(lastSelectedEmployee);
+			}
+		});
+		
+		ordersTab.add(employeesListRefreshButton, "10, 2, fill, fill");
+		ordersTab.add(liveOrdersTabs, "2, 4, 9, 1, fill, fill");
 		
 //		createNewTab(liveOrdersTabs, null);
 //		liveOrdersTabs.addChangeListener(new ChangeListener()
