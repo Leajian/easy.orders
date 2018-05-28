@@ -5,10 +5,11 @@ import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 public abstract class DataFetcher
 {	
+	static DBConnect db = new DBConnect();
+	
 	public static ArrayList<Client> initializeClients()
 	{
 		ArrayList<Client> clients = new ArrayList<>();
-		DBConnect db = new DBConnect();
 		
 		db.connect();
 		try
@@ -31,7 +32,6 @@ public abstract class DataFetcher
 	public static ArrayList<Product> initializeProducts()
 	{
 		ArrayList<Product> products = new ArrayList<>();
-		DBConnect db = new DBConnect();
 		
 		db.connect();
 		try
@@ -54,7 +54,6 @@ public abstract class DataFetcher
 	public static ArrayList<Order> RecordOfClient(Client client)
 	{
 		ArrayList<Order> ordersRecord = new ArrayList<>();
-		DBConnect db = new DBConnect();
 		
 		db.connect();		
 		try
@@ -77,7 +76,6 @@ public abstract class DataFetcher
 	public static ArrayList<Order> initializeOrders(Employee user)
 	{
 		ArrayList<Order> liveOrders = new ArrayList<>();
-		DBConnect db = new DBConnect();
 		
 		db.connect();
 		try
@@ -111,5 +109,27 @@ public abstract class DataFetcher
 		db.closeConnection();
 		
 		return liveOrders;
+	}
+	
+	public static ArrayList<Employee> initializeEmployees()
+	{
+		ArrayList<Employee> employees = new ArrayList<>();
+		
+		db.connect();
+		try
+		{
+			String query = "SELECT * FROM employee";
+			ResultSet rs = db.getStatement().executeQuery(query);
+			
+			while(rs.next())
+				employees.add(new Employee(rs.getString("username")));
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		db.closeConnection();
+		
+		return employees;
 	}
 }
