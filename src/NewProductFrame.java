@@ -20,6 +20,8 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
+import javax.swing.border.MatteBorder;
+import java.awt.Color;
 
 public class NewProductFrame extends JDialog
 {
@@ -30,8 +32,6 @@ public class NewProductFrame extends JDialog
 	private JTextField producerField = new JTextField();
 	private JTextField packagingField = new JTextField();
 	private JTextField priceField = new JTextField();
-	
-	private final JLabel ProductDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
 	private JLabel idLab = new JLabel("Κωδικός");
 	private JLabel nameLab = new JLabel("Όνομα");
 	private JLabel qualityLab = new JLabel("Ποιότητα");
@@ -56,9 +56,7 @@ public class NewProductFrame extends JDialog
 		//also it must be here and not the bottom for some reason
 		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		
-		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		
-		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel.setBorder(null);
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				FormSpecs.DEFAULT_COLSPEC,
@@ -68,9 +66,8 @@ public class NewProductFrame extends JDialog
 				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(60dlu;default):grow"),
-				FormSpecs.RELATED_GAP_COLSPEC,},
+				FormSpecs.UNRELATED_GAP_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("fill:168px:grow"),
 				FormSpecs.UNRELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:23px"),
 				FormSpecs.LINE_GAP_ROWSPEC,
@@ -80,39 +77,35 @@ public class NewProductFrame extends JDialog
 				FormSpecs.LINE_GAP_ROWSPEC,
 				RowSpec.decode("fill:23px"),
 				FormSpecs.UNRELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("fill:max(15dlu;default):grow"),
-				FormSpecs.RELATED_GAP_ROWSPEC,}));
-		
-		panel.add(ProductDetailsLabel, "2, 1, 7, 1, center, center");
-		panel.add(idLab, "2, 3, left, fill");
+				RowSpec.decode("max(23dlu;default)"),
+				RowSpec.decode("bottom:7dlu"),}));
+		panel.add(idLab, "2, 2, left, fill");
 		
 		idField.setEditable(false);
-		panel.add(idField, "4, 3, fill, fill");
+		panel.add(idField, "4, 2, fill, fill");
 
-		panel.add(qualityField, "8, 3, fill, fill");
-		panel.add(nameLab, "2, 5, left, fill");
-		panel.add(qualityLab, "6, 3, left, center");
+		panel.add(qualityField, "8, 2, fill, fill");
+		panel.add(nameLab, "2, 4, left, fill");
+		panel.add(qualityLab, "6, 2, left, center");
 
-		panel.add(nameField, "4, 5, fill, fill");
+		panel.add(nameField, "4, 4, fill, fill");
 
-		panel.add(packagingField, "8, 5, fill, fill");
-		panel.add(locationLab, "2, 7, fill, fill");
+		panel.add(packagingField, "8, 4, fill, fill");
+		panel.add(locationLab, "2, 6, fill, fill");
 
-		panel.add(locationField, "4, 7, fill, fill");
+		panel.add(locationField, "4, 6, fill, fill");
 
-		panel.add(stockSpinner, "8, 7, fill, fill");
-		panel.add(producerLab, "2, 9, left, center");
-		panel.add(packagingLab, "6, 5, left, center");
+		panel.add(stockSpinner, "8, 6, fill, fill");
+		panel.add(producerLab, "2, 8, left, center");
+		panel.add(packagingLab, "6, 4, left, center");
 
-		panel.add(producerField, "4, 9, fill, fill");
-		panel.add(priceLab, "6, 9, left, center");
-		panel.add(stockLab, "6, 7, left, center");
+		panel.add(producerField, "4, 8, fill, fill");
+		panel.add(priceLab, "6, 8, left, center");
+		panel.add(stockLab, "6, 6, left, center");
 
-		panel.add(priceField, "8, 9, fill, fill");
+		panel.add(priceField, "8, 8, fill, fill");
 		
-		panel.add(saveButton, "6, 13, 3, 1, fill, fill");
+		panel.add(saveButton, "6, 10, 3, 1, right, fill");
 		
 		db.connect();
 		try
@@ -206,7 +199,7 @@ public class NewProductFrame extends JDialog
 
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(480, 120);
-		this.setSize(496, 428);
+		this.setSize(496, 203);
 		this.setResizable(false);
 		this.setTitle("Νέο Προιόν");
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

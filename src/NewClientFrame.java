@@ -44,7 +44,6 @@ public class NewClientFrame extends JDialog
 	private JLabel zipCodeLab = new JLabel("Τ.Κ.");
 	private JLabel faxLab = new JLabel("ΦΑΞ");
 	private JLabel notesLab = new JLabel("Σημειώσεις");
-	private JLabel clientDetailsLabel = new JLabel("IMAGE PLACEHOLDER");
 	
 	private JButton saveButton = new JButton("Αποθήκευση");
 	
@@ -54,7 +53,7 @@ public class NewClientFrame extends JDialog
 
 	private JScrollPane notesFieldScrollPane = new JScrollPane();
 	
-	public NewClientFrame()
+	public NewClientFrame(ClientsTableModel ctm)
 	{
 		//this blocks other windows unless this is closed.
 		//also it must be here and not the bottom for some reason
@@ -80,8 +79,6 @@ public class NewClientFrame extends JDialog
 				ColumnSpec.decode("144px:grow"),
 				FormSpecs.UNRELATED_GAP_COLSPEC,},
 			new RowSpec[] {
-				FormSpecs.LINE_GAP_ROWSPEC,
-				RowSpec.decode("max(146dlu;default):grow"),
 				FormSpecs.UNRELATED_GAP_ROWSPEC,
 				RowSpec.decode("20px"),
 				FormSpecs.UNRELATED_GAP_ROWSPEC,
@@ -95,34 +92,31 @@ public class NewClientFrame extends JDialog
 				FormSpecs.PARAGRAPH_GAP_ROWSPEC,
 				RowSpec.decode("60px:grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("23px"),
-				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("33px"),
-				FormSpecs.LINE_GAP_ROWSPEC,}));
+				FormSpecs.UNRELATED_GAP_ROWSPEC,}));
 		
-		panel.add(clientDetailsLabel, "2, 2, 7, 1, center, center");
-		panel.add(nameLab, "2, 4, fill, center");
-		panel.add(nameField, "4, 4, fill, fill");
-		panel.add(idLab, "6, 4, fill, center");
-		panel.add(idField, "8, 4, fill, fill");
-		panel.add(cityLab, "2, 6, fill, center");
-		panel.add(cityField, "4, 6, fill, fill");
-		panel.add(addressLab, "2, 8, left, center");
-		panel.add(addressField, "4, 8, fill, fill");
-		panel.add(zipCodeLab, "6, 8, fill, center");
-		panel.add(zipCodeField, "8, 8, fill, fill");
-		panel.add(phoneNumberLab, "2, 10, left, center");
-		panel.add(phoneNumberField, "4, 10, fill, fill");
-		panel.add(faxLab, "6, 10, fill, center");
-		panel.add(faxField, "8, 10, fill, fill");
-		panel.add(emailLab, "2, 12, left, center");
-		panel.add(emailField, "4, 12, fill, fill");
-		panel.add(notesLab, "2, 14, fill, top");
-		panel.add(saveButton, "8, 18, right, fill");
+		panel.add(nameLab, "2, 2, fill, center");
+		panel.add(nameField, "4, 2, fill, fill");
+		panel.add(idLab, "6, 2, fill, center");
+		panel.add(idField, "8, 2, fill, fill");
+		panel.add(cityLab, "2, 4, fill, center");
+		panel.add(cityField, "4, 4, fill, fill");
+		panel.add(addressLab, "2, 6, left, center");
+		panel.add(addressField, "4, 6, fill, fill");
+		panel.add(zipCodeLab, "6, 6, fill, center");
+		panel.add(zipCodeField, "8, 6, fill, fill");
+		panel.add(phoneNumberLab, "2, 8, left, center");
+		panel.add(phoneNumberField, "4, 8, fill, fill");
+		panel.add(faxLab, "6, 8, fill, center");
+		panel.add(faxField, "8, 8, fill, fill");
+		panel.add(emailLab, "2, 10, left, center");
+		panel.add(emailField, "4, 10, fill, fill");
+		panel.add(notesLab, "2, 12, fill, top");
+		panel.add(saveButton, "8, 14, right, fill");
 		
 		notesFieldScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		
-		panel.add(notesFieldScrollPane, "4, 14, fill, fill");
+		panel.add(notesFieldScrollPane, "4, 12, fill, fill");
 		notesField.setLineWrap(true);
 		notesField.setWrapStyleWord(true);
 		notesFieldScrollPane.setViewportView(notesField);
@@ -154,7 +148,7 @@ public class NewClientFrame extends JDialog
 							int rs = db.getStatement().executeUpdate(query);
 						
 							//refresh the table after save
-							//ctm.populate();
+							ctm.populate();
 						
 							JOptionPane.showMessageDialog(null, "Ο νέος χρήστης καταχωρήθηκε.");
 						
@@ -199,7 +193,7 @@ public class NewClientFrame extends JDialog
 		
 		this.setIconImage(new ImageIcon(getClass().getResource("/favicon-32x32.png")).getImage());
 		this.setLocation(450, 100);
-		this.setSize(595, 636);
+		this.setSize(595, 315);
 		this.setResizable(false);
 		this.setTitle("Νέος Πελάτης");
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
