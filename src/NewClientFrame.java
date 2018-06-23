@@ -53,7 +53,7 @@ public class NewClientFrame extends JDialog
 
 	private JScrollPane notesFieldScrollPane = new JScrollPane();
 	
-	public NewClientFrame(ClientsTableModel ctm)
+	public NewClientFrame()
 	{
 		//this blocks other windows unless this is closed.
 		//also it must be here and not the bottom for some reason
@@ -146,9 +146,6 @@ public class NewClientFrame extends JDialog
 						{
 							String query = "INSERT INTO client (id, name, city, phoneNumber, email, address, fax, zipCode, notes) VALUES ('" + id + "', " + "'" + name + "', " + "'" + city + "', " + "'" + phoneNumber + "', " + "'" + email + "', " + "'" + address + "', " + "'" + fax + "', " + "'" + zipCode + "', " + "'" + notes + "')";
 							int rs = db.getStatement().executeUpdate(query);
-						
-							//refresh the table after save
-							ctm.populate();
 						
 							JOptionPane.showMessageDialog(null, "Ο νέος χρήστης καταχωρήθηκε.");
 						
