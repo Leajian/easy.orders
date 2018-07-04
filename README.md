@@ -1,5 +1,5 @@
 # Easy Orders
-This project was originally developed for the *Software Technology* course in **University of Macedonia, Department of Applied Informatics**. The goal of this application is to simplify the way orders are issued, but also it was our team's first try to create a relatively big project with our limited knowledge. This project was a reason to enstablish good communication between members and understand better the roles of each individual in a team. Therefore, it's not a perfect product that is ready for use.
+This project was originally developed for the *Software Engineering* course in **University of Macedonia, Department of Applied Informatics**. The goal of this application is to simplify the way orders are issued, but also it was our team's first try to create a relatively big project with our limited knowledge. This project was a reason to enstablish good communication between members and understand better the roles of each individual in a team. Therefore, it's not a perfect product that is ready for use.
 
 
 ## Prerequisites
